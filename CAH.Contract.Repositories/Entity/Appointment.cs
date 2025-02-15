@@ -1,0 +1,48 @@
+﻿using CAH.Core.Base;
+using CAH.Repositories.Entity;
+using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
+
+namespace CAH.Contract.Repositories.Entity
+{
+	public class Appointment : BaseEntity
+	{
+		[Required]
+		public Guid? UserId { get; set; }
+
+		[ForeignKey("UserId")]
+
+		public virtual ApplicationUsers User { get; set; }
+
+		public Guid? StylistId { get; set; }
+		public virtual ApplicationUsers Stylist { get; set; }
+
+        [MaxLength(50)]
+		public string? StatusForAppointment { get; set; }
+
+		public int PointsEarned { get; set; } = 0;
+
+		public int TotalTime {  get; set; }
+
+		[Required]
+		[Column(TypeName = "decimal(10, 2)")]
+		public decimal TotalAmount { get; set; }
+
+		[Required]
+		public DateTime AppointmentDate { get; set; }
+
+		public bool EmailSent { get; set; } = false;
+		public bool PhoneSent { get; set; } = false;
+        public string? PromotionId { get; set; }
+
+        [ForeignKey("PromotionId")]
+
+        public virtual Promotion? Promotion { get; set; }
+
+        public virtual ICollection<ServiceAppointment>? ServiceAppointments { get; set; }
+		public virtual ICollection<ComboAppointment>? ComboAppointments { get; set; }
+
+		public virtual ICollection<Payment> Payment { get; set; } = [];
+		public virtual Feedback? Feedback { get; set; }
+	}
+}
