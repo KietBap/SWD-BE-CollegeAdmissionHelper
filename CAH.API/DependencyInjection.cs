@@ -28,24 +28,6 @@ namespace CAH.API
 			services.ConfigJwt(configuration);
 			services.ConfigureRedis(configuration);
 
-			services.AddAuthentication(options =>
-			{
-				options.DefaultScheme = CookieAuthenticationDefaults.AuthenticationScheme;
-				options.DefaultChallengeScheme = GoogleDefaults.AuthenticationScheme;
-			})
-			.AddCookie(options =>
-			{
-				options.Cookie.HttpOnly = true;
-				options.Cookie.SecurePolicy = CookieSecurePolicy.SameAsRequest;
-				options.Cookie.SameSite = SameSiteMode.Lax;
-			})
-			.AddGoogle(options =>
-			{
-				options.ClientId = configuration["Authentication:Google:ClientId"];
-				options.ClientSecret = configuration["Authentication:Google:ClientSecret"];
-			});
-
-
 			services.Configure<CookiePolicyOptions>(options =>
 			{
 				options.CheckConsentNeeded = context => true;
