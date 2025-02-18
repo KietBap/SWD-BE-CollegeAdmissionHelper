@@ -20,7 +20,7 @@ namespace CAH.Services.Cache
         {
             var cachedData = await _cache.GetStringAsync(key);
 
-            if (cachedData is null)
+            if (cachedData is  null)
             {
                 return default;
             }
