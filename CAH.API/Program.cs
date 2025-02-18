@@ -2,6 +2,7 @@
 using System.Text.Json.Serialization;
 using Microsoft.OpenApi.Models;
 using CAH.API;
+using CAH.Repositories.Mapper;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -64,7 +65,7 @@ builder.Services.AddCors(options =>
 
 
 builder.Services.AddConfig(builder.Configuration);
-builder.Services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
+builder.Services.AddAutoMapper(typeof(AutoMapperProfile).Assembly);
 builder.Services.AddControllers().AddJsonOptions(options =>
 {
     options.JsonSerializerOptions.ReferenceHandler = ReferenceHandler.Preserve;
