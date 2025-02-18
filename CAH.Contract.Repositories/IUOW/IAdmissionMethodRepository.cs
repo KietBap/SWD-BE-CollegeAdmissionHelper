@@ -3,7 +3,7 @@ using CAH.Contract.Repositories.Interface;
 
 namespace CAH.Contract.Repositories.IUOW
 {
-    public interface IAppointmentRepository : IGenericRepository<Appointment>
-    {
-    }
+	public interface IAdmissionMethodRepository : IGenericRepository<AdmissionMethod>
+	{
+	}
 }

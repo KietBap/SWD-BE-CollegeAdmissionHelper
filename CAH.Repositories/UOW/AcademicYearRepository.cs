@@ -5,16 +5,16 @@ using Microsoft.EntityFrameworkCore;
 
 namespace CAH.Repositories.UOW
 {
-	public class UserRepository : GenericRepository<User>, IUserRepository
+	public class AcademicYearRepository : GenericRepository<AcademicYear>, IAcademicYearRepository
 	{
 		protected readonly DatabaseContext _context;
 
-		protected readonly DbSet<User> _dbSet;
+		protected readonly DbSet<AcademicYear> _dbSet;
 
-		public UserRepository(DatabaseContext dbContext) : base(dbContext)
+		public AcademicYearRepository(DatabaseContext dbContext) : base(dbContext)
 		{
 			_context = dbContext;
-			_dbSet = _context.Set<User>();
+			_dbSet = _context.Set<AcademicYear>();
 		}
 	}
 }

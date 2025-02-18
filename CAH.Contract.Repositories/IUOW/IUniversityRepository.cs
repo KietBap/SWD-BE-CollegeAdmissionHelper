@@ -3,7 +3,7 @@ using CAH.Contract.Repositories.Interface;
 
 namespace CAH.Contract.Repositories.IUOW
 {
-    public interface IRoleRepository: IGenericRepository<ApplicationRoles>
-    {
-    }
+	public interface IUniversityRepository : IGenericRepository<University>
+	{
+	}
 }

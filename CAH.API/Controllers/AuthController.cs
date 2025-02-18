@@ -1,6 +1,6 @@
-﻿using CAH.Contract.Services.Interface;
+﻿using CAH.Contract.Repositories.Entity;
+using CAH.Contract.Services.Interface;
 using CAH.ModelViews.AuthModelViews;
-using CAH.Repositories.Entity;
 using CAH.Services.Service;
 using Microsoft.AspNetCore.Mvc;
 
@@ -28,7 +28,7 @@ namespace CAH.API.Controllers
             }
 
             // Authenticate user
-            ApplicationUsers account = await _appUserService.AuthenticateAsync(model);
+            User account = await _appUserService.AuthenticateAsync(model);
             if (account == null)
             {
                 return Unauthorized("Invalid credentials");

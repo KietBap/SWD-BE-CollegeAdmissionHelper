@@ -3,7 +3,7 @@ using CAH.Contract.Repositories.Interface;
 
 namespace CAH.Contract.Repositories.IUOW
 {
-    public interface ISalaryPaymentRepository : IGenericRepository<SalaryPayment>
-    {
-    }
+	public interface IMajorRepository : IGenericRepository<Major>
+	{
+	}
 }

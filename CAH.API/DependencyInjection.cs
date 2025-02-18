@@ -1,19 +1,18 @@
-﻿using CAH.Contract.Repositories.Entity;
-using CAH.Contract.Services.Cache;
+﻿using CAH.Contract.Services.Cache;
 using CAH.Contract.Services.Interface;
 using CAH.Repositories.Context;
-using CAH.Repositories.Entity;
 using CAH.Services;
 using CAH.Services.Service;
 using CAH.Services.Cache;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
-using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
 using System.Text;
 using StackExchange.Redis;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Authentication.Google;
+using Microsoft.AspNetCore.Identity;
+using CAH.Contract.Repositories.Entity;
 
 namespace CAH.API
 {
@@ -23,8 +22,8 @@ namespace CAH.API
 		{
 			services.ConfigRoute();
 			services.AddDatabase(configuration);
-			services.AddIdentity();
 			services.AddInfrastructure(configuration);
+			services.AddIdentity();
 			services.AddServices();
 			services.ConfigJwt(configuration);
 			services.ConfigureRedis(configuration);
@@ -67,13 +66,13 @@ namespace CAH.API
 		{
 			services.AddDbContext<DatabaseContext>(options =>
 			{
-				options.UseLazyLoadingProxies().UseSqlServer(configuration.GetConnectionString("HairSalonDb"));
+				options.UseLazyLoadingProxies().UseSqlServer(configuration.GetConnectionString("CAH_Db"));
 			});
 		}
 
 		public static void AddIdentity(this IServiceCollection services)
 		{
-			services.AddIdentity<ApplicationUsers, ApplicationRoles>(options =>
+			services.AddIdentity<User, Contract.Repositories.Entity.Role>(options =>
 			{
 			})
 			 .AddEntityFrameworkStores<DatabaseContext>()
@@ -85,7 +84,7 @@ namespace CAH.API
 			services
 				.AddScoped<IAppUserService, AppUserService>()
 				.AddScoped<TokenService>()
-				.AddScoped<IPasswordHasher<ApplicationUsers>, PasswordHasher<ApplicationUsers>>()
+				.AddScoped<IPasswordHasher<User>, PasswordHasher<User>>()
 				.AddScoped<ICacheService, RedisCacheService>()
 				.AddSignalR();
 		}

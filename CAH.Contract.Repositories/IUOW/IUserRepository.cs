@@ -1,9 +1,8 @@
-﻿using CAH.Contract.Repositories.Interface;
-using CAH.Repositories.Entity;
-
+﻿using CAH.Contract.Repositories.Entity;
+using CAH.Contract.Repositories.Interface;
 namespace CAH.Contract.Repositories.IUOW
 {
-	public interface IUserRepository : IGenericRepository<ApplicationUsers>
+	public interface IUserRepository : IGenericRepository<User>
 	{
 	}
 }
