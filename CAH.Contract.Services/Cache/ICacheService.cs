@@ -5,7 +5,7 @@ namespace CAH.Contract.Services.Cache
 	{
 		Task<T?> GetListAsync<T>(string key);
 		Task SetAsync<T>(string key, T value, TimeSpan expiration, string prefix);
-		Task RemoveByPrefixAsync(string prefix);
+		Task RemoveByPrefixAsync(string  prefix);
 
     }
 }
