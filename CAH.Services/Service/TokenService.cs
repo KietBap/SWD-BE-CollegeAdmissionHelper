@@ -2,8 +2,6 @@
 using CAH.Contract.Repositories.Interface;
 using CAH.Core.Utils;
 using CAH.ModelViews.TokenModelViews;
-using CAH.Repositories.Entity;
-using Microsoft.AspNetCore.Identity;
 using Microsoft.Extensions.Configuration;
 using Microsoft.IdentityModel.Tokens;
 using System.IdentityModel.Tokens.Jwt;
@@ -11,69 +9,75 @@ using System.Security.Claims;
 using System.Security.Cryptography;
 using System.Text;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.AspNetCore.Identity;
 
 namespace CAH.Services.Service
 {
     public class TokenService
     {
         private readonly IConfiguration _configuration;
-        private readonly UserManager<ApplicationUsers> _userManager;
         private readonly IUnitOfWork _unitOfWork;
+		private readonly UserManager<User> _userManager;
 
-        public TokenService(IConfiguration configuration, UserManager<ApplicationUsers> userManager, RoleManager<ApplicationRoles> roleManager, IUnitOfWork unitOfWork)
+		public TokenService(IConfiguration configuration, IUnitOfWork unitOfWork, UserManager<User> userManager)
         {
             _configuration = configuration;
-            _userManager = userManager;
             _unitOfWork = unitOfWork;
+            _userManager = userManager;
         }
 
         public async Task<TokenModelView> GenerateJwtTokenAsync(string userId, string userName)
         {
-            var user = await _userManager.FindByIdAsync(userId);
-            var roles = await _userManager.GetRolesAsync(user ?? throw new Exception("User not found"));
-            
-            // Các claims của token
-            var claims = new List<Claim>
-            {
-                new Claim(JwtRegisteredClaimNames.Sub, userName),
-                new Claim(ClaimTypes.Name, userName),
-                new Claim(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString()),
-                new Claim("userId", userId)
-            };
+			var user = await _userManager.FindByIdAsync(userId);
+			var roles = await _userManager.GetRolesAsync(user ?? throw new Exception("User not found"));
 
-            foreach (var role in roles) {
-                claims.Add(new Claim(ClaimTypes.Role, role));
-            }
+			// Các claims của token
+			var claims = new List<Claim>
+			{
+				new Claim(JwtRegisteredClaimNames.Sub, userName),
+				new Claim(ClaimTypes.Name, userName),
+				new Claim(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString()),
+				new Claim("userId", userId)
+			};
 
-            // Tạo token
-            var token = CreateToken(claims);
+			foreach (var role in roles)
+			{
+				claims.Add(new Claim(ClaimTypes.Role, role));
+			}
 
-            var refreshToken = GenerateRefreshToken();
-            user.RefreshToken = refreshToken;
-            _ = int.TryParse(_configuration["JWT:RefreshTokenValidityInDays"], out int refreshTokenValidityInDays);
-            user.RefreshTokenExpiryTime = DateTime.Now.AddDays(refreshTokenValidityInDays);
+			// Tạo token
+			var token = CreateToken(claims);
 
-            var tokenString = new JwtSecurityTokenHandler().WriteToken(token);
+			var refreshToken = GenerateRefreshToken();
+			user.RefreshToken = refreshToken;
+			_ = int.TryParse(_configuration["JWT:RefreshTokenValidityInDays"], out int refreshTokenValidityInDays);
+			user.RefreshTokenExpiryTime = DateTime.Now.AddDays(refreshTokenValidityInDays);
+
+			var tokenString = new JwtSecurityTokenHandler().WriteToken(token);
 
 
-            // Add refresh token to database
-            await AddTokenToDatabaseAsync(userId, refreshToken);
+			// Add refresh token to database
+			await AddTokenToDatabaseAsync(userId, refreshToken);
 
-            return new TokenModelView
-            {
-                AccessToken = tokenString,
-                RefreshToken = refreshToken
-            };
-        }
+			return new TokenModelView
+			{
+				AccessToken = tokenString,
+				RefreshToken = refreshToken
+			};
+		}
 
         private async Task AddTokenToDatabaseAsync(string userId, string refreshToken)
         {
-            // Find the user by their userId using the _userManager
-            var user = await _userManager.FindByIdAsync(userId);
-            if (user != null)
+			if (!Guid.TryParse(userId, out Guid userIdGuid))
+			{
+				throw new ArgumentException("Invalid user ID format.");
+			}
+			// Find the user by their userId using the _userManager
+			var user = await _unitOfWork.GetRepository<User>().GetByIdAsync(userIdGuid);
+			if (user != null)
             {
                 // Get the token repository from the unit of work
-                var tokenRepository = _unitOfWork.GetRepository<ApplicationUserTokens>();
+                var tokenRepository = _unitOfWork.GetRepository<UserToken>();
 
                 try
                 {
@@ -97,7 +101,7 @@ namespace CAH.Services.Service
                     else
                     {
                         // If no existing token is found, create a new token record for the user
-                        var userToken = new ApplicationUserTokens
+                        var userToken = new UserToken
                         {
                             UserId = Guid.Parse(userId),
                             LoginProvider = "CustomLoginProvider", 
@@ -188,7 +192,7 @@ namespace CAH.Services.Service
             #pragma warning restore CS8600 
 
             // Find the user by username (from the database)
-            var user = await _unitOfWork.GetRepository<ApplicationUsers>().Entities.
+            var user = await _unitOfWork.GetRepository<User>().Entities.
                 FirstOrDefaultAsync(x => x.UserName == username);
             if (user == null || user.RefreshToken != refreshToken || user.RefreshTokenExpiryTime <= DateTime.Now)
             {
@@ -204,11 +208,8 @@ namespace CAH.Services.Service
             // Update the user's refresh token in the database with the new token
             user.RefreshToken = newRefreshToken;
 
-            // Optionally, update the user's security stamp (often used for invalidating sessions or triggering reauthentication)
-            user.SecurityStamp = "a"; 
-
             // Save the updated user information to the database
-            await _userManager.UpdateAsync(user);
+            await _unitOfWork.GetRepository<User>().UpdateAsync(user);
 
             // Return the new access token and refresh token as a model
             return new TokenModelView()
@@ -220,7 +221,7 @@ namespace CAH.Services.Service
         public async Task<string> Revoke(string username)
         {
             // Look up the user by their username
-            var user = await _unitOfWork.GetRepository<ApplicationUsers>().Entities.
+            var user = await _unitOfWork.GetRepository<User>().Entities.
                 FirstOrDefaultAsync(x => x.UserName == username);
 
             // If the user is not found, return null (indicating the revocation failed or the user does not exist)
@@ -230,10 +231,10 @@ namespace CAH.Services.Service
             user.RefreshToken = null;
 
             // Update the user's information in the database to reflect the revoked token
-            await _userManager.UpdateAsync(user);
+            await _unitOfWork.GetRepository<User>().UpdateAsync(user);
 
-            // Return a success message indicating the revocation was successful
-            return "Ok";
+			// Return a success message indicating the revocation was successful
+			return "Ok";
         }
 
         private ClaimsPrincipal? GetPrincipalFromExpiredToken(string? token)

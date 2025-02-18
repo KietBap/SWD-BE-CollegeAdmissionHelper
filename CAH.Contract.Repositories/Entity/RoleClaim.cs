@@ -3,7 +3,7 @@ using Microsoft.AspNetCore.Identity;
 
 namespace CAH.Contract.Repositories.Entity
 {
-    public class ApplicationUserClaims : IdentityUserClaim<Guid>
+    public class RoleClaim : IdentityRoleClaim<Guid>
     {
         public string? CreatedBy { get; set; }
         public string? LastUpdatedBy { get; set; }
@@ -11,7 +11,7 @@ namespace CAH.Contract.Repositories.Entity
         public DateTimeOffset CreatedTime { get; set; }
         public DateTimeOffset LastUpdatedTime { get; set; }
         public DateTimeOffset? DeletedTime { get; set; }
-        public ApplicationUserClaims()
+        public RoleClaim()
         {
             CreatedTime = CoreHelper.SystemTimeNow;
             LastUpdatedTime = CreatedTime;

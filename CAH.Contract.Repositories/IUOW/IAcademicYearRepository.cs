@@ -3,7 +3,7 @@ using CAH.Contract.Repositories.Interface;
 
 namespace CAH.Contract.Repositories.IUOW
 {
-    public interface IFeedbackRepository : IGenericRepository<Feedback>
-    {
-    }
+	public interface IAcademicYearRepository : IGenericRepository<AcademicYear>
+	{
+	}
 }

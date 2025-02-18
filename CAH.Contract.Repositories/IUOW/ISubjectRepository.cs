@@ -3,7 +3,7 @@ using CAH.Contract.Repositories.Interface;
 
 namespace CAH.Contract.Repositories.IUOW
 {
-    public interface IComboRepository : IGenericRepository<Combo>
-    {
-    }
+	public interface ISubjectRepository : IGenericRepository<Subject>
+	{
+	}
 }

@@ -3,7 +3,7 @@ using Microsoft.AspNetCore.Identity;
 
 namespace CAH.Contract.Repositories.Entity
 {
-    public class ApplicationUserTokens : IdentityUserToken<Guid>
+    public class UserToken : IdentityUserToken<Guid>
     {
         public string? CreatedBy { get; set; }
         public string? LastUpdatedBy { get; set; }
@@ -11,7 +11,7 @@ namespace CAH.Contract.Repositories.Entity
         public DateTimeOffset CreatedTime { get; set; }
         public DateTimeOffset LastUpdatedTime { get; set; }
         public DateTimeOffset? DeletedTime { get; set; }
-        public ApplicationUserTokens()
+        public UserToken()
         {
             CreatedTime = CoreHelper.SystemTimeNow;
             LastUpdatedTime = CreatedTime;
