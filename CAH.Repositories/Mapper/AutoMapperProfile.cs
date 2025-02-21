@@ -1,4 +1,6 @@
 using AutoMapper;
+using CAH.Contract.Repositories.Entity;
+using CAH.ModelViews.MajorModelViews;
 
 namespace CAH.Repositories.Mapper
 {
@@ -6,6 +8,8 @@ namespace CAH.Repositories.Mapper
     {
         public AutoMapperProfile()
         {
-        }
+			CreateMap<Major, CreateMajorModelView>();
+			CreateMap<CreateMajorModelView, Major>();
+		}
     }
 }
