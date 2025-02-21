@@ -2,8 +2,11 @@
 using CAH.Contract.Repositories.Entity;
 using CAH.Contract.Repositories.Interface;
 using CAH.Contract.Services.Interface;
+using CAH.Core;
 using CAH.Core.Base;
 using CAH.ModelViews.MajorModelViews;
+using DocumentFormat.OpenXml.Office2010.Excel;
+using Microsoft.EntityFrameworkCore;
 
 namespace CAH.Services.Service
 {
@@ -34,11 +37,7 @@ namespace CAH.Services.Service
 			}
 			catch (BaseException.BadRequestException ex)
 			{
-				return ex.Message;
-			}
-			catch (Exception ex)
-			{
-				return "An error occurred while adding the major.";
+				throw new Exception($"Error: {ex.Message}");
 			}
 		}
 
@@ -62,11 +61,7 @@ namespace CAH.Services.Service
 			}
 			catch (BaseException.BadRequestException ex)
 			{
-				return ex.Message;
-			}
-			catch (Exception ex)
-			{
-				return "An error occurred while delete the major.";
+				throw new Exception($"Error: {ex.Message}");
 			}
 		}
 
@@ -80,7 +75,7 @@ namespace CAH.Services.Service
 					return "can not find major";
 				}
 
-				major = _mapper.Map<Major>(model);
+				_mapper.Map(model, major);
 				major.LastUpdatedBy = model.UserId;
 				major.LastUpdatedTime = DateTimeOffset.UtcNow;
 
@@ -89,13 +84,42 @@ namespace CAH.Services.Service
 
 				return "Major updated successfully";
 			}
-			catch (BaseException.BadRequestException ex)
+			catch (Exception ex)
 			{
-				return ex.Message;
+				throw new Exception($"Error: {ex.Message}");
+			}
+		}
+
+		public async Task<BasePaginatedList<MajorModelView>> GetAllMajorAsync(int pageNumber, int pageSize)
+		{
+			IQueryable<Major> majorQuery = _unitOfWork.GetRepository<Major>().Entities
+				.Where(p => !p.DeletedTime.HasValue)
+				.OrderByDescending(s => s.CreatedTime);
+
+			int totalCount = await majorQuery.CountAsync();
+
+			List<Major> paginatedServices = await majorQuery
+				.Skip((pageNumber - 1) * pageSize)
+				.Take(pageSize)
+				.ToListAsync();
+
+			List<MajorModelView> majorModelView = _mapper.Map<List<MajorModelView>>(paginatedServices);
+
+			return new BasePaginatedList<MajorModelView>(majorModelView, totalCount, pageNumber, pageSize);
+		}
+
+
+		public async Task<MajorModelView> GetMajorByIdAsync(string id)
+		{
+			try
+			{
+				var major = await _unitOfWork.GetRepository<Major>().GetByIdAsync(id);
+
+				return _mapper.Map<MajorModelView>(major);
 			}
 			catch (Exception ex)
 			{
-				return "An error occurred while updating the major.";
+				throw new Exception($"Error: {ex.Message}");
 			}
 		}
 	}

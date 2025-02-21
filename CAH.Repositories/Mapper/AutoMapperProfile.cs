@@ -10,6 +10,8 @@ namespace CAH.Repositories.Mapper
         {
 			CreateMap<Major, CreateMajorModelView>();
 			CreateMap<CreateMajorModelView, Major>();
+			CreateMap<MajorModelView, Major>();
+			CreateMap<Major, MajorModelView>();
 		}
     }
 }
