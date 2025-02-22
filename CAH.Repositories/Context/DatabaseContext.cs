@@ -25,7 +25,7 @@ namespace CAH.Repositories.Context
 		public virtual DbSet<AdmissionInfor> AdmissionInfors { get; set; }
 		public virtual DbSet<AdmissionMethod> AdmissionMethods { get; set; }
 		public virtual DbSet<InforMethod> InforMethods { get; set; }
-
+		public virtual DbSet<SubjectScore> SubjectScores { get; set; }
 		protected override void OnModelCreating(ModelBuilder modelBuilder)
 		{
 			//base.OnModelCreating(modelBuilder);
