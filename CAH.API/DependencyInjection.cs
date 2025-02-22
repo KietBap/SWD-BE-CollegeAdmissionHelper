@@ -67,6 +67,7 @@ namespace CAH.API
 				.AddScoped<IPasswordHasher<User>, PasswordHasher<User>>()
 				.AddScoped<ICacheService, RedisCacheService>()
 				.AddScoped<IMajorService, MajorService>()
+				.AddScoped<IUniversityService, UniversityService>()
 				.AddSignalR();
 		}
 

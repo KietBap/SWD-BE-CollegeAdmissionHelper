@@ -50,7 +50,7 @@ namespace CAH.API.Controllers
 		}
 
 		[HttpGet("id")]
-		public async Task<ActionResult<MajorModelView>> GetMajorById(string id)
+		public async Task<ActionResult<Object>> GetMajorById(string id)
 		{
 			var result = await _majorService.GetMajorByIdAsync(id);
 

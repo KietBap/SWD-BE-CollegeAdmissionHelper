@@ -5,7 +5,6 @@ using CAH.Contract.Services.Interface;
 using CAH.Core;
 using CAH.Core.Base;
 using CAH.ModelViews.MajorModelViews;
-using DocumentFormat.OpenXml.Office2010.Excel;
 using Microsoft.EntityFrameworkCore;
 
 namespace CAH.Services.Service
@@ -109,11 +108,15 @@ namespace CAH.Services.Service
 		}
 
 
-		public async Task<MajorModelView> GetMajorByIdAsync(string id)
+		public async Task<Object> GetMajorByIdAsync(string id)
 		{
 			try
 			{
 				var major = await _unitOfWork.GetRepository<Major>().GetByIdAsync(id);
+				if (major == null || major.DeletedTime.HasValue)
+				{
+					return "can not find or major is deleted";
+				}
 
 				return _mapper.Map<MajorModelView>(major);
 			}
