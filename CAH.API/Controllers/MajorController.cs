@@ -1,10 +1,12 @@
 ﻿using CAH.Contract.Services.Interface;
 using CAH.Core;
 using CAH.ModelViews.MajorModelViews;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace CAH.API.Controllers
 {
+	[Authorize(Roles = "Admin")]
 	[Route("api/[controller]")]
 	[ApiController]
 	public class MajorController : ControllerBase
@@ -26,15 +28,15 @@ namespace CAH.API.Controllers
 		}
 
 		[HttpDelete("delete")]
-		public async Task<ActionResult<string>> DeleteMajor([FromQuery] string id, string userId)
+		public async Task<ActionResult<string>> DeleteMajor([FromQuery] string id)
 		{
-			string result = await _majorService.DeleteMajorAsync(id, userId);
+			string result = await _majorService.DeleteMajorAsync(id);
 
 			return Ok(new { Message = result });
 		}
 
 		[HttpPatch("update")]
-		public async Task<ActionResult<string>> UpdateMajor(string id,[FromQuery] CreateMajorModelView model)
+		public async Task<ActionResult<string>> UpdateMajor(string id, [FromQuery] CreateMajorModelView model)
 		{
 			string result = await _majorService.UpdateMajorAsync(id, model);
 

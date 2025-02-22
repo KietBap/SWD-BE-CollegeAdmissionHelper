@@ -5,6 +5,7 @@ using CAH.Contract.Services.Interface;
 using CAH.Core;
 using CAH.Core.Base;
 using CAH.ModelViews.MajorModelViews;
+using Microsoft.AspNetCore.Http;
 using Microsoft.EntityFrameworkCore;
 
 namespace CAH.Services.Service
@@ -13,21 +14,25 @@ namespace CAH.Services.Service
 	{
 		private readonly IUnitOfWork _unitOfWork;
 		private readonly IMapper _mapper;
+		private readonly IHttpContextAccessor _httpContextAccessor;
 
-        public MajorService(IUnitOfWork unitOfWork, IMapper mapper)
+		public MajorService(IUnitOfWork unitOfWork, IMapper mapper, IHttpContextAccessor httpContextAccessor)
         {
             _unitOfWork = unitOfWork;
             _mapper = mapper;
-        }
+			_httpContextAccessor = httpContextAccessor;
+		}
 
 		public async Task<string> CreateMajorAsync(CreateMajorModelView model)
 		{
 			try
 			{
+				var userId = _httpContextAccessor.HttpContext?.User.FindFirst("userId")?.Value;
+
 				Major newMajor = _mapper.Map<Major>(model);
 
 				newMajor.CreatedTime = DateTimeOffset.UtcNow;
-				newMajor.CreatedBy = model.UserId;
+				newMajor.CreatedBy = userId;
 
 				await _unitOfWork.GetRepository<Major>().InsertAsync(newMajor);
 				await _unitOfWork.SaveAsync();
@@ -40,10 +45,12 @@ namespace CAH.Services.Service
 			}
 		}
 
-		public async Task<string> DeleteMajorAsync(string id, string userId)
+		public async Task<string> DeleteMajorAsync(string id)
 		{
 			try
 			{
+				var userId = _httpContextAccessor.HttpContext?.User.FindFirst("userId")?.Value;
+
 				var major = await _unitOfWork.GetRepository<Major>().GetByIdAsync(id);
 				if (major == null)
 				{
@@ -68,6 +75,8 @@ namespace CAH.Services.Service
 		{
 			try
 			{
+				var userId = _httpContextAccessor.HttpContext?.User.FindFirst("userId")?.Value;
+
 				var major = await _unitOfWork.GetRepository<Major>().GetByIdAsync(id);
 				if (major == null)
 				{
@@ -75,7 +84,7 @@ namespace CAH.Services.Service
 				}
 
 				_mapper.Map(model, major);
-				major.LastUpdatedBy = model.UserId;
+				major.LastUpdatedBy = userId;
 				major.LastUpdatedTime = DateTimeOffset.UtcNow;
 
 				await _unitOfWork.GetRepository<Major>().UpdateAsync(major);

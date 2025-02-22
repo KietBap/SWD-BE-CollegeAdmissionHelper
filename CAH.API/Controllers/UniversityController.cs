@@ -1,10 +1,12 @@
 ﻿using CAH.Contract.Services.Interface;
 using CAH.Core;
 using CAH.ModelViews.UniversityModelViews;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace CAH.API.Controllers
 {
+	[Authorize(Roles = "Admin")]
 	[Route("api/[controller]")]
 	[ApiController]
 	public class UniversityController : ControllerBase
@@ -26,9 +28,9 @@ namespace CAH.API.Controllers
 		}
 
 		[HttpDelete("delete")]
-		public async Task<ActionResult<string>> DeleteUniversity([FromQuery] string id, string userId)
+		public async Task<ActionResult<string>> DeleteUniversity([FromQuery] string id)
 		{
-			string result = await _universityService.DeleteUniversityAsync(id, userId);
+			string result = await _universityService.DeleteUniversityAsync(id);
 
 			return Ok(new { Message = result });
 		}
