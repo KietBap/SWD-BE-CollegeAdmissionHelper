@@ -1,5 +1,6 @@
 using AutoMapper;
 using CAH.Contract.Repositories.Entity;
+using CAH.ModelViews.AdmissionMethodMVs;
 using CAH.ModelViews.MajorModelViews;
 using CAH.ModelViews.UniversityModelViews;
 
@@ -18,6 +19,11 @@ namespace CAH.Repositories.Mapper
 			CreateMap<UniversityModelView, University>();
 			CreateMap<UniversityMV, University>();
 			CreateMap<University, UniversityMV>();
+
+			CreateMap<AdmissionMethod, AdmissionMethodMV>();
+			CreateMap<AdmissionMethodMV, AdmissionMethod>();
+			CreateMap<ListAdMethodMV, AdmissionMethod>();
+			CreateMap<AdmissionMethod, ListAdMethodMV>();
 		}
     }
 }
