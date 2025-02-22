@@ -68,6 +68,7 @@ namespace CAH.API
 				.AddScoped<ICacheService, RedisCacheService>()
 				.AddScoped<IMajorService, MajorService>()
 				.AddScoped<IUniversityService, UniversityService>()
+				.AddScoped<IAdmissionMethodService, AdmissionMethodService>()
 				.AddSignalR();
 		}
 

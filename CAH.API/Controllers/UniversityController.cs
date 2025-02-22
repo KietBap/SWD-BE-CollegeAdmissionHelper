@@ -54,7 +54,7 @@ namespace CAH.API.Controllers
 		}
 
 		[HttpGet("id")]
-		public async Task<ActionResult<Object>> GetMajorById(string id)
+		public async Task<ActionResult<Object>> GetUniversityById(string id)
 		{
 			var result = await _universityService.GetUniversityByIdAsync(id);
 
