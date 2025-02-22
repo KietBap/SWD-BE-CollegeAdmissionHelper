@@ -32,4 +32,8 @@
     <ProjectReference Include="..\CAH.Core\CAH.Core.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="AdmissionMethodMVs\" />
+  </ItemGroup>
+
 </Project>

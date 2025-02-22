@@ -4,8 +4,8 @@ using CAH.Contract.Repositories.Interface;
 using CAH.Contract.Services.Interface;
 using CAH.Core;
 using CAH.Core.Base;
-using CAH.ModelViews.MajorModelViews;
 using CAH.ModelViews.UniversityModelViews;
+using Microsoft.AspNetCore.Http;
 using Microsoft.EntityFrameworkCore;
 
 namespace CAH.Services.Service
@@ -13,22 +13,26 @@ namespace CAH.Services.Service
 	public class UniversityService : IUniversityService
 	{
 		private readonly IUnitOfWork _unitOfWork;
+		private readonly IHttpContextAccessor _httpContext;
 		private readonly IMapper _mapper;
 
-		public UniversityService(IUnitOfWork unitOfWork, IMapper mapper)
+		public UniversityService(IUnitOfWork unitOfWork, IMapper mapper, IHttpContextAccessor httpContextAccessor)
 		{
 			_unitOfWork = unitOfWork;
 			_mapper = mapper;
+			_httpContext = httpContextAccessor;
 		}
 
 		public async Task<string> CreateUniversityAsync(UniversityModelView model)
 		{
 			try
 			{
+				var userId = _httpContext.HttpContext?.User.FindFirst("userId")?.Value;
+
 				University university = _mapper.Map<University>(model);
 
 				university.CreatedTime = DateTimeOffset.UtcNow;
-				university.CreatedBy = model.UserId;
+				university.CreatedBy = userId;
 
 				await _unitOfWork.GetRepository<University>().InsertAsync(university);
 				await _unitOfWork.SaveAsync();
@@ -41,10 +45,12 @@ namespace CAH.Services.Service
 			}
 		}
 
-		public async Task<string> DeleteUniversityAsync(string id, string userId)
+		public async Task<string> DeleteUniversityAsync(string id)
 		{
 			try
 			{
+				var userId = _httpContext.HttpContext?.User.FindFirst("userId")?.Value;
+
 				var university = await _unitOfWork.GetRepository<University>().GetByIdAsync(id);
 				if (university == null)
 				{
@@ -70,6 +76,8 @@ namespace CAH.Services.Service
 		{
 			try
 			{
+				var userId = _httpContext.HttpContext?.User.FindFirst("userId")?.Value;
+
 				var university = await _unitOfWork.GetRepository<University>().GetByIdAsync(id);
 				if (university == null)
 				{
@@ -77,7 +85,7 @@ namespace CAH.Services.Service
 				}
 
 				_mapper.Map(model, university);
-				university.LastUpdatedBy = model.UserId;
+				university.LastUpdatedBy = userId;
 				university.LastUpdatedTime = DateTimeOffset.UtcNow;
 
 				await _unitOfWork.GetRepository<University>().UpdateAsync(university);
