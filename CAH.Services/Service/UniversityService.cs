@@ -79,9 +79,9 @@ namespace CAH.Services.Service
 				var userId = _httpContext.HttpContext?.User.FindFirst("userId")?.Value;
 
 				var university = await _unitOfWork.GetRepository<University>().GetByIdAsync(id);
-				if (university == null)
+				if (university == null || university.DeletedTime.HasValue)
 				{
-					return "can not find university";
+					return "can not find or university is deleted";
 				}
 
 				_mapper.Map(model, university);
