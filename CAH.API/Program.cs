@@ -76,7 +76,7 @@ builder.Services.AddControllers().AddJsonOptions(options =>
 
 FirebaseApp.Create(new AppOptions()
 {
-    Credential = GoogleCredential.FromFile("firebase-adminsdk.json")
+    Credential = GoogleCredential.FromFile("loginGoogle.json")
 });
 
 
