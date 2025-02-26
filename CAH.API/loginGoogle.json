@@ -1,0 +1,13 @@
+{
+  "type": "service_account",
+  "project_id": "collegeadmissionhelper",
+  "private_key_id": "65e758a5c8c1b116a35dd6e3656f9e553f4f4b57",
+  "private_key": "-----BEGIN PRIVATE KEY-----\nMIIEvQIBADANBgkqhkiG9w0BAQEFAASCBKcwggSjAgEAAoIBAQDLwaDqc5eahug3\nCojtW/isydxefD4hyDWxjvAZ3mEPMTQczsNFlL7qNI9qNC0K6qcufQ2/JPQ3CtmF\nkluzkgI/XnDayPaiK13kknHMwUZ/MMfZafifqA0Fqapxpq2+irA1mMF028FlbUcg\nVgiZKMcZzfq4QFu8Q9ehci0SnMV19yIF8lMdzWCRvSOh6K6cC7nkDXjkU3cSl/+0\nLtUwFh0WLApzjG70rq22CsbXWmuEaHQ09PkG1pg9KRSgr/IksrUwrhdGb8a4KD7e\nHeTKHpchgBKWBfH+O/dwbkemPSczMHTo5RD/rGBHFzcQvcAV1swARvm8idbYyfRZ\n9gi02iCvAgMBAAECggEABLqUsnxGS3bQEt7yuJeG2PPCYor9oikUXe+UUPVhSUn6\nDKUb0RSXrbXUkkFtvjAd+y050XLZHCHrVHdGG4/K74+QjPNXDgJ1pmVjsL3XlgIa\n0UftVj8/Nh9u7j5RD/gGCOhnrP+gqGr12KFGh89zd3zZUcdkmaT1bzDILQNobclo\n6W//1HWu3CNETnY8iUMvBhOyOSMFY8+CZ80STNitjpNiBvy1XDt6Av8xXeEP8HkG\nVXGVc98nh13kX8+vOhbEzbp1trjFjNcWWgIO3FbW9Ch6jnMV6dLOnANCy0juxptG\nANa56PGxf3XTzn078f5gpoDeRwi33xyvnswZewKfQQKBgQDxwhgWo6fbiZiQHZ6w\nmTrNdO998QAvEr/1zx+MPV8OT/ijD+RtHy+gosSnD9JaLpEJtSVyDJSzjtwemfF0\n0ViSZrzt64bQShvxFL1Kv0gUD5GpYsx3EYm9cOzgV8SEYU/1c/ziRt1n42w1PrR4\nAk4ajUYK21Re5mCuB9ybFtChYQKBgQDXwm/RsO3sZ42yBs5z6Z3gm8Q4aXAkWI91\n5dIr2CAvDA9Iscv3k7bjl1z0AbHW13JLSHNPhtzW9cL9e1+OXPJOd0HgRyLQyy9H\nth77mG/2MdZj/pqIvcjgJpNG5ioxdMsFE4A1goLR0gZazadAdshf1rlwKJK6dUNI\nFzzlGWQsDwKBgAmVbisHldHoJHoiEnZhvKkEZ7IQabd0ANQXv+JpVGlW1j5wlNeW\nkubFTRJqWCZnDizaV3+r7AEqOqOj6qR84Av9sqOj4JZFOdJWxiI+bvcMnvOeDQjz\nUwiFf35tPEcbLHZIgM/fi0thApshvzm6ranzy8EGbNPOQirj+OTVBLRBAoGBAMcQ\nm/6KEVpWSIOCiCSl3IYI8Udi8JZ4JxSN0BWnuDnwFIHrmNZ5sPnXA2oVzjD8YnVX\nCRzMvyCNazRYCdfdpaoDmgIFX/foH104iOl0wYgSf02O8KFNCPLWZHe7kB5FNbMf\nROEZ4v0Xm8lXiQKPFVxnTnxO0uG5ozP2TLbLcIK9AoGAU0kvejfiJO37/f6mqJ39\ntY8yJzO2SOh9AXEJCJb57USeJp3pSmK4YA67rVhVdYBPYy8JW/A6O1I4UQjF1suY\nWYGJ+kSWwgX73pVFayOejUyj/xNNOLeDWVqi/kbK0ClrXQChqDBgj7RsO9k2dNtp\nhSMp1LHkJlJIheIFqs9gZCg=\n-----END PRIVATE KEY-----\n",
+  "client_email": "firebase-adminsdk-fbsvc@collegeadmissionhelper.iam.gserviceaccount.com",
+  "client_id": "103475014468430655322",
+  "auth_uri": "https://accounts.google.com/o/oauth2/auth",
+  "token_uri": "https://oauth2.googleapis.com/token",
+  "auth_provider_x509_cert_url": "https://www.googleapis.com/oauth2/v1/certs",
+  "client_x509_cert_url": "https://www.googleapis.com/robot/v1/metadata/x509/firebase-adminsdk-fbsvc%40collegeadmissionhelper.iam.gserviceaccount.com",
+  "universe_domain": "googleapis.com"
+}

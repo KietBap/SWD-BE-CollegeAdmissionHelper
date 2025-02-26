@@ -3,6 +3,8 @@ using System.Text.Json.Serialization;
 using Microsoft.OpenApi.Models;
 using CAH.API;
 using CAH.Repositories.Mapper;
+using FirebaseAdmin;
+using Google.Apis.Auth.OAuth2;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -72,7 +74,10 @@ builder.Services.AddControllers().AddJsonOptions(options =>
     options.JsonSerializerOptions.WriteIndented = true;
 });
 
-
+FirebaseApp.Create(new AppOptions()
+{
+    Credential = GoogleCredential.FromFile("firebase-adminsdk.json")
+});
 
 
 var app = builder.Build();
