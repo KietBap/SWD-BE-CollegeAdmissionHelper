@@ -37,6 +37,14 @@ namespace CAH.API.Controllers
             var token = await _tokenService.GenerateJwtTokenAsync(account.Id.ToString(), account.UserName);
             return Ok(token);
         }
-	}
+
+        [HttpPost("login-google")]
+        public async Task<IActionResult> LoginGoogle(GoogleToken model)
+        {
+            var token = await _appUserService.LoginGoogleAsync(model);
+
+            return Ok(token);
+        }
+    }
 }
 
