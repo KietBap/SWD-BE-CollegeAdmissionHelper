@@ -1,12 +1,10 @@
 ﻿using AutoMapper;
-using Azure.Core;
 using CAH.Contract.Repositories.Entity;
 using CAH.Contract.Repositories.Interface;
 using CAH.Contract.Services.Interface;
 using CAH.Core.Utils;
 using CAH.ModelViews.AuthModelViews;
 using CAH.ModelViews.TokenModelViews;
-using DocumentFormat.OpenXml.Spreadsheet;
 using FirebaseAdmin.Auth;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
@@ -143,28 +141,36 @@ namespace CAH.Services.Service
         }
 
         public async Task<TokenModelView> LoginGoogleAsync(GoogleToken model)
-		{
+        {
             try
             {
                 var decodedToken = await FirebaseAuth.DefaultInstance.VerifyIdTokenAsync(model.Token);
                 var uid = decodedToken.Uid;
+
                 var email = decodedToken.Claims.ContainsKey("email") ? decodedToken.Claims["email"].ToString() : null;
                 var displayName = decodedToken.Claims.ContainsKey("name") ? decodedToken.Claims["name"].ToString() : null;
+
                 var user = await GetUserByEmailAsync(email);
+
                 if (user == null)
                 {
-                    await CreateAccount(email);
+                    user = await CreateAccount(email);
+                    Console.WriteLine("New user created with email: " + email);
                 }
 
                 var token = await _tokenService.GenerateJwtTokenAsync(user.Id, user.UserName);
-
                 return token;
+            }
+            catch (FirebaseAuthException ex)
+            {
+                throw new Exception($"Firebase Auth Error: {ex.Message}");
             }
             catch (Exception ex)
             {
-                throw new Exception(ex.Message);
+                throw new Exception($"Error verifying Firebase ID Token: {ex.Message}");
             }
         }
+
 
     }
 }
