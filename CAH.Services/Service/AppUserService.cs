@@ -10,6 +10,9 @@ using DocumentFormat.OpenXml.Spreadsheet;
 using FirebaseAdmin.Auth;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
+using Newtonsoft.Json;
+using System.IdentityModel.Tokens.Jwt;
+using System.Text;
 
 namespace CAH.Services.Service
 {
@@ -143,28 +146,52 @@ namespace CAH.Services.Service
         }
 
         public async Task<TokenModelView> LoginGoogleAsync(GoogleToken model)
-		{
+        {
             try
             {
-                var decodedToken = await FirebaseAuth.DefaultInstance.VerifyIdTokenAsync(model.Token);
-                var uid = decodedToken.Uid;
-                var email = decodedToken.Claims.ContainsKey("email") ? decodedToken.Claims["email"].ToString() : null;
-                var displayName = decodedToken.Claims.ContainsKey("name") ? decodedToken.Claims["name"].ToString() : null;
-                var user = await GetUserByEmailAsync(email);
-                if (user == null)
+                if (string.IsNullOrEmpty(model.Token))
                 {
-                    await CreateAccount(email);
+                    throw new Exception("Token is null or empty.");
                 }
 
-                var token = await _tokenService.GenerateJwtTokenAsync(user.Id, user.UserName);
+                Console.WriteLine("Verifying token: " + model.Token); // Debug token
 
+
+                // Xác minh Firebase ID Token
+                var decodedToken = await FirebaseAuth.DefaultInstance.VerifyIdTokenAsync(model.Token);
+                var uid = decodedToken.Uid;
+
+                Console.WriteLine("Token verified. UID: " + uid); // Debug UID
+
+                // Lấy thông tin từ claims
+                var email = decodedToken.Claims.ContainsKey("email") ? decodedToken.Claims["email"].ToString() : null;
+                var displayName = decodedToken.Claims.ContainsKey("name") ? decodedToken.Claims["name"].ToString() : null;
+
+                // Kiểm tra người dùng
+                var user = await GetUserByEmailAsync(email);
+
+                if (user == null)
+                {
+                    user = await CreateAccount(email);
+                    Console.WriteLine("New user created with email: " + email);
+                }
+
+                // Tạo JWT token
+                var token = await _tokenService.GenerateJwtTokenAsync(user.Id, user.UserName);
                 return token;
+            }
+            catch (FirebaseAuthException ex)
+            {
+                // Lỗi cụ thể từ Firebase
+                throw new Exception($"Firebase Auth Error: {ex.Message}");
             }
             catch (Exception ex)
             {
-                throw new Exception(ex.Message);
+                // Lỗi chung
+                throw new Exception($"Error verifying Firebase ID Token: {ex.Message}");
             }
         }
+
 
     }
 }

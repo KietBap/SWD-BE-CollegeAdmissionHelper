@@ -2,6 +2,9 @@
 using CAH.Contract.Services.Interface;
 using CAH.ModelViews.AuthModelViews;
 using CAH.Services.Service;
+using FirebaseAdmin.Auth;
+using FirebaseAdmin;
+using Google.Apis.Auth;
 using Microsoft.AspNetCore.Mvc;
 
 namespace CAH.API.Controllers
@@ -14,7 +17,8 @@ namespace CAH.API.Controllers
         private readonly IAppUserService _appUserService;
         private readonly TokenService _tokenService;
 
-		public AuthController(TokenService tokenService, IAppUserService userService) {
+        public AuthController(TokenService tokenService, IAppUserService userService)
+        {
             _tokenService = tokenService;
             _appUserService = userService;
         }
@@ -47,4 +51,3 @@ namespace CAH.API.Controllers
         }
     }
 }
-
