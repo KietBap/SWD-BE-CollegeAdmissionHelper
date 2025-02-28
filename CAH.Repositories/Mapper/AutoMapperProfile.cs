@@ -1,6 +1,7 @@
 using AutoMapper;
 using CAH.Contract.Repositories.Entity;
 using CAH.ModelViews.AdmissionMethodMVs;
+using CAH.ModelViews.AuthModelViews;
 using CAH.ModelViews.MajorModelViews;
 using CAH.ModelViews.SubjectModelViews;
 using CAH.ModelViews.UniversityModelViews;
@@ -30,6 +31,9 @@ namespace CAH.Repositories.Mapper
 			CreateMap<SubjectModelView, Subject>();
 			CreateMap<ListSubjectModelView, Subject>();
 			CreateMap<Subject, ListSubjectModelView>();
+
+			CreateMap<User, UserModelView>();
+			CreateMap<UserModelView, User>();
 		}
     }
 }
