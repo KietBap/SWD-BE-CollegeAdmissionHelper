@@ -18,10 +18,10 @@ namespace CAH.Contract.Repositories.Entity
         [ForeignKey(nameof(UserId))]
         public virtual User User { get; set; }
 
-        [Required]
-        [MaxLength(4)]
-        public string Year { get; set; } 
+        public DateOnly Year { get; set; } 
 
-        public int Score { get; set; }
+        public float Score { get; set; }
+        public string ExamType { get; set; }
+        public string? Class { get; set; }
     }
 }

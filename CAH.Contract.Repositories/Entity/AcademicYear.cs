@@ -1,5 +1,4 @@
 ﻿using CAH.Core.Base;
-using System.ComponentModel.DataAnnotations;
 
 namespace CAH.Contract.Repositories.Entity
 {

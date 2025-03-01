@@ -12,6 +12,7 @@ namespace CAH.Contract.Repositories.Entity
 		[ForeignKey("UserId")]
 		public virtual User User { get; set; }
 
+		[Required]
 		public string AdmissionInforId { get; set; }
 
 		[ForeignKey("AdmissionInforId")]
