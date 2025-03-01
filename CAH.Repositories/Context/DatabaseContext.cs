@@ -26,6 +26,7 @@ namespace CAH.Repositories.Context
 		public virtual DbSet<AdmissionMethod> AdmissionMethods { get; set; }
 		public virtual DbSet<InforMethod> InforMethods { get; set; }
 		public virtual DbSet<SubjectScore> SubjectScores { get; set; }
+		public virtual DbSet<Review> Reviews { get; set; }
 		protected override void OnModelCreating(ModelBuilder modelBuilder)
 		{
 			//base.OnModelCreating(modelBuilder);
@@ -103,10 +104,22 @@ namespace CAH.Repositories.Context
 				.HasForeignKey(um => um.MajorId)
 				.OnDelete(DeleteBehavior.Restrict);
 
-			//===================================================Seed data================================================================
+            modelBuilder.Entity<Review>()
+                .HasOne(um => um.User)
+                .WithMany(m => m.Reviews)
+                .HasForeignKey(um => um.UserId)
+                .OnDelete(DeleteBehavior.Restrict);
 
-			//role
-			var roleIdAdmin = Guid.NewGuid();
+            modelBuilder.Entity<Review>()
+                .HasOne(um => um.UniMajor)
+                .WithMany(m => m.Reviews)
+                .HasForeignKey(um => um.UniMajorId)
+                .OnDelete(DeleteBehavior.Restrict);
+
+            //===================================================Seed data================================================================
+
+            //role
+            var roleIdAdmin = Guid.NewGuid();
 			var roleIdUser = Guid.NewGuid();
 			modelBuilder.Entity<Role>().HasData(
 				new Role
@@ -141,6 +154,7 @@ namespace CAH.Repositories.Context
 				new User
 				{
 					Id = adminId,
+					Name = "KICM vippro",
 					UserName = "admin",
 					NormalizedUserName = "ADMIN@EXAMPLE.COM",
 					Email = "admin@example.com",
@@ -156,6 +170,7 @@ namespace CAH.Repositories.Context
 				new User
 				{
 					Id = userId,
+					Name = "Jack 97",
 					UserName = "user",
 					NormalizedUserName = "USER@EXAMPLE.COM",
 					Email = "user@example.com",
@@ -167,7 +182,7 @@ namespace CAH.Repositories.Context
 					LastUpdatedBy = "SeedData",
 					CreatedTime = DateTimeOffset.UtcNow,
 					LastUpdatedTime = DateTimeOffset.UtcNow
-				});
+				}); ;
 
 			//user role
 			modelBuilder.Entity<UserRole>().HasData(
@@ -189,6 +204,116 @@ namespace CAH.Repositories.Context
 					CreatedTime = DateTimeOffset.UtcNow,
 					LastUpdatedTime = DateTimeOffset.UtcNow
 				});
-		}
+
+			//University
+			var uniId1 = Guid.NewGuid().ToString();
+            var uniId2 = Guid.NewGuid().ToString();
+            modelBuilder.Entity<University>().HasData(
+				new University
+				{
+					Id = uniId1,
+					Name = "FPT University",
+					Location = "Thu Duc",
+					UniversityCode = "FPT",
+					Email = "fptuniversity@fpt.edu.vn",
+					PhoneNumber = "0987654321",
+					Accreditation = "So 1 Viet Nam",
+					Type = "Private",
+					EstablishedDate = DateOnly.FromDateTime(DateTime.Now),
+					RankingInternational = 1,
+					RankingNational = 2,
+					CreatedBy = "SeedData",
+					LastUpdatedBy = "SeedData",
+					CreatedTime = DateTimeOffset.UtcNow,
+					LastUpdatedTime = DateTimeOffset.UtcNow
+				},
+				new University
+				{
+					Id = uniId2,
+					Name = "Su Pham Ki Thuat",
+					Location = "Vo Van Ngan, Thu Duc",
+					UniversityCode = "HCMUTE",
+					Email = "suphamkithuat@gmail.com",
+					PhoneNumber = "0987654321",
+					Accreditation = "So 1 VVN",
+					Type = "State",
+					EstablishedDate = DateOnly.FromDateTime(DateTime.Now),
+					RankingInternational = 1,
+					RankingNational = 2,
+					CreatedBy = "SeedData",
+					LastUpdatedBy = "SeedData",
+					CreatedTime = DateTimeOffset.UtcNow,
+					LastUpdatedTime = DateTimeOffset.UtcNow
+				});
+
+            //Major
+            var majorId1 = Guid.NewGuid().ToString();
+            var majorId2 = Guid.NewGuid().ToString();
+            modelBuilder.Entity<Major>().HasData(
+				new Major
+				{
+					Id = majorId1,
+					Name = "Cong Nghe Thong Tin",
+					CreatedBy = "SeedData",
+					LastUpdatedBy = "SeedData",
+					CreatedTime = DateTimeOffset.UtcNow,
+					LastUpdatedTime = DateTimeOffset.UtcNow
+				},
+				new Major
+				{
+					Id = majorId2,
+					Name = "Kinh Te",
+					CreatedBy = "SeedData",
+					LastUpdatedBy = "SeedData",
+					CreatedTime = DateTimeOffset.UtcNow,
+					LastUpdatedTime = DateTimeOffset.UtcNow
+				});
+
+            //Subject
+            var sub1 = Guid.NewGuid().ToString();
+            var sub2 = Guid.NewGuid().ToString();
+            modelBuilder.Entity<Subject>().HasData(
+                new Subject
+                {
+                    Id = sub1,
+                    Name = "Toan",
+                    CreatedBy = "SeedData",
+                    LastUpdatedBy = "SeedData",
+                    CreatedTime = DateTimeOffset.UtcNow,
+                    LastUpdatedTime = DateTimeOffset.UtcNow
+                },
+                new Subject
+                {
+                    Id = sub2,
+                    Name = "Tieng Anh",
+                    CreatedBy = "SeedData",
+                    LastUpdatedBy = "SeedData",
+                    CreatedTime = DateTimeOffset.UtcNow,
+                    LastUpdatedTime = DateTimeOffset.UtcNow
+                });
+
+            //AdmissionMethod
+            var am1 = Guid.NewGuid().ToString();
+            var am2 = Guid.NewGuid().ToString();
+            modelBuilder.Entity<AdmissionMethod>().HasData(
+                new AdmissionMethod
+                {
+                    Id = am1,
+                    MethodName = "Xet Diem Tot Nghiep",
+                    CreatedBy = "SeedData",
+                    LastUpdatedBy = "SeedData",
+                    CreatedTime = DateTimeOffset.UtcNow,
+                    LastUpdatedTime = DateTimeOffset.UtcNow
+                },
+                new AdmissionMethod
+                {
+                    Id = am2,
+                    MethodName = "Xet diem danh gia nang luc",
+                    CreatedBy = "SeedData",
+                    LastUpdatedBy = "SeedData",
+                    CreatedTime = DateTimeOffset.UtcNow,
+                    LastUpdatedTime = DateTimeOffset.UtcNow
+                });
+        }
 	}
 }

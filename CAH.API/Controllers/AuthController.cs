@@ -38,7 +38,7 @@ namespace CAH.API.Controllers
                 return Unauthorized("Invalid credentials");
             }
 
-            var token = await _tokenService.GenerateJwtTokenAsync(account.Id.ToString(), account.UserName);
+            var token = await _tokenService.GenerateJwtTokenAsync(account.Id.ToString(), account.UserName, account.Name);
             return Ok(token);
         }
 

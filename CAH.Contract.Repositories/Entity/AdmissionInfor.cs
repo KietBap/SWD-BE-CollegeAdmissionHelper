@@ -14,8 +14,6 @@ namespace CAH.Contract.Repositories.Entity
 		public virtual AcademicYear AcademicYear { get; set; }
 
 		public int Quota { get; set; }
-        public float ScoreRequirement { get; set; }
-        public string ScoreType { get; set; }
 		public DateTime AdmisstionDate { get; set; }
 		public DateTime Deadline { get; set; }
 		public virtual ICollection<InforMethod> InforMethods { get; set; }

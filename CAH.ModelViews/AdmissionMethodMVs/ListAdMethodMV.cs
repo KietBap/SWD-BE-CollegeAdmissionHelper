@@ -10,6 +10,7 @@ namespace CAH.ModelViews.AdmissionMethodMVs
 	{
         public string Id { get; set; }
         public string MethodName { get; set; }
+        public string RequiredDocuments { get; set; }
         public string Description { get; set; }
     }
 }

@@ -7,6 +7,7 @@ namespace CAH.Contract.Repositories.Entity
 	{
 		public string Password { get; set; } = string.Empty;
 		public string? UserImage { get; set; }
+		public string? Name { get; set; }
 		public string? CreatedBy { get; set; }
 		public string? LastUpdatedBy { get; set; }
 		public string? DeletedBy { get; set; }
@@ -23,6 +24,7 @@ namespace CAH.Contract.Repositories.Entity
 		}
 		public virtual ICollection<UserRole> UserRoles { get; set; }
 		public virtual ICollection<Wishlist> Wishlists { get; set; }
+		public virtual ICollection<Review> Reviews { get; set; }
 
 	}
 }
