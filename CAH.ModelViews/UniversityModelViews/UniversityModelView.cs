@@ -7,7 +7,7 @@
         public string UniversityCode { get; set; }
         public string Email { get; set; }
         public string PhoneNumber { get; set; }
-        public DateOnly EstablishedDate { get; set; }
+        public DateTime EstablishedDate { get; set; }
         public string? Accreditation { get; set; }
         public string Type { get; set; }
         public string Description { get; set; }

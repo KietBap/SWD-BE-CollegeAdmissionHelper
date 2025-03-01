@@ -4,7 +4,6 @@ using CAH.Contract.Repositories.Interface;
 using CAH.Contract.Services.Interface;
 using CAH.Core;
 using CAH.ModelViews.ReviewModelViews;
-using CAH.ModelViews.UniMajorModelViews;
 using Microsoft.AspNetCore.Http;
 using Microsoft.EntityFrameworkCore;
 

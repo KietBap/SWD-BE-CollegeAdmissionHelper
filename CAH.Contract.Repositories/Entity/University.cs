@@ -11,7 +11,7 @@ namespace CAH.Contract.Repositories.Entity
         public string PhoneNumber { get; set; }
         public string? Accreditation { get; set; }
         public string Type { get; set; }
-        public DateOnly EstablishedDate { get; set; }
+        public DateTime EstablishedDate { get; set; }
         public int? RankingNational { get; set; }
         public int? RankingInternational { get; set; }
         public string? Description { get; set; }
