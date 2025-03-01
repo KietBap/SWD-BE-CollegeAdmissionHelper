@@ -6,6 +6,7 @@ using CAH.ModelViews.AuthModelViews;
 using CAH.ModelViews.MajorModelViews;
 using CAH.ModelViews.ReviewModelViews;
 using CAH.ModelViews.SubjectModelViews;
+using CAH.ModelViews.SubScoreModelViews;
 using CAH.ModelViews.UniMajorModelViews;
 using CAH.ModelViews.UniversityModelViews;
 
@@ -56,6 +57,13 @@ namespace CAH.Repositories.Mapper
             CreateMap<Review, UpdateReviewModelView>();
             CreateMap<Review, ListReviewModelView>();
             CreateMap<ListReviewModelView, Review>();
+
+            CreateMap<SubjectScore, CreateSubScoreModelView>();
+            CreateMap<CreateSubScoreModelView, SubjectScore>();
+            CreateMap<UpdateSubScoreModelView, SubjectScore>();
+            CreateMap<SubjectScore, UpdateSubScoreModelView>();
+            CreateMap<SubjectScore, ListSubScoreModelView>();
+            CreateMap<ListSubScoreModelView, SubjectScore>();
         }
     }
 }

@@ -1,7 +1,6 @@
 ﻿using CAH.Contract.Services.Interface;
 using CAH.Core;
 using CAH.ModelViews.ReviewModelViews;
-using CAH.ModelViews.UniMajorModelViews;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 

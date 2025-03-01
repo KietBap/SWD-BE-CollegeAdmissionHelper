@@ -18,7 +18,7 @@ namespace CAH.Contract.Repositories.Entity
         [ForeignKey(nameof(UserId))]
         public virtual User User { get; set; }
 
-        public DateOnly Year { get; set; } 
+        public DateTime? Date { get; set; } 
 
         public float Score { get; set; }
         public string ExamType { get; set; }
