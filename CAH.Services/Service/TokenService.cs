@@ -26,7 +26,7 @@ namespace CAH.Services.Service
             _userManager = userManager;
         }
 
-        public async Task<TokenModelView> GenerateJwtTokenAsync(string userId, string userName)
+        public async Task<TokenModelView> GenerateJwtTokenAsync(string userId, string userName, string name)
         {
 			var user = await _userManager.FindByIdAsync(userId);
 			var roles = await _userManager.GetRolesAsync(user ?? throw new Exception("User not found"));
@@ -35,9 +35,9 @@ namespace CAH.Services.Service
 			var claims = new List<Claim>
 			{
 				new Claim(JwtRegisteredClaimNames.Sub, userName),
-				new Claim(ClaimTypes.Name, userName),
+				new Claim(ClaimTypes.Name, name),
 				new Claim(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString()),
-				new Claim("userId", userId)
+				new Claim("userId", userId),
 			};
 
 			foreach (var role in roles)

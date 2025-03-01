@@ -108,12 +108,13 @@ namespace CAH.Services.Service
             return userModelView;
         }
 
-        private async Task<UserModelView> CreateAccount(string email)
+        private async Task<UserModelView> CreateAccount(string email, string name)
         {
             var newAccount = new User
             {
                 Id = Guid.NewGuid(),
                 UserName = email.Split('@')[0],
+                Name = name,
                 Email = email,
                 SecurityStamp = Guid.NewGuid().ToString(),
             };
@@ -154,11 +155,11 @@ namespace CAH.Services.Service
 
                 if (user == null)
                 {
-                    user = await CreateAccount(email);
+                    user = await CreateAccount(email, displayName);
                     Console.WriteLine("New user created with email: " + email);
                 }
 
-                var token = await _tokenService.GenerateJwtTokenAsync(user.Id, user.UserName);
+                var token = await _tokenService.GenerateJwtTokenAsync(user.Id, user.UserName, user.Name);
                 return token;
             }
             catch (FirebaseAuthException ex)

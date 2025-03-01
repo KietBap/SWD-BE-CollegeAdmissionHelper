@@ -145,20 +145,20 @@ namespace CAH.Repositories.Migrations
                     b.HasData(
                         new
                         {
-                            Id = "16173d2d-17a8-47be-9fe7-618a92012c37",
+                            Id = "a69bbb65-e4b8-42df-b180-a6a45c8632e1",
                             CreatedBy = "SeedData",
-                            CreatedTime = new DateTimeOffset(new DateTime(2025, 3, 1, 6, 56, 21, 65, DateTimeKind.Unspecified).AddTicks(8143), new TimeSpan(0, 0, 0, 0, 0)),
+                            CreatedTime = new DateTimeOffset(new DateTime(2025, 3, 1, 7, 19, 38, 131, DateTimeKind.Unspecified).AddTicks(9851), new TimeSpan(0, 0, 0, 0, 0)),
                             LastUpdatedBy = "SeedData",
-                            LastUpdatedTime = new DateTimeOffset(new DateTime(2025, 3, 1, 6, 56, 21, 65, DateTimeKind.Unspecified).AddTicks(8143), new TimeSpan(0, 0, 0, 0, 0)),
+                            LastUpdatedTime = new DateTimeOffset(new DateTime(2025, 3, 1, 7, 19, 38, 131, DateTimeKind.Unspecified).AddTicks(9851), new TimeSpan(0, 0, 0, 0, 0)),
                             MethodName = "Xet Diem Tot Nghiep"
                         },
                         new
                         {
-                            Id = "952f3780-6c6f-455b-9c14-f5aba75b2060",
+                            Id = "f640b565-9941-4966-9f91-5c46ab7781e8",
                             CreatedBy = "SeedData",
-                            CreatedTime = new DateTimeOffset(new DateTime(2025, 3, 1, 6, 56, 21, 65, DateTimeKind.Unspecified).AddTicks(8147), new TimeSpan(0, 0, 0, 0, 0)),
+                            CreatedTime = new DateTimeOffset(new DateTime(2025, 3, 1, 7, 19, 38, 131, DateTimeKind.Unspecified).AddTicks(9854), new TimeSpan(0, 0, 0, 0, 0)),
                             LastUpdatedBy = "SeedData",
-                            LastUpdatedTime = new DateTimeOffset(new DateTime(2025, 3, 1, 6, 56, 21, 65, DateTimeKind.Unspecified).AddTicks(8147), new TimeSpan(0, 0, 0, 0, 0)),
+                            LastUpdatedTime = new DateTimeOffset(new DateTime(2025, 3, 1, 7, 19, 38, 131, DateTimeKind.Unspecified).AddTicks(9855), new TimeSpan(0, 0, 0, 0, 0)),
                             MethodName = "Xet diem danh gia nang luc"
                         });
                 });
@@ -253,20 +253,20 @@ namespace CAH.Repositories.Migrations
                     b.HasData(
                         new
                         {
-                            Id = "5ca6170d-22e8-4d93-9a72-8871f75ea619",
+                            Id = "d7f7a2a7-f29a-404b-8f36-c971730c24d9",
                             CreatedBy = "SeedData",
-                            CreatedTime = new DateTimeOffset(new DateTime(2025, 3, 1, 6, 56, 21, 65, DateTimeKind.Unspecified).AddTicks(8028), new TimeSpan(0, 0, 0, 0, 0)),
+                            CreatedTime = new DateTimeOffset(new DateTime(2025, 3, 1, 7, 19, 38, 131, DateTimeKind.Unspecified).AddTicks(9756), new TimeSpan(0, 0, 0, 0, 0)),
                             LastUpdatedBy = "SeedData",
-                            LastUpdatedTime = new DateTimeOffset(new DateTime(2025, 3, 1, 6, 56, 21, 65, DateTimeKind.Unspecified).AddTicks(8029), new TimeSpan(0, 0, 0, 0, 0)),
+                            LastUpdatedTime = new DateTimeOffset(new DateTime(2025, 3, 1, 7, 19, 38, 131, DateTimeKind.Unspecified).AddTicks(9760), new TimeSpan(0, 0, 0, 0, 0)),
                             Name = "Cong Nghe Thong Tin"
                         },
                         new
                         {
-                            Id = "6be7167d-317a-48c5-af69-464d71007244",
+                            Id = "1e6d4ce1-9293-4972-8897-60caeca7b7d4",
                             CreatedBy = "SeedData",
-                            CreatedTime = new DateTimeOffset(new DateTime(2025, 3, 1, 6, 56, 21, 65, DateTimeKind.Unspecified).AddTicks(8036), new TimeSpan(0, 0, 0, 0, 0)),
+                            CreatedTime = new DateTimeOffset(new DateTime(2025, 3, 1, 7, 19, 38, 131, DateTimeKind.Unspecified).AddTicks(9763), new TimeSpan(0, 0, 0, 0, 0)),
                             LastUpdatedBy = "SeedData",
-                            LastUpdatedTime = new DateTimeOffset(new DateTime(2025, 3, 1, 6, 56, 21, 65, DateTimeKind.Unspecified).AddTicks(8036), new TimeSpan(0, 0, 0, 0, 0)),
+                            LastUpdatedTime = new DateTimeOffset(new DateTime(2025, 3, 1, 7, 19, 38, 131, DateTimeKind.Unspecified).AddTicks(9763), new TimeSpan(0, 0, 0, 0, 0)),
                             Name = "Kinh Te"
                         });
                 });
@@ -357,19 +357,19 @@ namespace CAH.Repositories.Migrations
                     b.HasData(
                         new
                         {
-                            Id = new Guid("cad1b663-2cb0-4b1f-a09e-ed1cfa9d80ff"),
+                            Id = new Guid("9ec916dc-f9da-4339-9d21-03d54599f468"),
                             CreatedBy = "System",
-                            CreatedTime = new DateTimeOffset(new DateTime(2025, 3, 1, 6, 56, 20, 954, DateTimeKind.Unspecified).AddTicks(2742), new TimeSpan(0, 0, 0, 0, 0)),
-                            LastUpdatedTime = new DateTimeOffset(new DateTime(2025, 3, 1, 6, 56, 20, 954, DateTimeKind.Unspecified).AddTicks(2743), new TimeSpan(0, 0, 0, 0, 0)),
+                            CreatedTime = new DateTimeOffset(new DateTime(2025, 3, 1, 7, 19, 38, 20, DateTimeKind.Unspecified).AddTicks(8471), new TimeSpan(0, 0, 0, 0, 0)),
+                            LastUpdatedTime = new DateTimeOffset(new DateTime(2025, 3, 1, 7, 19, 38, 20, DateTimeKind.Unspecified).AddTicks(8472), new TimeSpan(0, 0, 0, 0, 0)),
                             Name = "Admin",
                             NormalizedName = "ADMIN"
                         },
                         new
                         {
-                            Id = new Guid("bff8c492-338c-4d77-aa7c-1545f87b3190"),
+                            Id = new Guid("629462fe-3ee5-4f93-900e-8610b5179ca2"),
                             CreatedBy = "System",
-                            CreatedTime = new DateTimeOffset(new DateTime(2025, 3, 1, 6, 56, 20, 954, DateTimeKind.Unspecified).AddTicks(2745), new TimeSpan(0, 0, 0, 0, 0)),
-                            LastUpdatedTime = new DateTimeOffset(new DateTime(2025, 3, 1, 6, 56, 20, 954, DateTimeKind.Unspecified).AddTicks(2746), new TimeSpan(0, 0, 0, 0, 0)),
+                            CreatedTime = new DateTimeOffset(new DateTime(2025, 3, 1, 7, 19, 38, 20, DateTimeKind.Unspecified).AddTicks(8496), new TimeSpan(0, 0, 0, 0, 0)),
+                            LastUpdatedTime = new DateTimeOffset(new DateTime(2025, 3, 1, 7, 19, 38, 20, DateTimeKind.Unspecified).AddTicks(8496), new TimeSpan(0, 0, 0, 0, 0)),
                             Name = "User",
                             NormalizedName = "USER"
                         });
@@ -452,20 +452,20 @@ namespace CAH.Repositories.Migrations
                     b.HasData(
                         new
                         {
-                            Id = "810703c2-c621-4037-96e5-919eaf9083ec",
+                            Id = "0abf6d5a-f3c1-4e26-8d97-ff1cd62ee9d6",
                             CreatedBy = "SeedData",
-                            CreatedTime = new DateTimeOffset(new DateTime(2025, 3, 1, 6, 56, 21, 65, DateTimeKind.Unspecified).AddTicks(8073), new TimeSpan(0, 0, 0, 0, 0)),
+                            CreatedTime = new DateTimeOffset(new DateTime(2025, 3, 1, 7, 19, 38, 131, DateTimeKind.Unspecified).AddTicks(9805), new TimeSpan(0, 0, 0, 0, 0)),
                             LastUpdatedBy = "SeedData",
-                            LastUpdatedTime = new DateTimeOffset(new DateTime(2025, 3, 1, 6, 56, 21, 65, DateTimeKind.Unspecified).AddTicks(8073), new TimeSpan(0, 0, 0, 0, 0)),
+                            LastUpdatedTime = new DateTimeOffset(new DateTime(2025, 3, 1, 7, 19, 38, 131, DateTimeKind.Unspecified).AddTicks(9805), new TimeSpan(0, 0, 0, 0, 0)),
                             Name = "Toan"
                         },
                         new
                         {
-                            Id = "e873e791-0560-4e94-9fb9-c832b9e7c625",
+                            Id = "de20a795-7ebf-422d-964d-e24d3225b3e7",
                             CreatedBy = "SeedData",
-                            CreatedTime = new DateTimeOffset(new DateTime(2025, 3, 1, 6, 56, 21, 65, DateTimeKind.Unspecified).AddTicks(8078), new TimeSpan(0, 0, 0, 0, 0)),
+                            CreatedTime = new DateTimeOffset(new DateTime(2025, 3, 1, 7, 19, 38, 131, DateTimeKind.Unspecified).AddTicks(9809), new TimeSpan(0, 0, 0, 0, 0)),
                             LastUpdatedBy = "SeedData",
-                            LastUpdatedTime = new DateTimeOffset(new DateTime(2025, 3, 1, 6, 56, 21, 65, DateTimeKind.Unspecified).AddTicks(8078), new TimeSpan(0, 0, 0, 0, 0)),
+                            LastUpdatedTime = new DateTimeOffset(new DateTime(2025, 3, 1, 7, 19, 38, 131, DateTimeKind.Unspecified).AddTicks(9809), new TimeSpan(0, 0, 0, 0, 0)),
                             Name = "Tieng Anh"
                         });
                 });
@@ -637,14 +637,14 @@ namespace CAH.Repositories.Migrations
                     b.HasData(
                         new
                         {
-                            Id = "a7efe8ce-dffe-42da-bf69-f60e98c66cae",
+                            Id = "40043c1a-a824-414d-a6a5-9de2fb970797",
                             Accreditation = "So 1 Viet Nam",
                             CreatedBy = "SeedData",
-                            CreatedTime = new DateTimeOffset(new DateTime(2025, 3, 1, 6, 56, 21, 65, DateTimeKind.Unspecified).AddTicks(7977), new TimeSpan(0, 0, 0, 0, 0)),
+                            CreatedTime = new DateTimeOffset(new DateTime(2025, 3, 1, 7, 19, 38, 131, DateTimeKind.Unspecified).AddTicks(9713), new TimeSpan(0, 0, 0, 0, 0)),
                             Email = "fptuniversity@fpt.edu.vn",
                             EstablishedDate = new DateOnly(2025, 3, 1),
                             LastUpdatedBy = "SeedData",
-                            LastUpdatedTime = new DateTimeOffset(new DateTime(2025, 3, 1, 6, 56, 21, 65, DateTimeKind.Unspecified).AddTicks(7978), new TimeSpan(0, 0, 0, 0, 0)),
+                            LastUpdatedTime = new DateTimeOffset(new DateTime(2025, 3, 1, 7, 19, 38, 131, DateTimeKind.Unspecified).AddTicks(9713), new TimeSpan(0, 0, 0, 0, 0)),
                             Location = "Thu Duc",
                             Name = "FPT University",
                             PhoneNumber = "0987654321",
@@ -655,14 +655,14 @@ namespace CAH.Repositories.Migrations
                         },
                         new
                         {
-                            Id = "21513bd1-3abf-44f0-89a0-acf8aa35d1e6",
+                            Id = "29aa5cf9-0767-4df0-8fa6-936df2e473bc",
                             Accreditation = "So 1 VVN",
                             CreatedBy = "SeedData",
-                            CreatedTime = new DateTimeOffset(new DateTime(2025, 3, 1, 6, 56, 21, 65, DateTimeKind.Unspecified).AddTicks(7983), new TimeSpan(0, 0, 0, 0, 0)),
+                            CreatedTime = new DateTimeOffset(new DateTime(2025, 3, 1, 7, 19, 38, 131, DateTimeKind.Unspecified).AddTicks(9719), new TimeSpan(0, 0, 0, 0, 0)),
                             Email = "suphamkithuat@gmail.com",
                             EstablishedDate = new DateOnly(2025, 3, 1),
                             LastUpdatedBy = "SeedData",
-                            LastUpdatedTime = new DateTimeOffset(new DateTime(2025, 3, 1, 6, 56, 21, 65, DateTimeKind.Unspecified).AddTicks(7983), new TimeSpan(0, 0, 0, 0, 0)),
+                            LastUpdatedTime = new DateTimeOffset(new DateTime(2025, 3, 1, 7, 19, 38, 131, DateTimeKind.Unspecified).AddTicks(9719), new TimeSpan(0, 0, 0, 0, 0)),
                             Location = "Vo Van Ngan, Thu Duc",
                             Name = "Su Pham Ki Thuat",
                             PhoneNumber = "0987654321",
@@ -762,20 +762,21 @@ namespace CAH.Repositories.Migrations
                     b.HasData(
                         new
                         {
-                            Id = new Guid("4118440f-3c62-4c31-baf4-c442a4f61372"),
+                            Id = new Guid("289cae22-4c9b-491d-82de-ea61efc350f5"),
                             AccessFailedCount = 0,
-                            ConcurrencyStamp = "31fd6c38-dd42-4c4f-8904-2e4c67da9900",
+                            ConcurrencyStamp = "3b31f147-88ae-48d0-82fc-10980c3b547c",
                             CreatedBy = "SeedData",
-                            CreatedTime = new DateTimeOffset(new DateTime(2025, 3, 1, 6, 56, 21, 65, DateTimeKind.Unspecified).AddTicks(7729), new TimeSpan(0, 0, 0, 0, 0)),
+                            CreatedTime = new DateTimeOffset(new DateTime(2025, 3, 1, 7, 19, 38, 131, DateTimeKind.Unspecified).AddTicks(9498), new TimeSpan(0, 0, 0, 0, 0)),
                             Email = "admin@example.com",
                             EmailConfirmed = true,
                             LastUpdatedBy = "SeedData",
-                            LastUpdatedTime = new DateTimeOffset(new DateTime(2025, 3, 1, 6, 56, 21, 65, DateTimeKind.Unspecified).AddTicks(7730), new TimeSpan(0, 0, 0, 0, 0)),
+                            LastUpdatedTime = new DateTimeOffset(new DateTime(2025, 3, 1, 7, 19, 38, 131, DateTimeKind.Unspecified).AddTicks(9498), new TimeSpan(0, 0, 0, 0, 0)),
                             LockoutEnabled = false,
+                            Name = "KICM vippro",
                             NormalizedEmail = "ADMIN@EXAMPLE.COM",
                             NormalizedUserName = "ADMIN@EXAMPLE.COM",
                             Password = "",
-                            PasswordHash = "AQAAAAIAAYagAAAAEBo582aAMITtd9/9mnlfka4mc9S/OFK1d/iQnZJyIDu6nqIz/SKNphDPKNty9wun3Q==",
+                            PasswordHash = "AQAAAAIAAYagAAAAEELUbh5jPs/swe/f7M+Q/7JuRliZhfYP3OOB0JRT9th31i0UED9ctlwym+q9dtKzHg==",
                             PhoneNumberConfirmed = false,
                             RefreshTokenExpiryTime = new DateTimeOffset(new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, 0, 0, 0, 0)),
                             SecurityStamp = "SeedData",
@@ -784,20 +785,21 @@ namespace CAH.Repositories.Migrations
                         },
                         new
                         {
-                            Id = new Guid("36664368-e96e-4a1e-bf02-87ff0d02c0ac"),
+                            Id = new Guid("815102cb-5662-410f-93d7-9aa703e05222"),
                             AccessFailedCount = 0,
-                            ConcurrencyStamp = "7286290b-c9f8-4a97-bd8e-c20505be0b2e",
+                            ConcurrencyStamp = "ab8adab0-9356-4d90-9c24-c7ec66d177ce",
                             CreatedBy = "SeedData",
-                            CreatedTime = new DateTimeOffset(new DateTime(2025, 3, 1, 6, 56, 21, 65, DateTimeKind.Unspecified).AddTicks(7737), new TimeSpan(0, 0, 0, 0, 0)),
+                            CreatedTime = new DateTimeOffset(new DateTime(2025, 3, 1, 7, 19, 38, 131, DateTimeKind.Unspecified).AddTicks(9506), new TimeSpan(0, 0, 0, 0, 0)),
                             Email = "user@example.com",
                             EmailConfirmed = true,
                             LastUpdatedBy = "SeedData",
-                            LastUpdatedTime = new DateTimeOffset(new DateTime(2025, 3, 1, 6, 56, 21, 65, DateTimeKind.Unspecified).AddTicks(7738), new TimeSpan(0, 0, 0, 0, 0)),
+                            LastUpdatedTime = new DateTimeOffset(new DateTime(2025, 3, 1, 7, 19, 38, 131, DateTimeKind.Unspecified).AddTicks(9506), new TimeSpan(0, 0, 0, 0, 0)),
                             LockoutEnabled = false,
+                            Name = "Jack 97",
                             NormalizedEmail = "USER@EXAMPLE.COM",
                             NormalizedUserName = "USER@EXAMPLE.COM",
                             Password = "",
-                            PasswordHash = "AQAAAAIAAYagAAAAEEB9mapoSSqtW1u8WnEFz3IPnE8sibm5wNOs7IEDzcJRi5GwLYlRXbsgQE94K7xE/A==",
+                            PasswordHash = "AQAAAAIAAYagAAAAEH4pbDeVIjTx5wpuETu+1XNVGSCmayEz4S+22io+Ret0ijnrd92KfSuf5ZccKQ9wTg==",
                             PhoneNumberConfirmed = false,
                             RefreshTokenExpiryTime = new DateTimeOffset(new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, 0, 0, 0, 0)),
                             SecurityStamp = "SeedData",
@@ -918,21 +920,21 @@ namespace CAH.Repositories.Migrations
                     b.HasData(
                         new
                         {
-                            UserId = new Guid("4118440f-3c62-4c31-baf4-c442a4f61372"),
-                            RoleId = new Guid("cad1b663-2cb0-4b1f-a09e-ed1cfa9d80ff"),
+                            UserId = new Guid("289cae22-4c9b-491d-82de-ea61efc350f5"),
+                            RoleId = new Guid("9ec916dc-f9da-4339-9d21-03d54599f468"),
                             CreatedBy = "SeedData",
-                            CreatedTime = new DateTimeOffset(new DateTime(2025, 3, 1, 6, 56, 21, 65, DateTimeKind.Unspecified).AddTicks(7893), new TimeSpan(0, 0, 0, 0, 0)),
+                            CreatedTime = new DateTimeOffset(new DateTime(2025, 3, 1, 7, 19, 38, 131, DateTimeKind.Unspecified).AddTicks(9618), new TimeSpan(0, 0, 0, 0, 0)),
                             LastUpdatedBy = "SeedData",
-                            LastUpdatedTime = new DateTimeOffset(new DateTime(2025, 3, 1, 6, 56, 21, 65, DateTimeKind.Unspecified).AddTicks(7894), new TimeSpan(0, 0, 0, 0, 0))
+                            LastUpdatedTime = new DateTimeOffset(new DateTime(2025, 3, 1, 7, 19, 38, 131, DateTimeKind.Unspecified).AddTicks(9619), new TimeSpan(0, 0, 0, 0, 0))
                         },
                         new
                         {
-                            UserId = new Guid("36664368-e96e-4a1e-bf02-87ff0d02c0ac"),
-                            RoleId = new Guid("bff8c492-338c-4d77-aa7c-1545f87b3190"),
+                            UserId = new Guid("815102cb-5662-410f-93d7-9aa703e05222"),
+                            RoleId = new Guid("629462fe-3ee5-4f93-900e-8610b5179ca2"),
                             CreatedBy = "SeedData",
-                            CreatedTime = new DateTimeOffset(new DateTime(2025, 3, 1, 6, 56, 21, 65, DateTimeKind.Unspecified).AddTicks(7896), new TimeSpan(0, 0, 0, 0, 0)),
+                            CreatedTime = new DateTimeOffset(new DateTime(2025, 3, 1, 7, 19, 38, 131, DateTimeKind.Unspecified).AddTicks(9621), new TimeSpan(0, 0, 0, 0, 0)),
                             LastUpdatedBy = "SeedData",
-                            LastUpdatedTime = new DateTimeOffset(new DateTime(2025, 3, 1, 6, 56, 21, 65, DateTimeKind.Unspecified).AddTicks(7897), new TimeSpan(0, 0, 0, 0, 0))
+                            LastUpdatedTime = new DateTimeOffset(new DateTime(2025, 3, 1, 7, 19, 38, 131, DateTimeKind.Unspecified).AddTicks(9622), new TimeSpan(0, 0, 0, 0, 0))
                         });
                 });
 

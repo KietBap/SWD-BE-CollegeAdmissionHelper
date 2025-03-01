@@ -154,6 +154,7 @@ namespace CAH.Repositories.Context
 				new User
 				{
 					Id = adminId,
+					Name = "KICM vippro",
 					UserName = "admin",
 					NormalizedUserName = "ADMIN@EXAMPLE.COM",
 					Email = "admin@example.com",
@@ -169,6 +170,7 @@ namespace CAH.Repositories.Context
 				new User
 				{
 					Id = userId,
+					Name = "Jack 97",
 					UserName = "user",
 					NormalizedUserName = "USER@EXAMPLE.COM",
 					Email = "user@example.com",
@@ -180,7 +182,7 @@ namespace CAH.Repositories.Context
 					LastUpdatedBy = "SeedData",
 					CreatedTime = DateTimeOffset.UtcNow,
 					LastUpdatedTime = DateTimeOffset.UtcNow
-				});
+				}); ;
 
 			//user role
 			modelBuilder.Entity<UserRole>().HasData(
