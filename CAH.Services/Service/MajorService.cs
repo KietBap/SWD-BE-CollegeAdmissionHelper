@@ -78,9 +78,9 @@ namespace CAH.Services.Service
 				var userId = _httpContextAccessor.HttpContext?.User.FindFirst("userId")?.Value;
 
 				var major = await _unitOfWork.GetRepository<Major>().GetByIdAsync(id);
-				if (major == null)
+				if (major == null || major.DeletedTime.HasValue)
 				{
-					return "can not find major";
+					return "can not find or major is deleted";
 				}
 
 				_mapper.Map(model, major);

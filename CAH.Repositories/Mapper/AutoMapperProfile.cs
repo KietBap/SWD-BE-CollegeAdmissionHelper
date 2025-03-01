@@ -1,9 +1,12 @@
 using AutoMapper;
 using CAH.Contract.Repositories.Entity;
+using CAH.ModelViews.AcademicYearModelViews;
 using CAH.ModelViews.AdmissionMethodMVs;
 using CAH.ModelViews.AuthModelViews;
 using CAH.ModelViews.MajorModelViews;
+using CAH.ModelViews.ReviewModelViews;
 using CAH.ModelViews.SubjectModelViews;
+using CAH.ModelViews.UniMajorModelViews;
 using CAH.ModelViews.UniversityModelViews;
 
 namespace CAH.Repositories.Mapper
@@ -34,6 +37,25 @@ namespace CAH.Repositories.Mapper
 
 			CreateMap<User, UserModelView>();
 			CreateMap<UserModelView, User>();
-		}
+
+			CreateMap<AcademicYear, AcademicYearModelView>();
+			CreateMap<AcademicYearModelView, AcademicYear>();
+            CreateMap<ListAcaYearModelView, AcademicYear>();
+            CreateMap<AcademicYear, ListAcaYearModelView>();
+
+            CreateMap<UniMajor, CreateUniMajorModelView>();
+            CreateMap<UniMajor, UpdateUniMajorModelView>();
+            CreateMap<CreateUniMajorModelView, UniMajor>();
+            CreateMap<UpdateUniMajorModelView, UniMajor>();
+            CreateMap<ListUniMajorModelView, UniMajor>();
+            CreateMap<UniMajor, ListUniMajorModelView>();
+
+            CreateMap<Review, CreateReviewModelView>();
+            CreateMap<CreateReviewModelView, Review>();
+            CreateMap<UpdateReviewModelView, Review>();
+            CreateMap<Review, UpdateReviewModelView>();
+            CreateMap<Review, ListReviewModelView>();
+            CreateMap<ListReviewModelView, Review>();
+        }
     }
 }

@@ -70,6 +70,9 @@ namespace CAH.API
 				.AddScoped<IUniversityService, UniversityService>()
 				.AddScoped<IAdmissionMethodService, AdmissionMethodService>()
 				.AddScoped<ISubjectService, SubjectService>()
+				.AddScoped<IUniMajorService, UniMajorService>()
+				.AddScoped<IReviewService, ReviewService>()
+				.AddScoped<AcademicYearService>()
 				.AddSignalR();
 		}
 

@@ -314,6 +314,29 @@ namespace CAH.Repositories.Context
                     CreatedTime = DateTimeOffset.UtcNow,
                     LastUpdatedTime = DateTimeOffset.UtcNow
                 });
+
+            //AcademicYear
+            var ay1 = Guid.NewGuid().ToString();
+            var ay2 = Guid.NewGuid().ToString();
+            modelBuilder.Entity<AcademicYear>().HasData(
+                new AcademicYear
+                {
+                    Id = ay1,
+                    Year = 2025,
+                    CreatedBy = "SeedData",
+                    LastUpdatedBy = "SeedData",
+                    CreatedTime = DateTimeOffset.UtcNow,
+                    LastUpdatedTime = DateTimeOffset.UtcNow
+                },
+                new AcademicYear
+                {
+                    Id = ay2,
+                    Year = 2024,
+                    CreatedBy = "SeedData",
+                    LastUpdatedBy = "SeedData",
+                    CreatedTime = DateTimeOffset.UtcNow,
+                    LastUpdatedTime = DateTimeOffset.UtcNow
+                });
         }
 	}
 }

@@ -17,8 +17,8 @@ namespace CAH.Contract.Repositories.Entity
 
 		[ForeignKey("UniversityId")]
 		public virtual University University { get; set; }
-        public float TuitionFee { get; set; }
-        public string MajorCode { get; set; }
+        public string? TuitionFee { get; set; }
+        public string? MajorCode { get; set; }
 
         public virtual ICollection<AdmissionInfor> AdmissionInfors { get; set; }
         public virtual ICollection<Review> Reviews { get; set; }
