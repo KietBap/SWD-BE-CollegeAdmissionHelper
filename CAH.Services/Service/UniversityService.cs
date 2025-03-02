@@ -5,6 +5,7 @@ using CAH.Contract.Services.Interface;
 using CAH.Core;
 using CAH.Core.Base;
 using CAH.ModelViews.UniversityModelViews;
+using DocumentFormat.OpenXml.Office2010.Excel;
 using Microsoft.AspNetCore.Http;
 using Microsoft.EntityFrameworkCore;
 
@@ -99,13 +100,28 @@ namespace CAH.Services.Service
 			}
 		}
 
-		public async Task<BasePaginatedList<UniversityMV>> GetAllUniversityAsync(int pageNumber, int pageSize)
+		public async Task<BasePaginatedList<UniversityMV>> GetAllUniversityAsync(int pageNumber, int pageSize, string? uniCode, string? type, string? location)
 		{
 			IQueryable<University> universityQuery = _unitOfWork.GetRepository<University>().Entities
 				.Where(p => !p.DeletedTime.HasValue)
-				.OrderByDescending(s => s.CreatedTime);
+            .OrderByDescending(s => s.CreatedTime);
 
-			int totalCount = await universityQuery.CountAsync();
+            if (!string.IsNullOrWhiteSpace(uniCode))
+            {
+                universityQuery = universityQuery.Where(p => p.UniversityCode == uniCode);
+            }
+
+            if (!string.IsNullOrWhiteSpace(type))
+            {
+                universityQuery = universityQuery.Where(p => p.Type == type);
+            }
+
+            if (!string.IsNullOrWhiteSpace(location))
+            {
+                universityQuery = universityQuery.Where(p => p.Location.Contains(location));
+            }
+
+            int totalCount = await universityQuery.CountAsync();
 
 			List<University> paginatedServices = await universityQuery
 				.Skip((pageNumber - 1) * pageSize)
