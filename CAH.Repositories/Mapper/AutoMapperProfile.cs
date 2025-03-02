@@ -9,6 +9,7 @@ using CAH.ModelViews.SubjectModelViews;
 using CAH.ModelViews.SubScoreModelViews;
 using CAH.ModelViews.UniMajorModelViews;
 using CAH.ModelViews.UniversityModelViews;
+using CAH.ModelViews.UserModelView;
 
 namespace CAH.Repositories.Mapper
 {
@@ -64,6 +65,9 @@ namespace CAH.Repositories.Mapper
             CreateMap<SubjectScore, UpdateSubScoreModelView>();
             CreateMap<SubjectScore, ListSubScoreModelView>();
             CreateMap<ListSubScoreModelView, SubjectScore>();
+
+            CreateMap<User, ListUserModelView>();
+            CreateMap<ListUserModelView, User>();
         }
     }
 }

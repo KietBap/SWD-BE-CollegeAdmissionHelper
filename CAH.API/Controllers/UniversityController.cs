@@ -46,9 +46,12 @@ namespace CAH.API.Controllers
 
 
 		[HttpGet("all")]
-		public async Task<ActionResult<BasePaginatedList<UniversityMV>>> GetAllUniversity(int pageNumber = 1, int pageSize = 5)
+		public async Task<ActionResult<BasePaginatedList<UniversityMV>>> GetAllUniversity([FromQuery] string? uniCode,
+																						  [FromQuery] string? type,
+																						  [FromQuery] string? location,
+																						  int pageNumber = 1, int pageSize = 5)
 		{
-			var result = await _universityService.GetAllUniversityAsync(pageNumber, pageSize);
+			var result = await _universityService.GetAllUniversityAsync(pageNumber, pageSize, uniCode, type, location);
 
 			return Ok(new { Message = result });
 		}

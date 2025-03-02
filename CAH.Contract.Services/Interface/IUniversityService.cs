@@ -8,7 +8,7 @@ namespace CAH.Contract.Services.Interface
 		Task<string> CreateUniversityAsync(UniversityModelView model);
 		Task<string> DeleteUniversityAsync(string id);
 		Task<string> UpdateUniversityAsync(string id, UniversityModelView model);
-		Task<BasePaginatedList<UniversityMV>> GetAllUniversityAsync(int pageNumber, int pageSize);
-		Task<Object> GetUniversityByIdAsync(string id);
+		Task<BasePaginatedList<UniversityMV>> GetAllUniversityAsync(int pageNumber, int pageSize, string? uniCode, string? type, string? location);
+        Task<Object> GetUniversityByIdAsync(string id);
 	}
 }
