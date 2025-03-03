@@ -10,5 +10,7 @@ namespace CAH.Contract.Services.Interface
 		Task<string> UpdateMajorAsync(string id, CreateMajorModelView model);
 		Task<BasePaginatedList<MajorModelView>> GetAllMajorAsync(int pageNumber, int pageSize);
 		Task<Object> GetMajorByIdAsync(string id);
-	}
+		Task<BasePaginatedList<MajorModelView>> GetAllMajorByUniIdAsync(int pageNumber, int pageSize, string universityId);
+
+    }
 }

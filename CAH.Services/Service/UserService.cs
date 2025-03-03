@@ -3,6 +3,7 @@ using CAH.Contract.Repositories.Entity;
 using CAH.Contract.Repositories.Interface;
 using CAH.Contract.Services.Interface;
 using CAH.Core;
+using CAH.ModelViews.UniversityModelViews;
 using CAH.ModelViews.UserModelView;
 using Microsoft.AspNetCore.Http;
 using Microsoft.EntityFrameworkCore;
@@ -64,6 +65,26 @@ namespace CAH.Services.Service
             List<ListUserModelView> userModelView = _mapper.Map<List<ListUserModelView>>(paginatedServices);
 
             return new BasePaginatedList<ListUserModelView>(userModelView, totalCount, pageNumber, pageSize);
+        }
+
+
+
+        public async Task<Object> GetUserByIdAsync(string id)
+        {
+            try
+            {
+                var user = await _unitOfWork.GetRepository<User>().GetByIdAsync(Guid.Parse(id));
+                if (user == null || user.DeletedTime.HasValue)
+                {
+                    return "can not find or user is deleted";
+                }
+
+                return _mapper.Map<ListUserModelView>(user);
+            }
+            catch (Exception ex)
+            {
+                throw new Exception($"Error: {ex.Message}");
+            }
         }
     }
 }

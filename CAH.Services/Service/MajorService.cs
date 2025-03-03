@@ -5,6 +5,7 @@ using CAH.Contract.Services.Interface;
 using CAH.Core;
 using CAH.Core.Base;
 using CAH.ModelViews.MajorModelViews;
+using CAH.ModelViews.UniversityModelViews;
 using Microsoft.AspNetCore.Http;
 using Microsoft.EntityFrameworkCore;
 
@@ -117,7 +118,30 @@ namespace CAH.Services.Service
 		}
 
 
-		public async Task<Object> GetMajorByIdAsync(string id)
+        public async Task<BasePaginatedList<MajorModelView>> GetAllMajorByUniIdAsync(int pageNumber, int pageSize, string universityId)
+        {
+            IQueryable<string> majorIdsQuery = _unitOfWork.GetRepository<UniMajor>().Entities
+				.Where(um => um.UniversityId == universityId && !um.DeletedTime.HasValue)
+				.Select(um => um.MajorId);
+
+            IQueryable<Major> majorQuery = _unitOfWork.GetRepository<Major>().Entities
+                .Where(m => majorIdsQuery.Contains(m.Id) && !m.DeletedTime.HasValue)
+                .OrderByDescending(m => m.CreatedTime);
+
+            int totalCount = await majorQuery.CountAsync();
+
+            List<Major> paginatedServices = await majorQuery
+                .Skip((pageNumber - 1) * pageSize)
+                .Take(pageSize)
+                .ToListAsync();
+
+            List<MajorModelView> majorModelView = _mapper.Map<List<MajorModelView>>(paginatedServices);
+
+            return new BasePaginatedList<MajorModelView>(majorModelView, totalCount, pageNumber, pageSize);
+        }
+
+
+        public async Task<Object> GetMajorByIdAsync(string id)
 		{
 			try
 			{

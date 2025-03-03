@@ -32,5 +32,14 @@ namespace CAH.API.Controllers
 
             return Ok(new { Message = result });
         }
+
+        [HttpGet("id")]
+        [Authorize(Roles = "Admin,User")]
+        public async Task<ActionResult<BasePaginatedList<ListUserModelView>>> GetUserById([FromQuery] string? id)
+        {
+            var result = await _userService.GetUserByIdAsync(id);
+
+            return Ok(new { Message = result });
+        }
     }
 }
