@@ -1,4 +1,6 @@
-﻿namespace CAH.ModelViews.UniversityModelViews
+﻿using Microsoft.AspNetCore.Http;
+
+namespace CAH.ModelViews.UniversityModelViews
 {
 	public class UniversityModelView
 	{
@@ -13,5 +15,6 @@
         public string Description { get; set; }
         public int? RankingNational { get; set; }
         public int? RankingInternational { get; set; }
+        public IFormFile Image { get; set; }
     }
 }

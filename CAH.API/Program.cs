@@ -58,7 +58,7 @@ builder.Services.AddCors(options =>
 {
 	options.AddDefaultPolicy(builder =>
 	{
-		builder.WithOrigins("http://localhost:4200")
+		builder.WithOrigins("http://localhost:4200", "http://localhost:5173", "https://swdfe-9pgc.vercel.app")
 			.AllowAnyHeader()
 			.AllowAnyMethod()
 			.AllowCredentials();
