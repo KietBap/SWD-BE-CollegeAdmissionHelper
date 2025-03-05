@@ -75,6 +75,7 @@ namespace CAH.API
 				.AddScoped<ISubjectScoreService, SubjectScoreService>()
 				.AddScoped<IUserService, UserService>()
 				.AddScoped<AcademicYearService>()
+				.AddScoped<GeminiService>()
 				.AddSignalR();
 		}
 

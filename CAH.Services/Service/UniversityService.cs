@@ -7,6 +7,7 @@ using CAH.Core.Base;
 using CAH.ModelViews.UniversityModelViews;
 using Microsoft.AspNetCore.Http;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Configuration;
 
 namespace CAH.Services.Service
 {
@@ -15,12 +16,14 @@ namespace CAH.Services.Service
 		private readonly IUnitOfWork _unitOfWork;
 		private readonly IHttpContextAccessor _httpContext;
 		private readonly IMapper _mapper;
+        private readonly IConfiguration _configuration;
 
-		public UniversityService(IUnitOfWork unitOfWork, IMapper mapper, IHttpContextAccessor httpContextAccessor)
+        public UniversityService(IUnitOfWork unitOfWork, IMapper mapper, IHttpContextAccessor httpContextAccessor, IConfiguration configuration)
 		{
 			_unitOfWork = unitOfWork;
 			_mapper = mapper;
 			_httpContext = httpContextAccessor;
+			_configuration = configuration;
 		}
 
 		public async Task<string> CreateUniversityAsync(UniversityModelView model)
@@ -29,8 +32,15 @@ namespace CAH.Services.Service
 			{
 				var userId = _httpContext.HttpContext?.User.FindFirst("userId")?.Value;
 
-				University university = _mapper.Map<University>(model);
+                string imageUrl = string.Empty;
+                if (model.Image != null)
+                {
+                    var imageHelper = new Core.Utils.Firebase.ImageHelper(_configuration);
+                    imageUrl = await imageHelper.Upload(model.Image);
+                }
 
+                University university = _mapper.Map<University>(model);
+				university.Image = imageUrl;
 				university.CreatedTime = DateTimeOffset.UtcNow;
 				university.CreatedBy = userId;
 
@@ -78,7 +88,14 @@ namespace CAH.Services.Service
 			{
 				var userId = _httpContext.HttpContext?.User.FindFirst("userId")?.Value;
 
-				var university = await _unitOfWork.GetRepository<University>().GetByIdAsync(id);
+                string imageUrl = string.Empty;
+                if (model.Image != null)
+                {
+                    var imageHelper = new Core.Utils.Firebase.ImageHelper(_configuration);
+                    imageUrl = await imageHelper.Upload(model.Image);
+                }
+
+                var university = await _unitOfWork.GetRepository<University>().GetByIdAsync(id);
 				if (university == null || university.DeletedTime.HasValue)
 				{
 					return "can not find or university is deleted";
@@ -87,6 +104,7 @@ namespace CAH.Services.Service
 				_mapper.Map(model, university);
 				university.LastUpdatedBy = userId;
 				university.LastUpdatedTime = DateTimeOffset.UtcNow;
+				university.Image = imageUrl;
 
 				await _unitOfWork.GetRepository<University>().UpdateAsync(university);
 				await _unitOfWork.SaveAsync();
@@ -107,7 +125,7 @@ namespace CAH.Services.Service
 
             if (!string.IsNullOrWhiteSpace(uniCode))
             {
-                universityQuery = universityQuery.Where(p => p.UniversityCode == uniCode);
+                universityQuery = universityQuery.Where(p => p.UniversityCode.Contains(uniCode));
             }
 
             if (!string.IsNullOrWhiteSpace(type))

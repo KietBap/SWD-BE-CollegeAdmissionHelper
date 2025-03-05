@@ -269,6 +269,35 @@ namespace CAH.Repositories.Context
 					LastUpdatedTime = DateTimeOffset.UtcNow
 				});
 
+			//UniMajor
+			var uniMajor1 = Guid.NewGuid().ToString();
+			var uniMajor2 = Guid.NewGuid().ToString();
+            modelBuilder.Entity<UniMajor>().HasData(
+                new UniMajor
+                {
+                    Id = uniMajor1,
+					UniversityId = uniId1,
+					MajorId = majorId1,
+                    TuitionFee = "30.000.000",
+					MajorCode = "SE",
+                    CreatedBy = "SeedData",
+                    LastUpdatedBy = "SeedData",
+                    CreatedTime = DateTimeOffset.UtcNow,
+                    LastUpdatedTime = DateTimeOffset.UtcNow
+                },
+                new UniMajor
+                {
+                    Id = uniMajor2,
+                    UniversityId = uniId1,
+                    MajorId = majorId2,
+                    TuitionFee = "20.000.000",
+                    MajorCode = "SS",
+                    CreatedBy = "SeedData",
+                    LastUpdatedBy = "SeedData",
+                    CreatedTime = DateTimeOffset.UtcNow,
+                    LastUpdatedTime = DateTimeOffset.UtcNow
+                });
+
             //Subject
             var sub1 = Guid.NewGuid().ToString();
             var sub2 = Guid.NewGuid().ToString();
