@@ -56,13 +56,24 @@ builder.Services.AddSwaggerGen(option =>
 
 builder.Services.AddCors(options =>
 {
-	options.AddDefaultPolicy(builder =>
-	{
-		builder.WithOrigins("http://localhost:4200", "http://localhost:5173", "https://swdfe-9pgc.vercel.app")
-			.AllowAnyHeader()
-			.AllowAnyMethod()
-			.AllowCredentials();
-	});
+    options.AddDefaultPolicy(policy =>
+    {
+        policy.WithOrigins(
+            "http://localhost:4200",
+            "http://localhost:5173",
+            "https://swdfe-9pgc.vercel.app"
+        )
+        .AllowAnyHeader()
+        .AllowAnyMethod()
+        .AllowCredentials();
+    });
+
+    options.AddPolicy("AllowSwagger", policy =>
+    {
+        policy.WithOrigins("https://swpproject-egd0b4euezg4akg7.southeastasia-01.azurewebsites.net")
+              .AllowAnyHeader()
+              .AllowAnyMethod();
+    });
 });
 
 
@@ -87,7 +98,14 @@ var app = builder.Build();
 app.UseSwagger();
 app.UseSwaggerUI();
 // Enable CORS
-app.UseCors();
+app.UseCors(); // Để áp dụng DefaultPolicy cho frontend
+
+if (app.Environment.IsDevelopment())
+{
+    app.UseCors("AllowSwagger"); // Chỉ mở CORS cho Swagger khi dev
+}
+
+
 app.UseHttpsRedirection();
 
 app.UseAuthentication();
