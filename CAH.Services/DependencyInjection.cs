@@ -1,4 +1,5 @@
 ﻿using CAH.Contract.Repositories.Interface;
+using CAH.Contract.Repositories.IUOW;
 using CAH.Repositories.UOW;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
@@ -14,6 +15,7 @@ namespace CAH.Services
         public static void AddRepositories(this IServiceCollection services)
         {
             services.AddScoped<IUnitOfWork, UnitOfWork>();
+            services.AddScoped<IDashboardRepository, DashboardRepository>();    
         }
     }
 }
