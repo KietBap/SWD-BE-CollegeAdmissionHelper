@@ -14,6 +14,6 @@
         public string Description { get; set; }
         public int? RankingNational { get; set; }
         public int? RankingInternational { get; set; }
-
+        public string Image { get; set; }
     }
 }
