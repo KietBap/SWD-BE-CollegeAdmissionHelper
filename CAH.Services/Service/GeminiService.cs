@@ -13,6 +13,8 @@ namespace CAH.Services.Service
         {
             _apiKey = configuration["AI:GeminiApiKey"];
             _httpClient = httpClient;
+
+            Console.WriteLine($"Gemini API Key: {_apiKey}");
         }
         public async Task<GeminiResponseModelView> GenerateTextAsync(string prompt)
         {
@@ -37,6 +39,7 @@ namespace CAH.Services.Service
             if (response.IsSuccessStatusCode)
             {
                 var responseContent = await response.Content.ReadAsStringAsync();
+                Console.WriteLine("Response: " + responseContent);
                 using JsonDocument doc = JsonDocument.Parse(responseContent);
                 var root = doc.RootElement;
 
