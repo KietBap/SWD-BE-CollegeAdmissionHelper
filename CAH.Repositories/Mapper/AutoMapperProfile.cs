@@ -1,6 +1,7 @@
 using AutoMapper;
 using CAH.Contract.Repositories.Entity;
 using CAH.ModelViews.AcademicYearModelViews;
+using CAH.ModelViews.AdmissionInforModelViews;
 using CAH.ModelViews.AdmissionMethodMVs;
 using CAH.ModelViews.AuthModelViews;
 using CAH.ModelViews.MajorModelViews;
@@ -68,6 +69,10 @@ namespace CAH.Repositories.Mapper
 
             CreateMap<User, ListUserModelView>();
             CreateMap<ListUserModelView, User>();
+
+            CreateMap<AdmissionInfor, AdmissionInforModelView>();
+            CreateMap<AdmissionInforModelView, AdmissionInfor>();
+            CreateMap<InforMethodModel, InforMethod>();
         }
     }
 }

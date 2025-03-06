@@ -39,7 +39,8 @@ namespace CAH.Services.Service
             if (response.IsSuccessStatusCode)
             {
                 var responseContent = await response.Content.ReadAsStringAsync();
-                Console.WriteLine("Response: " + responseContent);
+                //Console.WriteLine("Response: " + responseContent);
+                //Console.WriteLine($"Gemini API Key: {_apiKey}");
                 using JsonDocument doc = JsonDocument.Parse(responseContent);
                 var root = doc.RootElement;
 
