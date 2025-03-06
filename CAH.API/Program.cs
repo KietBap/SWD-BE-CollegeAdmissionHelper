@@ -58,10 +58,10 @@ builder.Services.AddCors(options =>
 {
     options.AddDefaultPolicy(builder =>
     {
-        builder.WithOrigins("http://localhost:4200", "http://localhost:5173", "https://swdfe-9pgc.vercel.app")
-            .AllowAnyHeader()
-            .AllowAnyMethod()
-            .AllowCredentials();
+    	builder.WithOrigins("http://localhost:4200", "http://localhost:5173", "https://swdfe-9pgc.vercel.app")
+        .AllowAnyHeader()
+        .AllowAnyMethod()
+	.AllowCredentials();
     });
 });
 
@@ -88,6 +88,7 @@ app.UseSwagger();
 app.UseSwaggerUI();
 // Enable CORS
 app.UseCors();
+
 app.UseHttpsRedirection();
 
 app.UseAuthentication();
