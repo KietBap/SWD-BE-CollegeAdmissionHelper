@@ -81,7 +81,7 @@ namespace CAH.Services.Service
                 Console.WriteLine($"Exception in GenerateTextAsync: {ex.Message}");
                 return new GeminiResponseModelView()
                 {
-                    Content = "Đã xảy ra lỗi khi gọi API Gemini.",
+                    Content = $"Đã xảy ra lỗi khi gọi API Gemini. {ex.Message}",
                     Time = DateTime.Now
                 };
             }
