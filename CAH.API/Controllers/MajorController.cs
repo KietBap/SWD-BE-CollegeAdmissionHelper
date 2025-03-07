@@ -20,7 +20,7 @@ namespace CAH.API.Controllers
 
 
 		[HttpPost]
-		public async Task<ActionResult<string>> CreateMajor([FromBody] CreateMajorModelView model)
+		public async Task<ActionResult<string>> CreateMajor(CreateMajorModelView model)
 		{
 			string result = await _majorService.CreateMajorAsync(model);
 
@@ -28,7 +28,7 @@ namespace CAH.API.Controllers
 		}
 
 		[HttpDelete("{id}")]
-		public async Task<ActionResult<string>> DeleteMajor([FromBody] string id)
+		public async Task<ActionResult<string>> DeleteMajor(string id)
 		{
 			string result = await _majorService.DeleteMajorAsync(id);
 
@@ -36,7 +36,7 @@ namespace CAH.API.Controllers
 		}
 
 		[HttpPatch("{id}")]
-		public async Task<ActionResult<string>> UpdateMajor(string id, [FromBody] CreateMajorModelView model)
+		public async Task<ActionResult<string>> UpdateMajor(string id, CreateMajorModelView model)
 		{
 			string result = await _majorService.UpdateMajorAsync(id, model);
 

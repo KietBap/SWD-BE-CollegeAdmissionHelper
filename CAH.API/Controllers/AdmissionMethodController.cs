@@ -19,7 +19,7 @@ namespace CAH.API.Controllers
         }
 
 		[HttpPost]
-		public async Task<ActionResult<string>> CreateAdmissionMethod([FromBody] AdmissionMethodMV model)
+		public async Task<ActionResult<string>> CreateAdmissionMethod(AdmissionMethodMV model)
 		{
 			string result = await _service.CreateAdmissionMethodAsync(model);
 
@@ -27,7 +27,7 @@ namespace CAH.API.Controllers
 		}
 
 		[HttpDelete("{id}")]
-		public async Task<ActionResult<string>> DeleteAdmissionMethod([FromBody] string id)
+		public async Task<ActionResult<string>> DeleteAdmissionMethod(string id)
 		{
 			string result = await _service.DeleteAdmissionMethodAsync(id);
 
@@ -36,7 +36,7 @@ namespace CAH.API.Controllers
 
 
 		[HttpPatch("{id}")]
-		public async Task<ActionResult<string>> UpdateAdmissionMethod(string id, [FromBody] AdmissionMethodMV model)
+		public async Task<ActionResult<string>> UpdateAdmissionMethod(string id, AdmissionMethodMV model)
 		{
 			string result = await _service.UpdateAdmissionMethodAsync(id, model);
 

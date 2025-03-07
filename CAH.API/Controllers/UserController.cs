@@ -20,7 +20,7 @@ namespace CAH.API.Controllers
         
         [HttpGet]
         [Authorize(Roles = "Admin")]
-        public async Task<ActionResult<BasePaginatedList<ListUserModelView>>> GetAllUser([FromBody] string? id,
+        public async Task<ActionResult<BasePaginatedList<ListUserModelView>>> GetAllUser(string? id,
                                                                                         string? email,
                                                                                         string? phoneNumber, 
                                                                                         int pageNumber = 1, int pageSize = 5)
@@ -32,7 +32,7 @@ namespace CAH.API.Controllers
 
         [HttpGet("{id}")]
         [Authorize(Roles = "Admin,User")]
-        public async Task<ActionResult<BasePaginatedList<ListUserModelView>>> GetUserById([FromBody] string? id)
+        public async Task<ActionResult<BasePaginatedList<ListUserModelView>>> GetUserById(string? id)
         {
             var result = await _userService.GetUserByIdAsync(id);
 

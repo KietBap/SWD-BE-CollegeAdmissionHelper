@@ -29,8 +29,8 @@ namespace CAH.API.Controllers
 
 
         [HttpGet]
-        public async Task<ActionResult<BasePaginatedList<UniversityMV>>> GetAllUniversity([FromQuery] string? uniName,
-                                                                                          [FromQuery] string? majorName,
+        public async Task<ActionResult<BasePaginatedList<UniversityMV>>> GetAllUniversity(string? uniName,
+                                                                                          string? majorName,
                                                                                           int pageNumber = 1, int pageSize = 5)
         {
             var result = await _admissionInforService.GetAllAdmissionInforAsync(pageNumber, pageSize, uniName, majorName);

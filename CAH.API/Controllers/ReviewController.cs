@@ -19,7 +19,7 @@ namespace CAH.API.Controllers
         }
 
         [HttpPost]
-        public async Task<ActionResult<string>> CreateReview([FromBody] CreateReviewModelView model)
+        public async Task<ActionResult<string>> CreateReview(CreateReviewModelView model)
         {
             string result = await _service.CreateReviewAsync(model);
 
@@ -28,7 +28,7 @@ namespace CAH.API.Controllers
 
 
         [HttpDelete("{id}")]
-        public async Task<ActionResult<string>> DeleteReview([FromBody] string id)
+        public async Task<ActionResult<string>> DeleteReview(string id)
         {
             string result = await _service.DeleteReviewAsync(id);
 
@@ -37,7 +37,7 @@ namespace CAH.API.Controllers
 
 
         [HttpPatch("{id}")]
-        public async Task<ActionResult<string>> UpdateReview(string id, [FromBody] UpdateReviewModelView model)
+        public async Task<ActionResult<string>> UpdateReview(string id, UpdateReviewModelView model)
         {
             string result = await _service.UpdateReviewAsync(id, model);
 

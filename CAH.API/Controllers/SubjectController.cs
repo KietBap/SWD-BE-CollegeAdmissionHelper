@@ -20,7 +20,7 @@ namespace CAH.API.Controllers
 
 
 		[HttpPost]
-		public async Task<ActionResult<string>> CreateSubject([FromBody] SubjectModelView model)
+		public async Task<ActionResult<string>> CreateSubject(SubjectModelView model)
 		{
 			string result = await _service.CreateSubjectAsync(model);
 
@@ -37,7 +37,7 @@ namespace CAH.API.Controllers
 
 
 		[HttpPatch("{id}")]
-		public async Task<ActionResult<string>> UpdateSubject(string id, [FromBody] SubjectModelView model)
+		public async Task<ActionResult<string>> UpdateSubject(string id, SubjectModelView model)
 		{
 			string result = await _service.UpdateSubjectAsync(id, model);
 
