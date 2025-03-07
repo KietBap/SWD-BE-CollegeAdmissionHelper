@@ -20,16 +20,16 @@ namespace CAH.API.Controllers
         }
 
 
-        [HttpPost("create")]
-        public async Task<ActionResult<string>> CreateAcademicYear([FromQuery] AcademicYearModelView model)
+        [HttpPost]
+        public async Task<ActionResult<string>> CreateAcademicYear([FromBody] AcademicYearModelView model)
         {
             string result = await _service.CreateAcademicYearAsync(model);
 
             return Ok(new { Message = result });
         }
 
-        [HttpDelete("delete")]
-        public async Task<ActionResult<string>> DeleteAcademicYear([FromQuery] string id)
+        [HttpDelete("{id}")]
+        public async Task<ActionResult<string>> DeleteAcademicYear(string id)
         {
             string result = await _service.DeleteAcademicYearAsync(id);
 
@@ -37,7 +37,7 @@ namespace CAH.API.Controllers
         }
 
 
-        [HttpPatch("update")]
+        [HttpPatch("{id}")]
         public async Task<ActionResult<string>> UpdateAcademicYear(string id, [FromQuery] AcademicYearModelView model)
         {
             string result = await _service.UpdateAcademicYearAsync(id, model);
@@ -46,7 +46,7 @@ namespace CAH.API.Controllers
         }
 
 
-        [HttpGet("all")]
+        [HttpGet]
         public async Task<ActionResult<BasePaginatedList<ListSubjectModelView>>> GetAllAcademicYear(int pageNumber = 1, int pageSize = 5)
         {
             var result = await _service.GetAllAcademicYearAsync(pageNumber, pageSize);
@@ -54,7 +54,7 @@ namespace CAH.API.Controllers
             return Ok(new { Message = result });
         }
 
-        [HttpGet("id")]
+        [HttpGet("{id}")]
         public async Task<ActionResult<Object>> GetAcademicYearById(string id)
         {
             var result = await _service.GetAcademicYearByIdAsync(id);

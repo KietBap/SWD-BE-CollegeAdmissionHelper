@@ -16,12 +16,13 @@ namespace CAH.Services.Service
 
             Console.WriteLine($"Gemini API Key: {_apiKey}");
         }
-        public async Task<GeminiResponseModelView> GenerateTextAsync(string prompt)
+        public async Task<Object> GenerateTextAsync(string prompt)
         {
-
-            var requestBody = new
+            try
             {
-                contents = new[]
+                var requestBody = new
+                {
+                    contents = new[]
                 {
                 new
                 {
@@ -31,33 +32,39 @@ namespace CAH.Services.Service
                     }
                 }
             }
-            };
-            var jsonContent = new StringContent(JsonSerializer.Serialize(requestBody), Encoding.UTF8, "application/json");
-            var requestUrl = $"https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key={_apiKey}";
-            var response = await _httpClient.PostAsync(requestUrl, jsonContent);
-
-            if (response.IsSuccessStatusCode)
-            {
-                var responseContent = await response.Content.ReadAsStringAsync();
-                //Console.WriteLine("Response: " + responseContent);
-                //Console.WriteLine($"Gemini API Key: {_apiKey}");
-                using JsonDocument doc = JsonDocument.Parse(responseContent);
-                var root = doc.RootElement;
-
-                // Lấy nội dung chính từ JSON
-                var generatedText = root
-                    .GetProperty("candidates")[0]
-                    .GetProperty("content")
-                    .GetProperty("parts")[0]
-                    .GetProperty("text")
-                    .GetString();
-                return new GeminiResponseModelView()
-                {
-                    Content = generatedText,
-                    Time = DateTime.Now
                 };
+                var jsonContent = new StringContent(JsonSerializer.Serialize(requestBody), Encoding.UTF8, "application/json");
+                var requestUrl = $"https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key={_apiKey}";
+                var response = await _httpClient.PostAsync(requestUrl, jsonContent);
+
+                if (response.IsSuccessStatusCode)
+                {
+                    var responseContent = await response.Content.ReadAsStringAsync();
+                    //Console.WriteLine("Response: " + responseContent);
+                    //Console.WriteLine($"Gemini API Key: {_apiKey}");
+                    using JsonDocument doc = JsonDocument.Parse(responseContent);
+                    var root = doc.RootElement;
+
+                    // Lấy nội dung chính từ JSON
+                    var generatedText = root
+                        .GetProperty("candidates")[0]
+                        .GetProperty("content")
+                        .GetProperty("parts")[0]
+                        .GetProperty("text")
+                        .GetString();
+                    return new GeminiResponseModelView()
+                    {
+                        Content = generatedText,
+                        Time = DateTime.Now
+                    };
+                }
+                return null;
             }
-            return null;
+            catch (Exception ex)
+            {
+                throw new Exception($"Error: {ex.Message}");
+            }
+            
         }
     }
 }

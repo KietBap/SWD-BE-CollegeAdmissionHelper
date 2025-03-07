@@ -21,15 +21,15 @@ namespace CAH.API.Controllers
 		}
 
 
-		[HttpPost("create")]
-		public async Task<ActionResult<string>> CreateSubject([FromQuery] SubjectModelView model)
+		[HttpPost]
+		public async Task<ActionResult<string>> CreateSubject([FromBody] SubjectModelView model)
 		{
 			string result = await _service.CreateSubjectAsync(model);
 
 			return Ok(new { Message = result });
 		}
 
-		[HttpDelete("delete")]
+		[HttpDelete("{id}")]
 		public async Task<ActionResult<string>> DeleteSubject([FromQuery] string id)
 		{
 			string result = await _service.DeleteSubjectAsync(id);
@@ -38,7 +38,7 @@ namespace CAH.API.Controllers
 		}
 
 
-		[HttpPatch("update")]
+		[HttpPatch("{id}")]
 		public async Task<ActionResult<string>> UpdateSubject(string id, [FromQuery] SubjectModelView model)
 		{
 			string result = await _service.UpdateSubjectAsync(id, model);
@@ -47,7 +47,7 @@ namespace CAH.API.Controllers
 		}
 
 
-		[HttpGet("all")]
+		[HttpGet]
 		public async Task<ActionResult<BasePaginatedList<ListSubjectModelView>>> GetAllSubject(int pageNumber = 1, int pageSize = 5)
 		{
 			var result = await _service.GetAllSubjectAsync(pageNumber, pageSize);
@@ -55,7 +55,7 @@ namespace CAH.API.Controllers
 			return Ok(new { Message = result });
 		}
 
-		[HttpGet("id")]
+		[HttpGet("{id}")]
 		public async Task<ActionResult<Object>> GetSubjectById(string id)
 		{
 			var result = await _service.GetSubjectByIdAsync(id);

@@ -21,7 +21,7 @@ namespace CAH.API.Controllers
         }
 
 
-        [HttpPost()]
+        [HttpPost]
         public async Task<ActionResult<string>> CreateAdmissionInfor(AdmissionInforModelView model)
         {
             string result = await _admissionInforService.CreateAdmissionInforAsync(model);
@@ -30,7 +30,7 @@ namespace CAH.API.Controllers
         }
 
 
-        [HttpGet()]
+        [HttpGet]
         public async Task<ActionResult<BasePaginatedList<UniversityMV>>> GetAllUniversity([FromQuery] string? uniName,
                                                                                           [FromQuery] string? majorName,
                                                                                           int pageNumber = 1, int pageSize = 5)

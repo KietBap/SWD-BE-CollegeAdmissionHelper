@@ -18,8 +18,8 @@ namespace CAH.API.Controllers
             _service = reviewService;
         }
 
-        [HttpPost("create")]
-        public async Task<ActionResult<string>> CreateReview([FromQuery] CreateReviewModelView model)
+        [HttpPost]
+        public async Task<ActionResult<string>> CreateReview([FromBody] CreateReviewModelView model)
         {
             string result = await _service.CreateReviewAsync(model);
 
@@ -27,8 +27,8 @@ namespace CAH.API.Controllers
         }
 
 
-        [HttpDelete("delete")]
-        public async Task<ActionResult<string>> DeleteReview([FromQuery] string id)
+        [HttpDelete("{id}")]
+        public async Task<ActionResult<string>> DeleteReview([FromBody] string id)
         {
             string result = await _service.DeleteReviewAsync(id);
 
@@ -36,7 +36,7 @@ namespace CAH.API.Controllers
         }
 
 
-        [HttpPatch("update")]
+        [HttpPatch("{id}")]
         public async Task<ActionResult<string>> UpdateReview(string id, [FromQuery] UpdateReviewModelView model)
         {
             string result = await _service.UpdateReviewAsync(id, model);
@@ -44,7 +44,7 @@ namespace CAH.API.Controllers
             return Ok(new { Message = result });
         }
 
-        [HttpGet("all")]
+        [HttpGet]
         public async Task<ActionResult<BasePaginatedList<ListReviewModelView>>> GetAllReview(int pageNumber = 1, int pageSize = 5)
         {
             var result = await _service.GetAllReviewAsync(pageNumber, pageSize);
@@ -52,7 +52,7 @@ namespace CAH.API.Controllers
             return Ok(new { Message = result });
         }
 
-        [HttpGet("id")]
+        [HttpGet("{id}")]
         public async Task<ActionResult<Object>> GetReviewById(string id)
         {
             var result = await _service.GetReviewByIdAsync(id);

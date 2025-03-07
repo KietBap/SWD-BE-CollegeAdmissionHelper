@@ -20,7 +20,7 @@ namespace CAH.API.Controllers
             _service = admissionMethodService;
         }
 
-		[HttpPost("create")]
+		[HttpPost]
 		public async Task<ActionResult<string>> CreateAdmissionMethod([FromQuery] AdmissionMethodMV model)
 		{
 			string result = await _service.CreateAdmissionMethodAsync(model);
@@ -28,7 +28,7 @@ namespace CAH.API.Controllers
 			return Ok(new { Message = result });
 		}
 
-		[HttpDelete("delete")]
+		[HttpDelete("{id}")]
 		public async Task<ActionResult<string>> DeleteAdmissionMethod([FromQuery] string id)
 		{
 			string result = await _service.DeleteAdmissionMethodAsync(id);
@@ -37,7 +37,7 @@ namespace CAH.API.Controllers
 		}
 
 
-		[HttpPatch("update")]
+		[HttpPatch("{id}")]
 		public async Task<ActionResult<string>> UpdateAdmissionMethod(string id, [FromQuery] AdmissionMethodMV model)
 		{
 			string result = await _service.UpdateAdmissionMethodAsync(id, model);
@@ -45,7 +45,7 @@ namespace CAH.API.Controllers
 			return Ok(new { Message = result });
 		}
 
-		[HttpGet("all")]
+		[HttpGet]
 		public async Task<ActionResult<BasePaginatedList<ListAdMethodMV>>> GetAllAdMethod(int pageNumber = 1, int pageSize = 5)
 		{
 			var result = await _service.GetAllAdMethodAsync(pageNumber, pageSize);
@@ -53,7 +53,7 @@ namespace CAH.API.Controllers
 			return Ok(new { Message = result });
 		}
 
-		[HttpGet("id")]
+		[HttpGet("{id}")]
 		public async Task<ActionResult<Object>> GetAdMethodById(string id)
 		{
 			var result = await _service.GetAdMethodByIdAsync(id);

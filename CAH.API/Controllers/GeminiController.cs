@@ -14,8 +14,8 @@ namespace CAH.API.Controllers
             _service = geminiService;
         }
 
-        [HttpGet()]
-        public async Task<ActionResult<Object>> GetAcademicYearById(string prompt)
+        [HttpGet]
+        public async Task<ActionResult<Object>> GenerateText(string prompt)
         {
             var result = await _service.GenerateTextAsync(prompt);
 
