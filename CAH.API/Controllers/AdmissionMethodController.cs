@@ -1,8 +1,6 @@
 ﻿using CAH.Contract.Services.Interface;
 using CAH.Core;
 using CAH.ModelViews.AdmissionMethodMVs;
-using CAH.ModelViews.UniversityModelViews;
-using CAH.Services.Service;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
@@ -21,7 +19,7 @@ namespace CAH.API.Controllers
         }
 
 		[HttpPost]
-		public async Task<ActionResult<string>> CreateAdmissionMethod([FromQuery] AdmissionMethodMV model)
+		public async Task<ActionResult<string>> CreateAdmissionMethod([FromBody] AdmissionMethodMV model)
 		{
 			string result = await _service.CreateAdmissionMethodAsync(model);
 
@@ -29,7 +27,7 @@ namespace CAH.API.Controllers
 		}
 
 		[HttpDelete("{id}")]
-		public async Task<ActionResult<string>> DeleteAdmissionMethod([FromQuery] string id)
+		public async Task<ActionResult<string>> DeleteAdmissionMethod([FromBody] string id)
 		{
 			string result = await _service.DeleteAdmissionMethodAsync(id);
 
@@ -38,7 +36,7 @@ namespace CAH.API.Controllers
 
 
 		[HttpPatch("{id}")]
-		public async Task<ActionResult<string>> UpdateAdmissionMethod(string id, [FromQuery] AdmissionMethodMV model)
+		public async Task<ActionResult<string>> UpdateAdmissionMethod(string id, [FromBody] AdmissionMethodMV model)
 		{
 			string result = await _service.UpdateAdmissionMethodAsync(id, model);
 

@@ -19,7 +19,7 @@ namespace CAH.API.Controllers
 		}
 
 
-		[HttpPost("create")]
+		[HttpPost]
 		public async Task<ActionResult<string>> CreateMajor([FromBody] CreateMajorModelView model)
 		{
 			string result = await _majorService.CreateMajorAsync(model);
@@ -27,7 +27,7 @@ namespace CAH.API.Controllers
 			return Ok(new { Message = result });
 		}
 
-		[HttpDelete("delete")]
+		[HttpDelete("{id}")]
 		public async Task<ActionResult<string>> DeleteMajor([FromBody] string id)
 		{
 			string result = await _majorService.DeleteMajorAsync(id);
@@ -35,7 +35,7 @@ namespace CAH.API.Controllers
 			return Ok(new { Message = result });
 		}
 
-		[HttpPatch("update")]
+		[HttpPatch("{id}")]
 		public async Task<ActionResult<string>> UpdateMajor(string id, [FromBody] CreateMajorModelView model)
 		{
 			string result = await _majorService.UpdateMajorAsync(id, model);
@@ -43,23 +43,26 @@ namespace CAH.API.Controllers
 			return Ok(new { Message = result });
 		}
 
-		[HttpGet("all")]
-		public async Task<ActionResult<BasePaginatedList<MajorModelView>>> GetAllMajor(int pageNumber = 1, int pageSize = 5)
-		{
-			var result = await _majorService.GetAllMajorAsync(pageNumber, pageSize);
-
-			return Ok(new { Message = result });
-		}
-
-        [HttpGet("all-by-universityId")]
-        public async Task<ActionResult<BasePaginatedList<MajorModelView>>> GetAllMajorByUniId([FromBody] string uniId, int pageNumber = 1, int pageSize = 5)
+        [HttpGet]
+        public async Task<ActionResult<BasePaginatedList<MajorModelView>>> GetAllMajor(
+			int pageNumber = 1,
+			int pageSize = 5,
+			string? majorName = null,
+			string? universityName = null)
         {
-            var result = await _majorService.GetAllMajorByUniIdAsync(pageNumber, pageSize, uniId);
+            var result = await _majorService.GetAllMajorAsync(pageNumber, pageSize, majorName, universityName);
+            return Ok(new { Message = result });
+        }
+
+        [HttpGet("{universityId}")]
+        public async Task<ActionResult<BasePaginatedList<MajorModelView>>> GetAllMajorByUniId(string? universityId, int pageNumber = 1, int pageSize = 5)
+        {
+            var result = await _majorService.GetAllMajorByUniIdAsync(pageNumber, pageSize, universityId);
 
             return Ok(new { Message = result });
         }
 
-        [HttpGet("id")]
+        [HttpGet("{id}")]
 		public async Task<ActionResult<Object>> GetMajorById(string id)
 		{
 			var result = await _majorService.GetMajorByIdAsync(id);

@@ -1,8 +1,6 @@
 ﻿using CAH.Contract.Services.Interface;
 using CAH.Core;
-using CAH.ModelViews.MajorModelViews;
 using CAH.ModelViews.UniMajorModelViews;
-using CAH.Services.Service;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
@@ -20,8 +18,8 @@ namespace CAH.API.Controllers
             _service = uniMajorService;
         }
 
-        [HttpPost("create")]
-        public async Task<ActionResult<string>> CreateUniMajor([FromQuery] CreateUniMajorModelView model)
+        [HttpPost]
+        public async Task<ActionResult<string>> CreateUniMajor([FromBody] CreateUniMajorModelView model)
         {
             string result = await _service.CreateUniMajorAsync(model);
 
@@ -29,8 +27,8 @@ namespace CAH.API.Controllers
         }
 
 
-        [HttpDelete("delete")]
-        public async Task<ActionResult<string>> DeleteUniMajor([FromQuery] string id)
+        [HttpDelete("{id}")]
+        public async Task<ActionResult<string>> DeleteUniMajor([FromBody] string id)
         {
             string result = await _service.DeleteUniMajorAsync(id);
 
@@ -38,15 +36,15 @@ namespace CAH.API.Controllers
         }
 
 
-        [HttpPatch("update")]
-        public async Task<ActionResult<string>> UpdateUniMajor(string id, [FromQuery] UpdateUniMajorModelView model)
+        [HttpPatch("{id}")]
+        public async Task<ActionResult<string>> UpdateUniMajor(string id, [FromBody] UpdateUniMajorModelView model)
         {
             string result = await _service.UpdateUniMajorAsync(id, model);
 
             return Ok(new { Message = result });
         }
 
-        [HttpGet("all")]
+        [HttpGet]
         public async Task<ActionResult<BasePaginatedList<ListUniMajorModelView>>> GetAllUniMajor(int pageNumber = 1, int pageSize = 5)
         {
             var result = await _service.GetAllUniMajorAsync(pageNumber, pageSize);
@@ -54,7 +52,7 @@ namespace CAH.API.Controllers
             return Ok(new { Message = result });
         }
 
-        [HttpGet("id")]
+        [HttpGet("{id}")]
         public async Task<ActionResult<Object>> GetUniMajorById(string id)
         {
             var result = await _service.GetUniMajorByIdAsync(id);

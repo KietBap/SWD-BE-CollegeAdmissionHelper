@@ -2,9 +2,6 @@
 using CAH.Contract.Services.Interface;
 using CAH.ModelViews.AuthModelViews;
 using CAH.Services.Service;
-using FirebaseAdmin.Auth;
-using FirebaseAdmin;
-using Google.Apis.Auth;
 using Microsoft.AspNetCore.Mvc;
 
 namespace CAH.API.Controllers

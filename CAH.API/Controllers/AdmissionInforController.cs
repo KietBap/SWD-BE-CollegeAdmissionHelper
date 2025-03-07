@@ -2,8 +2,6 @@
 using CAH.Core;
 using CAH.ModelViews.AdmissionInforModelViews;
 using CAH.ModelViews.UniversityModelViews;
-using CAH.Services.Service;
-using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace CAH.API.Controllers

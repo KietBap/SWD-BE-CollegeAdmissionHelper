@@ -38,7 +38,7 @@ namespace CAH.API.Controllers
 
 
         [HttpPatch("{id}")]
-        public async Task<ActionResult<string>> UpdateAcademicYear(string id, [FromQuery] AcademicYearModelView model)
+        public async Task<ActionResult<string>> UpdateAcademicYear(string id, [FromBody] AcademicYearModelView model)
         {
             string result = await _service.UpdateAcademicYearAsync(id, model);
 

@@ -37,7 +37,7 @@ namespace CAH.API.Controllers
 
 
         [HttpPatch("{id}")]
-        public async Task<ActionResult<string>> UpdateReview(string id, [FromQuery] UpdateReviewModelView model)
+        public async Task<ActionResult<string>> UpdateReview(string id, [FromBody] UpdateReviewModelView model)
         {
             string result = await _service.UpdateReviewAsync(id, model);
 

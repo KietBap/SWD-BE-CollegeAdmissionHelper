@@ -1,8 +1,6 @@
 ﻿using CAH.Contract.Services.Interface;
 using CAH.Core;
 using CAH.ModelViews.SubjectModelViews;
-using CAH.ModelViews.UniversityModelViews;
-using CAH.Services.Service;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
@@ -30,7 +28,7 @@ namespace CAH.API.Controllers
 		}
 
 		[HttpDelete("{id}")]
-		public async Task<ActionResult<string>> DeleteSubject([FromQuery] string id)
+		public async Task<ActionResult<string>> DeleteSubject([FromBody] string id)
 		{
 			string result = await _service.DeleteSubjectAsync(id);
 
@@ -39,7 +37,7 @@ namespace CAH.API.Controllers
 
 
 		[HttpPatch("{id}")]
-		public async Task<ActionResult<string>> UpdateSubject(string id, [FromQuery] SubjectModelView model)
+		public async Task<ActionResult<string>> UpdateSubject(string id, [FromBody] SubjectModelView model)
 		{
 			string result = await _service.UpdateSubjectAsync(id, model);
 

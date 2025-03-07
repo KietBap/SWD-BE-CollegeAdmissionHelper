@@ -99,23 +99,35 @@ namespace CAH.Services.Service
 			}
 		}
 
-		public async Task<BasePaginatedList<MajorModelView>> GetAllMajorAsync(int pageNumber, int pageSize)
+		public async Task<BasePaginatedList<MajorModelView>> GetAllMajorAsync(int pageNumber, int pageSize, string? majorName, string? universityName)
 		{
-			IQueryable<Major> majorQuery = _unitOfWork.GetRepository<Major>().Entities
-				.Where(p => !p.DeletedTime.HasValue)
-				.OrderByDescending(s => s.CreatedTime);
+            IQueryable<Major> majorQuery = _unitOfWork.GetRepository<Major>().Entities
+				.Where(p => !p.DeletedTime.HasValue);
 
-			int totalCount = await majorQuery.CountAsync();
+            if (!string.IsNullOrEmpty(majorName))
+            {
+                majorQuery = majorQuery.Where(m => m.Name.Contains(majorName));
+            }
 
-			List<Major> paginatedServices = await majorQuery
-				.Skip((pageNumber - 1) * pageSize)
-				.Take(pageSize)
-				.ToListAsync();
+            if (!string.IsNullOrEmpty(universityName))
+            {
+                majorQuery = majorQuery.Where(m =>
+                    m.UniMajors.Any(um => um.University.Name.Contains(universityName))
+                );
+            }
 
-			List<MajorModelView> majorModelView = _mapper.Map<List<MajorModelView>>(paginatedServices);
+            int totalCount = await majorQuery.CountAsync();
 
-			return new BasePaginatedList<MajorModelView>(majorModelView, totalCount, pageNumber, pageSize);
-		}
+            List<Major> paginatedMajors = await majorQuery
+                .OrderByDescending(s => s.CreatedTime)
+                .Skip((pageNumber - 1) * pageSize)
+                .Take(pageSize)
+                .ToListAsync();
+
+            List<MajorModelView> majorModelView = _mapper.Map<List<MajorModelView>>(paginatedMajors);
+
+            return new BasePaginatedList<MajorModelView>(majorModelView, totalCount, pageNumber, pageSize);
+        }
 
 
         public async Task<BasePaginatedList<MajorModelView>> GetAllMajorByUniIdAsync(int pageNumber, int pageSize, string universityId)
