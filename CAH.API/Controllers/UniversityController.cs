@@ -20,7 +20,7 @@ namespace CAH.API.Controllers
 
 
 		[HttpPost("create")]
-		public async Task<ActionResult<string>> CreateUniversity([FromQuery] UniversityModelView model)
+		public async Task<ActionResult<string>> CreateUniversity([FromBody] UniversityModelView model)
 		{
 			string result = await _universityService.CreateUniversityAsync(model);
 
@@ -28,7 +28,7 @@ namespace CAH.API.Controllers
 		}
 
 		[HttpDelete("delete")]
-		public async Task<ActionResult<string>> DeleteUniversity([FromQuery] string id)
+		public async Task<ActionResult<string>> DeleteUniversity([FromBody] string id)
 		{
 			string result = await _universityService.DeleteUniversityAsync(id);
 
@@ -37,7 +37,7 @@ namespace CAH.API.Controllers
 
 
 		[HttpPatch("update")]
-		public async Task<ActionResult<string>> UpdateUniversity(string id, [FromQuery] UniversityModelView model)
+		public async Task<ActionResult<string>> UpdateUniversity(string id, [FromBody] UniversityModelView model)
 		{
 			string result = await _universityService.UpdateUniversityAsync(id, model);
 
@@ -46,9 +46,9 @@ namespace CAH.API.Controllers
 
 
 		[HttpGet("all")]
-		public async Task<ActionResult<BasePaginatedList<UniversityMV>>> GetAllUniversity([FromQuery] string? uniCode,
-																						  [FromQuery] string? type,
-																						  [FromQuery] string? location,
+		public async Task<ActionResult<BasePaginatedList<UniversityMV>>> GetAllUniversity([FromBody] string? uniCode,
+																						  string? type,
+																						  string? location,
 																						  int pageNumber = 1, int pageSize = 5)
 		{
 			var result = await _universityService.GetAllUniversityAsync(pageNumber, pageSize, uniCode, type, location);

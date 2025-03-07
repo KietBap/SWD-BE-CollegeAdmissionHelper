@@ -20,7 +20,7 @@ namespace CAH.API.Controllers
 
 
 		[HttpPost("create")]
-		public async Task<ActionResult<string>> CreateMajor([FromQuery] CreateMajorModelView model)
+		public async Task<ActionResult<string>> CreateMajor([FromBody] CreateMajorModelView model)
 		{
 			string result = await _majorService.CreateMajorAsync(model);
 
@@ -28,7 +28,7 @@ namespace CAH.API.Controllers
 		}
 
 		[HttpDelete("delete")]
-		public async Task<ActionResult<string>> DeleteMajor([FromQuery] string id)
+		public async Task<ActionResult<string>> DeleteMajor([FromBody] string id)
 		{
 			string result = await _majorService.DeleteMajorAsync(id);
 
@@ -36,7 +36,7 @@ namespace CAH.API.Controllers
 		}
 
 		[HttpPatch("update")]
-		public async Task<ActionResult<string>> UpdateMajor(string id, [FromQuery] CreateMajorModelView model)
+		public async Task<ActionResult<string>> UpdateMajor(string id, [FromBody] CreateMajorModelView model)
 		{
 			string result = await _majorService.UpdateMajorAsync(id, model);
 
@@ -52,7 +52,7 @@ namespace CAH.API.Controllers
 		}
 
         [HttpGet("all-by-universityId")]
-        public async Task<ActionResult<BasePaginatedList<MajorModelView>>> GetAllMajorByUniId([FromQuery] string uniId, int pageNumber = 1, int pageSize = 5)
+        public async Task<ActionResult<BasePaginatedList<MajorModelView>>> GetAllMajorByUniId([FromBody] string uniId, int pageNumber = 1, int pageSize = 5)
         {
             var result = await _majorService.GetAllMajorByUniIdAsync(pageNumber, pageSize, uniId);
 
