@@ -45,9 +45,9 @@ namespace CAH.API.Controllers
         }
 
         [HttpGet]
-        public async Task<ActionResult<BasePaginatedList<ListUniMajorModelView>>> GetAllUniMajor(int pageNumber = 1, int pageSize = 5)
+        public async Task<ActionResult<BasePaginatedList<ListUniMajorModelView>>> GetAllUniMajor(string? universityName,int pageNumber = 1, int pageSize = 5)
         {
-            var result = await _service.GetAllUniMajorAsync(pageNumber, pageSize);
+            var result = await _service.GetAllUniMajorAsync(pageNumber, pageSize, universityName);
 
             return Ok(new { Message = result });
         }

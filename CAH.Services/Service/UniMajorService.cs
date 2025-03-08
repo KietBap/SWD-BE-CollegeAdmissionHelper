@@ -101,23 +101,37 @@ namespace CAH.Services.Service
         }
 
 
-        public async Task<BasePaginatedList<ListUniMajorModelView>> GetAllUniMajorAsync(int pageNumber, int pageSize)
+        public async Task<BasePaginatedList<ListUniMajorModelView>> GetAllUniMajorAsync(int pageNumber, int pageSize, string? universityName)
         {
             IQueryable<UniMajor> uniMajorQuery = _unitOfWork.GetRepository<UniMajor>().Entities
                 .Where(p => !p.DeletedTime.HasValue)
+                .Include(p => p.University)
+                .Include(p => p.Major)
                 .OrderByDescending(s => s.CreatedTime);
+
+            if (!string.IsNullOrWhiteSpace(universityName))
+            {
+                uniMajorQuery = uniMajorQuery.Where(p => p.University.Name.Contains(universityName));
+            }
 
             int totalCount = await uniMajorQuery.CountAsync();
 
-            List<UniMajor> paginatedServices = await uniMajorQuery
+            List<ListUniMajorModelView> uniMajorModelView = await uniMajorQuery
                 .Skip((pageNumber - 1) * pageSize)
                 .Take(pageSize)
+                .Select(p => new ListUniMajorModelView
+                {
+                    Id = p.Id.ToString(),
+                    TuitionFee = p.TuitionFee,
+                    MajorCode = p.MajorCode,
+                    UniversityName = p.University.Name,
+                    MajorName = p.Major.Name
+                })
                 .ToListAsync();
-
-            List<ListUniMajorModelView> uniMajorModelView = _mapper.Map<List<ListUniMajorModelView>>(paginatedServices);
 
             return new BasePaginatedList<ListUniMajorModelView>(uniMajorModelView, totalCount, pageNumber, pageSize);
         }
+
 
 
         public async Task<Object> GetUniMajorByIdAsync(string id)
