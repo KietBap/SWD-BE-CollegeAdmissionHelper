@@ -20,7 +20,7 @@ namespace CAH.API.Controllers
 
 
         [HttpPost]
-        public async Task<ActionResult<string>> CreateAdmissionInfor(AdmissionInforModelView model)
+        public async Task<ActionResult<string>> CreateAdmissionInfor(CreateAdInforModelView model)
         {
             string result = await _admissionInforService.CreateAdmissionInforAsync(model);
 
@@ -34,6 +34,14 @@ namespace CAH.API.Controllers
                                                                                           int pageNumber = 1, int pageSize = 5)
         {
             var result = await _admissionInforService.GetAllAdmissionInforAsync(pageNumber, pageSize, uniName, majorName);
+
+            return Ok(new { Message = result });
+        }
+
+        [HttpGet("{id}")]
+        public async Task<ActionResult<Object>> GetAdmissionInforById(string id)
+        {
+            var result = await _admissionInforService.GetAdInforByIdAsync(id);
 
             return Ok(new { Message = result });
         }

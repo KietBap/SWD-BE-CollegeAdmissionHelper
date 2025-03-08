@@ -70,8 +70,8 @@ namespace CAH.Repositories.Mapper
             CreateMap<User, ListUserModelView>();
             CreateMap<ListUserModelView, User>();
 
-            CreateMap<AdmissionInfor, AdmissionInforModelView>();
-            CreateMap<AdmissionInforModelView, AdmissionInfor>();
+            CreateMap<AdmissionInfor, CreateAdInforModelView>();
+            CreateMap<CreateAdInforModelView, AdmissionInfor>();
             CreateMap<InforMethodModel, InforMethod>();
         }
     }

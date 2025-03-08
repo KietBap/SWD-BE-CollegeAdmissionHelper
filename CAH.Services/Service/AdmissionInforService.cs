@@ -5,7 +5,7 @@ using CAH.Contract.Services.Interface;
 using CAH.Core;
 using CAH.Core.Base;
 using CAH.ModelViews.AdmissionInforModelViews;
-using CAH.ModelViews.UniversityModelViews;
+using CAH.ModelViews.AdmissionMethodMVs;
 using Microsoft.AspNetCore.Http;
 using Microsoft.EntityFrameworkCore;
 
@@ -24,7 +24,7 @@ namespace CAH.Services.Service
             _mapper = mapper;
         }
 
-        public async Task<string> CreateAdmissionInforAsync(AdmissionInforModelView model)
+        public async Task<string> CreateAdmissionInforAsync(CreateAdInforModelView model)
         {
             try
             {
@@ -106,5 +106,71 @@ namespace CAH.Services.Service
 
             return new BasePaginatedList<ListAdInforModelView>(adInforModelView, totalCount, pageNumber, pageSize);
         }
+
+
+        public async Task<string> DeleteAdmissionInforAsync(string id)
+        {
+            try
+            {
+                var userId = _httpContext.HttpContext?.User.FindFirst("userId")?.Value;
+
+                var admissionInfor = await _unitOfWork.GetRepository<AdmissionInfor>().GetByIdAsync(id);
+                if (admissionInfor == null)
+                {
+                    return "can not find admissionInfor";
+                }
+
+                admissionInfor.DeletedTime = DateTimeOffset.UtcNow;
+                admissionInfor.DeletedBy = userId;
+
+                await _unitOfWork.GetRepository<AdmissionInfor>().UpdateAsync(admissionInfor);
+                await _unitOfWork.SaveAsync();
+
+                return "AdmissionInfor delete successfully";
+            }
+            catch (BaseException.BadRequestException ex)
+            {
+                throw new Exception($"Error: {ex.Message}");
+            }
+        }
+
+        public async Task<object> GetAdInforByIdAsync(string id)
+        {
+            try
+            {
+                var admissionInfor = await _unitOfWork.GetRepository<AdmissionInfor>().Entities
+                    .Where(a => a.Id == id && !a.DeletedTime.HasValue)
+                    .Include(a => a.InforMethods)
+                    .ThenInclude(im => im.AdmissionMethod)
+                    .FirstOrDefaultAsync();
+
+                if (admissionInfor == null)
+                {
+                    return "Can not find or AdmissionInfor is deleted";
+                }
+
+                var result = new AdmissionInforModelView
+                {
+                    Id = admissionInfor.Id.ToString(),
+                    Quota = admissionInfor.Quota,
+                    AdmisstionDate = admissionInfor.AdmisstionDate,
+                    Deadline = admissionInfor.Deadline,
+                    InforMethods = admissionInfor.InforMethods.Select(im => new ListInforMethodModelView
+                    {
+                        MethodName = im.AdmissionMethod.MethodName,
+                        ScoreType = im.ScoreType,
+                        ScoreRequirement = im.ScoreRequirement,
+                        PercentageOfQuota = im.PercentageOfQuota
+                    }).ToList()
+                };
+
+                return result;
+            }
+            catch (Exception ex)
+            {
+                throw new Exception($"Error: {ex.Message}");
+            }
+        }
+
     }
 }
