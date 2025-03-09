@@ -29,7 +29,6 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\CAH.Contract.Repositories\CAH.Contract.Repositories.csproj" />
     <ProjectReference Include="..\CAH.Core\CAH.Core.csproj" />
   </ItemGroup>
 

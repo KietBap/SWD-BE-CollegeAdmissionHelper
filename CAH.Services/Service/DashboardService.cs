@@ -3,6 +3,10 @@ using CAH.Contract.Repositories.Entity;
 using CAH.Contract.Repositories.Interface;
 using CAH.Contract.Repositories.IUOW;
 using CAH.Contract.Services.Interface;
+using CAH.ModelViews.DashBoardModelViews;
+using CAH.ModelViews.UniMajorModelViews;
+using Microsoft.AspNetCore.Http;
+using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -13,22 +17,37 @@ namespace CAH.Services.Service
 {
     public class DashboardService : IDashboardService
     {
-        private readonly IDashboardRepository dashboardRepository;
-        private IMapper mapper;
-        public DashboardService( IMapper mapper, IDashboardRepository dashboardRepository)
+        private readonly IDashboardRepository _dashboardRepository;
+        private IMapper _mapper;
+        private readonly IHttpContextAccessor _httpContextAccessor;
+        public DashboardService(IMapper mapper, IDashboardRepository dashboardRepository, IHttpContextAccessor httpContextAccessor)
         {
-            this.dashboardRepository = dashboardRepository;
-            this.mapper = mapper;
+            _dashboardRepository = dashboardRepository;
+            _mapper = mapper;
+            _httpContextAccessor = httpContextAccessor;
         }
-  
+
         public async Task<int> GetUniversityCountAsync()
         {
-            return await dashboardRepository.GetUniversityCountAsync();
+            return await _dashboardRepository.GetUniversityCountAsync();
         }
 
         public async Task<int> GetUserCountAsync()
         {
-            return await dashboardRepository.GetUserCountAsync();
+            return await _dashboardRepository.GetUserCountAsync();
         }
+        public async Task<List<UserLoginCountModelView>> GetUserLoginCountsAsync(DateTime startDate, DateTime endDate)
+        {
+            try
+            {
+                var userLogins = await _dashboardRepository.GetUserLoginCountsAsync(startDate, endDate);
+                return _mapper.Map<List<UserLoginCountModelView>>(userLogins);
+            }
+            catch (Exception ex)
+            {
+                throw new Exception($"Lỗi khi lấy thống kê đăng nhập: {ex.Message}");
+            }
+        }
+
     }
 }

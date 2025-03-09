@@ -17,23 +17,25 @@ namespace CAH.Repositories.Context
 		public virtual DbSet<RoleClaim> ApplicationRoleClaims => Set<RoleClaim>();
 		public virtual DbSet<UserToken> ApplicationUserTokens => Set<UserToken>();
 		public virtual DbSet<Subject> Subjects { get; set; }
-		public virtual DbSet<Wishlist> Wishlists { get; set; }
+		public virtual DbSet<Wishlist> Wishlists { get; set; } // note
 		public virtual DbSet<AcademicYear> AcademicYears { get; set; }
 		public virtual DbSet<Major> Majors { get; set; }
 		public virtual DbSet<UniMajor> UniMajors { get; set; }
 		public virtual DbSet<University> Universities { get; set; }
-		public virtual DbSet<AdmissionInfor> AdmissionInfors { get; set; }
-		public virtual DbSet<AdmissionMethod> AdmissionMethods { get; set; }
-		public virtual DbSet<InforMethod> InforMethods { get; set; }
-		public virtual DbSet<SubjectScore> SubjectScores { get; set; }
-		public virtual DbSet<Review> Reviews { get; set; }
-		protected override void OnModelCreating(ModelBuilder modelBuilder)
+		public virtual DbSet<AdmissionInfor> AdmissionInfors { get; set; } // Note
+		public virtual DbSet<AdmissionMethod> AdmissionMethods { get; set; }// Note
+        public virtual DbSet<InforMethod> InforMethods { get; set; } // Note
+        public virtual DbSet<SubjectScore> SubjectScores { get; set; }
+		public virtual DbSet<Review> Reviews { get; set; } // Note
+		public virtual DbSet<UserLoginHistory> UserLoginHistories { get; set; }
+        protected override void OnModelCreating(ModelBuilder modelBuilder)
 		{
 			//base.OnModelCreating(modelBuilder);
 
 			// Thiết lập các quan hệ giữa các bảng
 			modelBuilder.Entity<UserLogin>()
 				.HasKey(login => new { login.UserId, login.LoginProvider, login.ProviderKey });
+
 			modelBuilder.Entity<UserRole>(userRole =>
 			{
 				userRole.HasKey(ur => new { ur.UserId, ur.RoleId });
@@ -45,6 +47,7 @@ namespace CAH.Repositories.Context
 					.WithMany(r => r.UserRoles)
 					.HasForeignKey(ur => ur.RoleId)
 					.IsRequired();
+
 			});
 
 			modelBuilder.Entity<UserToken>()
@@ -344,9 +347,51 @@ namespace CAH.Repositories.Context
                     LastUpdatedTime = DateTimeOffset.UtcNow
                 });
 
-            //AcademicYear
+
+            // AdmissionInfor
+            var ai1 = Guid.NewGuid().ToString();
+            var ai2 = Guid.NewGuid().ToString();
             var ay1 = Guid.NewGuid().ToString();
             var ay2 = Guid.NewGuid().ToString();
+
+            modelBuilder.Entity<AdmissionInfor>().HasData(
+                new AdmissionInfor
+                {
+                    Id = ai1,
+                    UniMajorId = uniMajor1,
+                    AcademicYearId = ay1, // ✅ OK, dùng ID của AcademicYear
+                    CreatedBy = "SeedData",
+                    LastUpdatedBy = "SeedData",
+                    CreatedTime = DateTimeOffset.UtcNow,
+                    LastUpdatedTime = DateTimeOffset.UtcNow
+                },
+                new AdmissionInfor
+                {
+                    Id = ai2,
+                    UniMajorId = uniMajor2,
+                    AcademicYearId = ay2, // ✅ OK
+                    CreatedBy = "SeedData",
+                    LastUpdatedBy = "SeedData",
+                    CreatedTime = DateTimeOffset.UtcNow,
+                    LastUpdatedTime = DateTimeOffset.UtcNow
+                });
+
+            // Wishlist
+            modelBuilder.Entity<Wishlist>().HasData(
+                new Wishlist
+                {
+                    Id = Guid.NewGuid().ToString(),
+                    UserId = userId,
+                    AdmissionInforId = ai1, // ✅ Dùng đúng ID của AdmissionInfor
+                    CreatedBy = "SeedData",
+                    LastUpdatedBy = "SeedData",
+                    CreatedTime = DateTimeOffset.UtcNow,
+                    LastUpdatedTime = DateTimeOffset.UtcNow
+                });
+
+
+            //AcademicYear
+
             modelBuilder.Entity<AcademicYear>().HasData(
                 new AcademicYear
                 {
@@ -361,6 +406,57 @@ namespace CAH.Repositories.Context
                 {
                     Id = ay2,
                     Year = 2024,
+                    CreatedBy = "SeedData",
+                    LastUpdatedBy = "SeedData",
+                    CreatedTime = DateTimeOffset.UtcNow,
+                    LastUpdatedTime = DateTimeOffset.UtcNow
+                });
+            // InforMethod
+            modelBuilder.Entity<InforMethod>().HasData(
+                new InforMethod
+                {
+                    Id = Guid.NewGuid().ToString(),
+                    AdmissionInforId = ai1,
+                    AdmissionMethodId = am1,
+                    ScoreType = "GPA", // Bổ sung giá trị cho ScoreType
+                    CreatedBy = "SeedData",
+                    LastUpdatedBy = "SeedData",
+                    CreatedTime = DateTimeOffset.UtcNow,
+                    LastUpdatedTime = DateTimeOffset.UtcNow
+                },
+                new InforMethod
+                {
+                    Id = Guid.NewGuid().ToString(),
+                    AdmissionInforId = ai2,
+                    AdmissionMethodId = am2,
+                    ScoreType = "Percentage", // Bổ sung giá trị cho ScoreType
+                    CreatedBy = "SeedData",
+                    LastUpdatedBy = "SeedData",
+                    CreatedTime = DateTimeOffset.UtcNow,
+                    LastUpdatedTime = DateTimeOffset.UtcNow
+                });
+
+            //Review
+            modelBuilder.Entity<Review>().HasData(
+                new Review
+                {
+                    Id = Guid.NewGuid().ToString(),
+                    UserId = userId,
+                    UniMajorId = uniMajor1,
+                    Comment = "Truong rat tot!",
+                    Rating = 5,
+                    CreatedBy = "SeedData",
+                    LastUpdatedBy = "SeedData",
+                    CreatedTime = DateTimeOffset.UtcNow,
+                    LastUpdatedTime = DateTimeOffset.UtcNow
+                },
+                new Review
+                {
+                    Id = Guid.NewGuid().ToString(),
+                    UserId = adminId,
+                    UniMajorId = uniMajor2,
+                    Comment = "Moi truong hoc tap nang dong!",
+                    Rating = 4,
                     CreatedBy = "SeedData",
                     LastUpdatedBy = "SeedData",
                     CreatedTime = DateTimeOffset.UtcNow,
