@@ -4,6 +4,7 @@ using CAH.ModelViews.AcademicYearModelViews;
 using CAH.ModelViews.AdmissionInforModelViews;
 using CAH.ModelViews.AdmissionMethodMVs;
 using CAH.ModelViews.AuthModelViews;
+using CAH.ModelViews.DashBoardModelViews;
 using CAH.ModelViews.MajorModelViews;
 using CAH.ModelViews.ReviewModelViews;
 using CAH.ModelViews.SubjectModelViews;
@@ -73,6 +74,10 @@ namespace CAH.Repositories.Mapper
             CreateMap<AdmissionInfor, AdmissionInforModelView>();
             CreateMap<AdmissionInforModelView, AdmissionInfor>();
             CreateMap<InforMethodModel, InforMethod>();
+
+            CreateMap<UserLogin, UserLoginCountModelView>();
+
+
         }
     }
 }

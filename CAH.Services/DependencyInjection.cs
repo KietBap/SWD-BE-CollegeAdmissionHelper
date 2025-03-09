@@ -14,8 +14,10 @@ namespace CAH.Services
         }
         public static void AddRepositories(this IServiceCollection services)
         {
+            services.AddScoped(typeof(IGenericRepository<>), typeof(GenericRepository<>));
             services.AddScoped<IUnitOfWork, UnitOfWork>();
-            services.AddScoped<IDashboardRepository, DashboardRepository>();    
+            services.AddScoped<IDashboardRepository, DashboardRepository>();   
+            
         }
     }
 }

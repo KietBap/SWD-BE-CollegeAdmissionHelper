@@ -30,6 +30,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\CAH.Core\CAH.Core.csproj" />
+    <ProjectReference Include="..\CAH.ModelViews\CAH.ModelViews.csproj" />
   </ItemGroup>
 
 </Project>

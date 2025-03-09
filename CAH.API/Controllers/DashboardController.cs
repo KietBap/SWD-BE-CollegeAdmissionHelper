@@ -1,32 +1,50 @@
 ﻿using CAH.Contract.Services.Interface;
-using Microsoft.AspNetCore.Authorization;
+using CAH.ModelViews.DashBoardModelViews;
 using Microsoft.AspNetCore.Mvc;
+using System;
+using System.Collections.Generic;
+using System.Threading.Tasks;
 
 namespace CAH.API.Controllers
 {
-    [Authorize(Roles = "Admin")]
+    //[Authorize(Roles = "Admin")]
     [Route("api/[controller]")]
     [ApiController]
-    public class DashboardController : ControllerBase
+    public class DashboardController : Controller
     {
-       public readonly IDashboardService _service;
-        public DashboardController(IDashboardService service)
+        private readonly IDashboardService _dashboardService;
+
+        public DashboardController(IDashboardService dashboardService)
         {
-            _service = service;
+            _dashboardService = dashboardService;
         }
 
         [HttpGet("total-users")]
-        public async Task<IActionResult> GetTotalUsers()
+        public async Task<ActionResult<int>> GetTotalUsers()
         {
-            var totalUsers = await _service.GetUserCountAsync();
-            return Ok(totalUsers);
+            int totalUsers = await _dashboardService.GetUserCountAsync();
+            return Ok(new { Message = "Success", TotalUsers = totalUsers });
         }
 
         [HttpGet("total-universitys")]
-        public async Task<IActionResult> GetTotalInstructors()
+        public async Task<ActionResult<int>> GetTotalUniversities()
         {
-            var totalUniversity = await _service.GetUniversityCountAsync();
-            return Ok(totalUniversity);
+            int totalUniversity = await _dashboardService.GetUniversityCountAsync();
+            return Ok(new { Message = "Success", TotalUniversities = totalUniversity });
         }
+
+        [HttpGet("user-login-stats")]
+        public async Task<ActionResult<List<UserLoginCountModelView>>> GetUserLoginStats([FromQuery] DateTime? startDate, [FromQuery] DateTime? endDate)
+        {
+            var defaultStartDate = new DateTime(DateTime.UtcNow.Year, DateTime.UtcNow.Month, 1); // Ngày 1 của tháng hiện tại
+            var defaultEndDate = DateTime.UtcNow; // Ngày hiện tại
+
+            var actualStartDate = startDate ?? defaultStartDate;
+            var actualEndDate = endDate ?? defaultEndDate;
+
+            var loginStats = await _dashboardService.GetUserLoginCountsAsync(actualStartDate, actualEndDate);
+            return Ok(new { Message = "Success", Data = loginStats });
+        }
+
     }
 }

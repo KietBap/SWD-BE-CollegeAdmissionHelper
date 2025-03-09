@@ -4,6 +4,7 @@ using CAH.Contract.Repositories.Interface;
 using CAH.Contract.Services.Interface;
 using CAH.Core.Utils;
 using CAH.ModelViews.AuthModelViews;
+using CAH.ModelViews.DashBoardModelViews;
 using CAH.ModelViews.TokenModelViews;
 using FirebaseAdmin.Auth;
 using Microsoft.AspNetCore.Identity;
@@ -30,61 +31,132 @@ namespace CAH.Services.Service
 
         public async Task<User> AuthenticateAsync(LoginModelView model)
         {
-			var accountRepository = _unitOfWork.GetRepository<User>();
+            var accountRepository = _unitOfWork.GetRepository<User>();
 
-			// Find the user by Username
-			var user = await accountRepository.Entities
-				.FirstOrDefaultAsync(x => x.UserName == model.Username);
+            // 📌 1. Tìm user theo username
+            var user = await accountRepository.Entities
+                .FirstOrDefaultAsync(x => x.UserName == model.Username);
 
-			if (user == null)
-			{
-				return null; // User does not exist
-			}
+            if (user == null)
+            {
+                return null; // User không tồn tại
+            }
 
-			// Verify the password
-			var passwordVerificationResult = _passwordHasher.VerifyHashedPassword(user, user.PasswordHash, model.Password);
+            // 📌 2. Kiểm tra mật khẩu
+            var passwordVerificationResult = _passwordHasher.VerifyHashedPassword(user, user.PasswordHash, model.Password);
 
-			if (passwordVerificationResult == PasswordVerificationResult.Failed)
-			{
-				return null; // Password does not match
-			}
+            if (passwordVerificationResult == PasswordVerificationResult.Failed)
+            {
+                return null; // Sai mật khẩu
+            }
 
-			// Check if a login record already exists
-			var loginRepository = _unitOfWork.GetRepository<UserLogin>();
-			var existingLogin = await loginRepository.Entities
-				.FirstOrDefaultAsync(x => x.UserId == user.Id && x.LoginProvider == "CustomLoginProvider");
+            // 📌 3. Lấy repository
+            var loginRepository = _unitOfWork.GetRepository<UserLogin>();
+            var loginHistoryRepository = _unitOfWork.GetRepository<UserLoginHistory>();
 
-			if (existingLogin == null)
-			{
-				// If no login record exists, add a new one
-				var loginInfo = new UserLogin
-				{
-					UserId = user.Id, // UserId from the authenticated user
-					ProviderKey = user.Id.ToString(),
-					LoginProvider = "CustomLoginProvider", // Or another provider name
-					ProviderDisplayName = "Standard Login",
-					CreatedBy = user.UserName, // Record who performed the login
-					CreatedTime = CoreHelper.SystemTimeNow,
-					LastUpdatedBy = user.UserName,
-					LastUpdatedTime = CoreHelper.SystemTimeNow
-				};
+            // 📌 4. Lưu lịch sử đăng nhập vào UserLoginHistory
+            var newLoginHistory = new UserLoginHistory
+            {
+                UserId = user.Id,
+                LoginProvider = "CustomLoginProvider",
+                ProviderKey = user.Id.ToString(), // 🔹 Đảm bảo có ProviderKey
+                LoginTime = CoreHelper.SystemTimeNow,
+                CreatedBy = user.UserName,
+                CreatedTime = CoreHelper.SystemTimeNow
+            };
 
-				await loginRepository.InsertAsync(loginInfo);
-				await _unitOfWork.SaveAsync(); // Save changes to the database
-			}
-			else
-			{
-				// If the login record already exists, update it if necessary
-				existingLogin.LastUpdatedBy = user.UserName;
-				existingLogin.LastUpdatedTime = CoreHelper.SystemTimeNow;
+            await loginHistoryRepository.InsertAsync(newLoginHistory);
 
-				await loginRepository.UpdateAsync(existingLogin);
-				await _unitOfWork.SaveAsync(); // Save changes to the database
-			}
+            // 📌 5. Cập nhật hoặc tạo mới UserLogin
+            var existingLogin = await loginRepository.Entities
+                .FirstOrDefaultAsync(x => x.UserId == user.Id && x.LoginProvider == "CustomLoginProvider");
 
-			return user; // Return the authenticated user
-		}
+            if (existingLogin == null)
+            {
+                await loginRepository.InsertAsync(new UserLogin
+                {
+                    UserId = user.Id,
+                    ProviderKey = user.Id.ToString(),
+                    LoginProvider = "CustomLoginProvider",
+                    ProviderDisplayName = "Standard Login",
+                    LastUpdatedBy = user.UserName,
+                    LastUpdatedTime = CoreHelper.SystemTimeNow
+                });
+            }
+            else
+            {
+                existingLogin.LastUpdatedBy = user.UserName;
+                existingLogin.LastUpdatedTime = CoreHelper.SystemTimeNow;
+                loginRepository.Update(existingLogin);
+            }
 
+            // 📌 6. Lưu thay đổi
+            await _unitOfWork.SaveAsync();
+
+            return user;
+        }
+
+
+
+        //public async Task<User> AuthenticateAsync(LoginModelView model)
+        //{
+        //    var accountRepository = _unitOfWork.GetRepository<User>();
+
+        //    // Find the user by Username
+        //    var user = await accountRepository.Entities
+        //        .FirstOrDefaultAsync(x => x.UserName == model.Username);
+
+        //    if (user == null)
+        //    {
+        //        return null; // User does not exist
+        //    }
+
+        //    // Verify the password
+        //    var passwordVerificationResult = _passwordHasher.VerifyHashedPassword(user, user.PasswordHash, model.Password);
+
+        //    if (passwordVerificationResult == PasswordVerificationResult.Failed)
+        //    {
+        //        return null; // Password does not match
+        //    }
+
+        //    // Check if a login record already exists
+        //    var loginRepository = _unitOfWork.GetRepository<UserLogin>();
+        //    var loginAgain = _unitOfWork.GetRepository<UserLoginCountModelView>();
+        //    var existingLogin = await loginRepository.Entities
+        //        .FirstOrDefaultAsync(x => x.UserId == user.Id && x.LoginProvider == "CustomLoginProvider");
+
+        //    if (existingLogin == null)
+        //    {
+        //        // If no login record exists, add a new one
+        //        var loginInfo = new UserLogin
+        //        {
+        //            UserId = user.Id, // UserId from the authenticated user
+        //            ProviderKey = user.Id.ToString(),
+        //            LoginProvider = "CustomLoginProvider", // Or another provider name
+        //            ProviderDisplayName = "Standard Login",
+        //            CreatedBy = user.UserName, // Record who performed the login
+        //            CreatedTime = CoreHelper.SystemTimeNow,
+        //            LastUpdatedBy = user.UserName,
+        //            LastUpdatedTime = CoreHelper.SystemTimeNow,
+        //            LoginCount = 1, // Lần đầu đăng nhập
+        //            LoginTime = CoreHelper.SystemTimeNow // Cập nhật thời gian đăng nhập
+        //        };
+
+        //        await loginRepository.InsertAsync(loginInfo);
+        //        await _unitOfWork.SaveAsync(); // Save changes to the database
+        //    }
+        //    else
+        //    {
+        //        // If the login record already exists, update it if necessary
+        //        existingLogin.LastUpdatedBy = user.UserName;
+        //        existingLogin.LastUpdatedTime = CoreHelper.SystemTimeNow;
+
+        //        await loginRepository.UpdateAsync(existingLogin);
+        //        await _unitOfWork.SaveAsync(); // Save changes to the database
+        //    }
+
+        //    return user; // Return the authenticated user
+        //}
         public async Task<UserModelView> GetUserByEmailAsync(string email)
         {
             // Check if the provided User email is valid (non-empty and non-whitespace)
