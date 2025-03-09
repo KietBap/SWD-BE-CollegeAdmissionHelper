@@ -5,7 +5,7 @@ using CAH.Contract.Services.Interface;
 using CAH.Core;
 using CAH.Core.Base;
 using CAH.ModelViews.AdmissionInforModelViews;
-using CAH.ModelViews.AdmissionMethodMVs;
+using CAH.ModelViews.UniversityModelViews;
 using Microsoft.AspNetCore.Http;
 using Microsoft.EntityFrameworkCore;
 
@@ -65,7 +65,7 @@ namespace CAH.Services.Service
         }
 
 
-        public async Task<BasePaginatedList<ListAdInforModelView>> GetAllAdmissionInforAsync(int pageNumber, int pageSize, string? uniName, string? majorName)
+        public async Task<BasePaginatedList<ListAdInforModelView>> GetAllAdmissionInforAsync(int pageNumber, int pageSize, string? uniName, string? majorName, int? year)
         {
             IQueryable<AdmissionInfor> query = _unitOfWork.GetRepository<AdmissionInfor>().Entities
                 .Where(p => !p.DeletedTime.HasValue)
@@ -88,6 +88,11 @@ namespace CAH.Services.Service
                 query = query.Where(p => p.UniMajor.Major.Name.Contains(majorName));
             }
 
+            if (year.HasValue)
+            {
+                query = query.Where(p => p.AdmisstionDate.Year == year.Value);
+            }
+
             int totalCount = await query.CountAsync();
 
             // Lấy dữ liệu phân trang
@@ -99,7 +104,7 @@ namespace CAH.Services.Service
                     Id = p.Id,
                     UniversityName = p.UniMajor.University.Name,
                     MajorName = p.UniMajor.Major.Name,
-                    MethodName = string.Join(", ", p.InforMethods.Select(im => im.AdmissionMethod.MethodName)), // Lấy danh sách phương thức tuyển sinh
+                    MethodName = string.Join(", ", p.InforMethods.Select(im => im.AdmissionMethod.MethodName)),
                     AdmisstionDate = p.AdmisstionDate
                 })
                 .ToListAsync();
@@ -114,10 +119,20 @@ namespace CAH.Services.Service
             {
                 var userId = _httpContext.HttpContext?.User.FindFirst("userId")?.Value;
 
-                var admissionInfor = await _unitOfWork.GetRepository<AdmissionInfor>().GetByIdAsync(id);
+                var admissionInfor = await _unitOfWork.GetRepository<AdmissionInfor>().Entities
+                    .Include(a => a.InforMethods) 
+                    .FirstOrDefaultAsync(a => a.Id == id);
+
                 if (admissionInfor == null)
                 {
-                    return "can not find admissionInfor";
+                    return "Can not find admissionInfor";
+                }
+
+                foreach (var inforMethod in admissionInfor.InforMethods)
+                {
+                    inforMethod.DeletedTime = DateTimeOffset.UtcNow;
+                    inforMethod.DeletedBy = userId;
+                    await _unitOfWork.GetRepository<InforMethod>().UpdateAsync(inforMethod);
                 }
 
                 admissionInfor.DeletedTime = DateTimeOffset.UtcNow;
@@ -126,13 +141,14 @@ namespace CAH.Services.Service
                 await _unitOfWork.GetRepository<AdmissionInfor>().UpdateAsync(admissionInfor);
                 await _unitOfWork.SaveAsync();
 
-                return "AdmissionInfor delete successfully";
+                return "AdmissionInfor and related InforMethods deleted successfully";
             }
             catch (BaseException.BadRequestException ex)
             {
                 throw new Exception($"Error: {ex.Message}");
             }
         }
+
 
         public async Task<object> GetAdInforByIdAsync(string id)
         {
@@ -155,13 +171,16 @@ namespace CAH.Services.Service
                     Quota = admissionInfor.Quota,
                     AdmisstionDate = admissionInfor.AdmisstionDate,
                     Deadline = admissionInfor.Deadline,
-                    InforMethods = admissionInfor.InforMethods.Select(im => new ListInforMethodModelView
-                    {
-                        MethodName = im.AdmissionMethod.MethodName,
-                        ScoreType = im.ScoreType,
-                        ScoreRequirement = im.ScoreRequirement,
-                        PercentageOfQuota = im.PercentageOfQuota
-                    }).ToList()
+                    InforMethods = admissionInfor.InforMethods
+                        .Where(im => !im.DeletedTime.HasValue)
+                        .Select(im => new ListInforMethodModelView
+                        {
+                            InforMethodId = im.Id,
+                            MethodName = im.AdmissionMethod.MethodName,
+                            ScoreType = im.ScoreType,
+                            ScoreRequirement = im.ScoreRequirement,
+                            PercentageOfQuota = im.PercentageOfQuota
+                        }).ToList()
                 };
 
                 return result;
@@ -171,6 +190,42 @@ namespace CAH.Services.Service
                 throw new Exception($"Error: {ex.Message}");
             }
         }
+
+
+        //public async Task<string> UpdateAdmissionInforAsync(string id, UniversityModelView model)
+        //{
+        //    try
+        //    {
+        //        var userId = _httpContext.HttpContext?.User.FindFirst("userId")?.Value;
+
+        //        string imageUrl = string.Empty;
+        //        if (model.Image != null)
+        //        {
+        //            var imageHelper = new Core.Utils.Firebase.ImageHelper(_configuration);
+        //            imageUrl = await imageHelper.Upload(model.Image);
+        //        }
+
+        //        var university = await _unitOfWork.GetRepository<University>().GetByIdAsync(id);
+        //        if (university == null || university.DeletedTime.HasValue)
+        //        {
+        //            return "can not find or university is deleted";
+        //        }
+
+        //        _mapper.Map(model, university);
+        //        university.LastUpdatedBy = userId;
+        //        university.LastUpdatedTime = DateTimeOffset.UtcNow;
+        //        university.Image = imageUrl;
+
+        //        await _unitOfWork.GetRepository<University>().UpdateAsync(university);
+        //        await _unitOfWork.SaveAsync();
+
+        //        return "University updated successfully";
+        //    }
+        //    catch (Exception ex)
+        //    {
+        //        throw new Exception($"Error: {ex.Message}");
+        //    }
+        //}
 
     }
 }

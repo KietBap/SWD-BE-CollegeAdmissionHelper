@@ -1,6 +1,4 @@
-﻿using System.Text.Json.Serialization;
-
-namespace CAH.ModelViews.AdmissionInforModelViews
+﻿namespace CAH.ModelViews.AdmissionInforModelViews
 {
     public class CreateAdInforModelView
     {

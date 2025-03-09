@@ -6,7 +6,8 @@ namespace CAH.Contract.Services.Interface
     public interface IAdmissionInforService
     {
         Task<string> CreateAdmissionInforAsync(CreateAdInforModelView model);
-        Task<BasePaginatedList<ListAdInforModelView>> GetAllAdmissionInforAsync(int pageNumber, int pageSize, string? uniName, string? majorName);
+        Task<BasePaginatedList<ListAdInforModelView>> GetAllAdmissionInforAsync(int pageNumber, int pageSize, string? uniName, string? majorName, int? year);
         Task<object> GetAdInforByIdAsync(string id);
+        Task<string> DeleteAdmissionInforAsync(string id);
     }
 }
