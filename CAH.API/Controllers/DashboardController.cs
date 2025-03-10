@@ -1,5 +1,6 @@
 ﻿using CAH.Contract.Services.Interface;
 using CAH.ModelViews.DashBoardModelViews;
+using CAH.Services.Service;
 using Microsoft.AspNetCore.Mvc;
 using System;
 using System.Collections.Generic;
@@ -45,6 +46,17 @@ namespace CAH.API.Controllers
             var loginStats = await _dashboardService.GetUserLoginCountsAsync(actualStartDate, actualEndDate);
             return Ok(new { Message = "Success", Data = loginStats });
         }
+        [HttpGet("top-majors")]
+        public async Task<IActionResult> GetTopMajors([FromQuery] int year, [FromQuery] string period)
+        {
+            if (string.IsNullOrEmpty(period) || (period.ToLower() != "month" && period.ToLower() != "quarter"))
+            {
+                return BadRequest("Invalid period. It must be 'month' or 'quarter'.");
+            }
 
+            var result = await _dashboardService.GetTopMajorsAsync(year, period);
+
+            return Ok(result);
+        }
     }
 }

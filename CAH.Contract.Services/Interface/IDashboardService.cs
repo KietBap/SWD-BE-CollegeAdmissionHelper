@@ -1,4 +1,6 @@
-﻿using CAH.ModelViews.DashBoardModelViews;
+﻿using CAH.Contract.Repositories.Entity;
+using CAH.ModelViews.DashBoardModelViews;
+using CAH.ModelViews.UniMajorModelViews;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -12,5 +14,7 @@ namespace CAH.Contract.Services.Interface
         Task<int> GetUserCountAsync();
         Task<int> GetUniversityCountAsync();
         Task<List<UserLoginCountModelView>> GetUserLoginCountsAsync(DateTime startDate, DateTime endDate);
+        Task<List<ListUniMajorModelView>> GetTopMajorsAsync(int year, string period);
+
     }
 }

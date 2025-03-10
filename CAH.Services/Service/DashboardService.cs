@@ -48,6 +48,11 @@ namespace CAH.Services.Service
                 throw new Exception($"Lỗi khi lấy thống kê đăng nhập: {ex.Message}");
             }
         }
+        public async Task<List<ListUniMajorModelView>> GetTopMajorsAsync(int year, string period)
+        {
+            return await _dashboardRepository.GetTopMajorsAsync(year, period);
+        }
+
 
     }
 }
