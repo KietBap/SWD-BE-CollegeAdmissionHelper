@@ -150,7 +150,7 @@ namespace CAH.Services.Service
         }
 
 
-        public async Task<object> GetAdInforByIdAsync(string id)
+        public async Task<Object> GetAdInforByIdAsync(string id)
         {
             try
             {
