@@ -1,5 +1,6 @@
 ﻿using CAH.Contract.Services.Interface;
 using CAH.Core;
+using CAH.ModelViews.UniMajorModelViews;
 using CAH.ModelViews.UserModelView;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -35,6 +36,26 @@ namespace CAH.API.Controllers
         public async Task<ActionResult<BasePaginatedList<ListUserModelView>>> GetUserById(string? id)
         {
             var result = await _userService.GetUserByIdAsync(id);
+
+            return Ok(new { Message = result });
+        }
+        [HttpDelete("{id}")]
+        [Authorize(Roles = "Admin")]
+
+        public async Task<ActionResult<string>> DeleteUserAccount(string id)
+        {
+            string result = await _userService.DeleteUserAccountAsync(id);
+
+            return Ok(new { Message = result });
+        }
+
+
+        [HttpPatch("{id}")]
+        [Authorize(Roles = "User")]
+
+        public async Task<ActionResult<string>> UpdateUserAccount(string id, ListUserModelView model)
+        {
+            string result = await _userService.UpdateUserAccountAsync(id, model);
 
             return Ok(new { Message = result });
         }

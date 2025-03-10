@@ -3,6 +3,7 @@ using CAH.Contract.Repositories.Entity;
 using CAH.Contract.Repositories.Interface;
 using CAH.Contract.Services.Interface;
 using CAH.Core;
+using CAH.ModelViews.UniMajorModelViews;
 using CAH.ModelViews.UniversityModelViews;
 using CAH.ModelViews.UserModelView;
 using Microsoft.AspNetCore.Http;
@@ -80,6 +81,59 @@ namespace CAH.Services.Service
                 }
 
                 return _mapper.Map<ListUserModelView>(user);
+            }
+            catch (Exception ex)
+            {
+                throw new Exception($"Error: {ex.Message}");
+            }
+        }
+        public async Task<string> DeleteUserAccountAsync(string id)
+        {
+            try
+            {
+                var userId = _httpContextAccessor.HttpContext?.User.FindFirst("userId")?.Value;
+
+                var user = await _unitOfWork.GetRepository<User>().GetByIdAsync(id);
+                if (user == null)
+                {
+                    return "can not find UserAccount";
+                }
+
+                user.DeletedTime = DateTimeOffset.UtcNow;
+                user.DeletedBy = userId;
+
+                await _unitOfWork.GetRepository<User>().UpdateAsync(user);
+                await _unitOfWork.SaveAsync();
+
+                return "UserAccount delete successfully";
+            }
+            catch (Exception ex)
+            {
+                throw new Exception($"Error: {ex.Message}");
+            }
+        }
+
+
+        public async Task<string> UpdateUserAccountAsync(string id, ListUserModelView model)
+        {
+            try
+            {
+                var userId = _httpContextAccessor.HttpContext?.User.FindFirst("userId")?.Value;
+
+                var user = await _unitOfWork.GetRepository<User>().GetByIdAsync(id);
+                if (user == null || user.DeletedTime.HasValue)
+                {
+                    return "can not find or UserAccount is deleted";
+                }
+
+                _mapper.Map(model, user);
+                user.LastUpdatedBy = userId;
+                user.LastUpdatedTime = DateTimeOffset.UtcNow;
+
+                await _unitOfWork.GetRepository<User>().UpdateAsync(user);
+                await _unitOfWork.SaveAsync();
+
+                return "UserAccount updated successfully";
             }
             catch (Exception ex)
             {
