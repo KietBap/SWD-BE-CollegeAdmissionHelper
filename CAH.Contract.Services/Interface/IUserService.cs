@@ -7,5 +7,8 @@ namespace CAH.Contract.Services.Interface
     {
         Task<BasePaginatedList<ListUserModelView>> GetAllUserAsync(int pageNumber, int pageSize, string id, string email, string phoneNumber);
         Task<Object> GetUserByIdAsync(string id);
+        Task<string> DeleteUserAccountAsync(string id);
+        Task<string> UpdateUserAccountAsync(string id, ListUserModelView model);
+
     }
 }
