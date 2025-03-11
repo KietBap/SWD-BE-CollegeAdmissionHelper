@@ -1,4 +1,9 @@
 ﻿using CAH.ModelViews.AIChatBotModelView;
+using Firebase.Database;
+using Firebase.Database.Query;
+using FirebaseAdmin;
+using Google.Apis.Auth.OAuth2;
+using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Configuration;
 using System.Text;
 using System.Text.Json;
@@ -9,59 +14,68 @@ namespace CAH.Services.Service
     {
         private readonly string _apiKey;
         private readonly HttpClient _httpClient;
-        public GeminiService(IConfiguration configuration, HttpClient httpClient)
+        private readonly FirebaseClient _firebaseClient;
+        private readonly IHttpContextAccessor _httpContextAccessor;
+
+        public GeminiService(IConfiguration configuration, HttpClient httpClient, IHttpContextAccessor httpContextAccessor)
         {
             _apiKey = configuration["AI:GeminiApiKey"];
             _httpClient = httpClient;
 
-            Console.WriteLine($"Gemini API Key: {_apiKey}");
+            if (FirebaseApp.DefaultInstance == null)
+            {
+                FirebaseApp.Create(new AppOptions
+                {
+                    Credential = GoogleCredential.FromFile("collegeadmissionhelper-firebase-adminsdk-fbsvc-7898fc81a5.json")
+                });
+            }
+
+            _firebaseClient = new FirebaseClient("https://collegeadmissionhelper.asia-southeast1.firebasedatabase.app/");
+            _httpContextAccessor = httpContextAccessor;
         }
         public async Task<GeminiResponseModelView> GenerateTextAsync(string prompt)
         {
             try
             {
-                // Lấy API Key từ biến môi trường trên Azure
+                var userId = _httpContextAccessor.HttpContext?.User.FindFirst("userId")?.Value;
+
                 var apiKey = Environment.GetEnvironmentVariable("GEMINI_API_KEY") ?? _apiKey;
                 if (string.IsNullOrEmpty(apiKey))
                 {
                     throw new Exception("API Key is missing. Make sure it is set in environment variables.");
                 }
 
-
                 var requestBody = new
                 {
                     contents = new[]
                     {
-                new
-                {
-                    parts = new[]
-                    {
-                        new { text = $"{prompt}" }
+                        new
+                        {
+                            parts = new[]
+                            {
+                                new { text = $"{prompt}" }
+                            }
+                        }
                     }
-                }
-            }
                 };
 
                 var jsonContent = new StringContent(JsonSerializer.Serialize(requestBody), Encoding.UTF8, "application/json");
                 var requestUrl = $"https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key={apiKey}";
-
 
                 var response = await _httpClient.PostAsync(requestUrl, jsonContent);
                 var responseContent = await response.Content.ReadAsStringAsync();
 
                 if (!response.IsSuccessStatusCode)
                 {
-                    Console.WriteLine($"Error: {response.StatusCode} - {responseContent}");
                     throw new Exception($"Error calling Gemini API: {response.StatusCode} - {responseContent}");
                 }
 
                 using JsonDocument doc = JsonDocument.Parse(responseContent);
                 var root = doc.RootElement;
 
-                // Kiểm tra nếu response có dữ liệu hợp lệ
                 if (!root.TryGetProperty("candidates", out var candidates) || candidates.GetArrayLength() == 0)
                 {
-                    throw new Exception($"Invalid response format from Gemini API: {responseContent}");
+                    throw new Exception("Invalid response format from Gemini API.");
                 }
 
                 var generatedText = candidates[0]
@@ -70,21 +84,60 @@ namespace CAH.Services.Service
                     .GetProperty("text")
                     .GetString();
 
-                return new GeminiResponseModelView()
+                var responseModel = new GeminiResponseModelView
                 {
                     Content = generatedText,
                     Time = DateTime.Now
                 };
+
+                // Lưu lịch sử chat vào Firebase
+                await SaveChatHistoryAsync(userId, prompt, generatedText);
+
+                return responseModel;
             }
             catch (Exception ex)
             {
-                Console.WriteLine($"Exception in GenerateTextAsync: {ex.Message}");
-                return new GeminiResponseModelView()
+                return new GeminiResponseModelView
                 {
-                    Content = $"Đã xảy ra lỗi khi gọi API Gemini. {ex.Message}",
+                    Content = $"Đã xảy ra lỗi: {ex.Message}",
                     Time = DateTime.Now
                 };
             }
+        }
+
+        private async Task SaveChatHistoryAsync(string userId, string userMessage, string botResponse)
+        {
+            var conversationId = DateTime.UtcNow.ToString("yyyyMMddHHmmss"); 
+
+            var userMessageData = new
+            {
+                Sender = "user",
+                Text = userMessage,
+                Timestamp = DateTime.UtcNow
+            };
+
+            var botMessageData = new
+            {
+                Sender = "bot",
+                Text = botResponse,
+                Timestamp = DateTime.UtcNow.AddSeconds(2) 
+            };
+
+            // Lưu tin nhắn của User
+            await _firebaseClient
+                .Child("ChatHistory")
+                .Child(userId)
+                .Child(conversationId)
+                .Child("messages")
+                .PostAsync(userMessageData);
+
+            // Lưu tin nhắn của Bot
+            await _firebaseClient
+                .Child("ChatHistory")
+                .Child(userId)
+                .Child(conversationId)
+                .Child("messages")
+                .PostAsync(botMessageData);
         }
 
     }

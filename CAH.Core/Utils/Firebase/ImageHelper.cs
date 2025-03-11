@@ -9,7 +9,6 @@ namespace CAH.Core.Utils.Firebase
 {
 	public class ImageHelper
 	{
-		private readonly IConfiguration _configuration;
         private readonly string _bucket;
 
         public ImageHelper(IConfiguration configuration)
