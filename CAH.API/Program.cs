@@ -5,6 +5,7 @@ using CAH.API;
 using CAH.Repositories.Mapper;
 using FirebaseAdmin;
 using Google.Apis.Auth.OAuth2;
+using StackExchange.Redis;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -13,6 +14,25 @@ builder.Configuration
     .AddJsonFile("appsettings.json", optional: false, reloadOnChange: true)
     .AddJsonFile($"appsettings.{builder.Environment.EnvironmentName}.json", optional: true, reloadOnChange: true)
     .AddEnvironmentVariables();
+
+var redisConfig = builder.Configuration.GetSection("Redis:ConnectionString").Value;
+
+builder.Services.AddSingleton<IConnectionMultiplexer>(sp =>
+{
+    if (string.IsNullOrEmpty(redisConfig))
+    {
+        throw new InvalidOperationException("Redis connection string is not configured.");
+    }
+
+    return ConnectionMultiplexer.Connect(redisConfig);
+});
+
+builder.Services.AddStackExchangeRedisCache(options =>
+{
+    options.Configuration = redisConfig;
+    options.InstanceName = "CollegeAdmissionHelper";
+});
+
 
 builder.Services.AddHttpClient();
 builder.Services.AddControllers();

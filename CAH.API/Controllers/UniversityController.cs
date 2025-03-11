@@ -1,4 +1,5 @@
-﻿using CAH.Contract.Services.Interface;
+﻿using CAH.Contract.Services.Cache;
+using CAH.Contract.Services.Interface;
 using CAH.Core;
 using CAH.ModelViews.UniversityModelViews;
 using Microsoft.AspNetCore.Authorization;
@@ -12,37 +13,44 @@ namespace CAH.API.Controllers
 	public class UniversityController : ControllerBase
 	{
 		private readonly IUniversityService _universityService;
+		private readonly ICacheService _cacheService;
 
-		public UniversityController(IUniversityService universityService)
+		public UniversityController(IUniversityService universityService, ICacheService cacheService)
 		{
 			_universityService = universityService;
+			_cacheService = cacheService;
 		}
 
 
 		[HttpPost]
 		public async Task<ActionResult<string>> CreateUniversity(UniversityModelView model)
 		{
-			string result = await _universityService.CreateUniversityAsync(model);
+            string result = await _universityService.CreateUniversityAsync(model);
+            await _cacheService.RemoveByPrefixAsync("universities"); 
 
-			return Ok(new { Message = result });
-		}
+            return Ok(new { Message = result });
+        }
 
 		[HttpDelete("{id}")]
 		public async Task<ActionResult<string>> DeleteUniversity(string id)
 		{
-			string result = await _universityService.DeleteUniversityAsync(id);
+            string result = await _universityService.DeleteUniversityAsync(id);
+            await _cacheService.RemoveByPrefixAsync("universities");
+            await _cacheService.RemoveByPrefixAsync($"university:{id}");
 
-			return Ok(new { Message = result });
-		}
+            return Ok(new { Message = result });
+        }
 
 
 		[HttpPatch("{id}")]
 		public async Task<ActionResult<string>> UpdateUniversity(string id, UniversityModelView model)
 		{
-			string result = await _universityService.UpdateUniversityAsync(id, model);
+            string result = await _universityService.UpdateUniversityAsync(id, model);
+            await _cacheService.RemoveByPrefixAsync("universities");
+            await _cacheService.RemoveByPrefixAsync($"university:{id}"); 
 
-			return Ok(new { Message = result });
-		}
+            return Ok(new { Message = result });
+        }
 
 
 		[HttpGet]
@@ -51,17 +59,35 @@ namespace CAH.API.Controllers
 																						  string? location,
 																						  int pageNumber = 1, int pageSize = 5)
 		{
-			var result = await _universityService.GetAllUniversityAsync(pageNumber, pageSize, uniCode, type, location);
+            string cacheKey = $"universities:page_{pageNumber}_size_{pageSize}_code_{uniCode}_type_{type}_location_{location}";
+            var cachedResult = await _cacheService.GetListAsync<BasePaginatedList<UniversityMV>>(cacheKey);
 
-			return Ok(new { Message = result });
-		}
+            if (cachedResult is not null)
+            {
+                return Ok(new { Message = cachedResult });
+            }
+
+            var result = await _universityService.GetAllUniversityAsync(pageNumber, pageSize, uniCode, type, location);
+
+            await _cacheService.SetAsync(cacheKey, result, TimeSpan.FromMinutes(30), "universities");
+            return Ok(new { Message = result });
+        }
 
 		[HttpGet("{id}")]
 		public async Task<ActionResult<Object>> GetUniversityById(string id)
 		{
-			var result = await _universityService.GetUniversityByIdAsync(id);
+            string cacheKey = $"university:{id}";
+            var cachedResult = await _cacheService.GetListAsync<object>(cacheKey);
 
-			return Ok(new { Message = result });
-		}
+            if (cachedResult is not null)
+            {
+                return Ok(new { Message = cachedResult });
+            }
+
+            var result = await _universityService.GetUniversityByIdAsync(id);
+
+            await _cacheService.SetAsync(cacheKey, result, TimeSpan.FromMinutes(30), $"university:{id}");
+            return Ok(new { Message = result });
+        }
 	}
 }
