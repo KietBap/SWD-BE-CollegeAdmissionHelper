@@ -107,6 +107,11 @@ namespace CAH.Services.Service
 
         private async Task SaveChatHistoryAsync(string userId, string userMessage, string botResponse)
         {
+            if (string.IsNullOrEmpty(userId))
+            {
+                return;
+            }
+
             var conversationId = DateTime.UtcNow.ToString("yyyyMMddHHmmss"); 
 
             var userMessageData = new
