@@ -105,7 +105,7 @@ namespace CAH.Services.Service
             }
         }
 
-        private async Task SaveChatHistoryAsync(string userId, string userMessage, string botResponse)
+        private async Task SaveChatHistoryAsync(string userId,  string userMessage, string botResponse)
         {
             if (string.IsNullOrEmpty(userId))
             {
