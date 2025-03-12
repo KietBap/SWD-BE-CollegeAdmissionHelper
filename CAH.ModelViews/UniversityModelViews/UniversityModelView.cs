@@ -1,9 +1,10 @@
-﻿using Microsoft.AspNetCore.Http;
+﻿using CAH.ModelViews.UniMajorModelViews;
 
 namespace CAH.ModelViews.UniversityModelViews
 {
-	public class UniversityModelView
-	{
+    public class UniversityModelView
+    {
+        public string Id { get; set; }
         public string Name { get; set; }
         public string Location { get; set; }
         public string UniversityCode { get; set; }
@@ -15,6 +16,7 @@ namespace CAH.ModelViews.UniversityModelViews
         public string Description { get; set; }
         public int? RankingNational { get; set; }
         public int? RankingInternational { get; set; }
-        public IFormFile Image { get; set; }
+        public string Image { get; set; }
+        public List<ListUniMajorModelView>? Majors { get; set; }
     }
 }

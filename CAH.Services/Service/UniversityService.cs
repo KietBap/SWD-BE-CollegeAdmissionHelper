@@ -4,6 +4,7 @@ using CAH.Contract.Repositories.Interface;
 using CAH.Contract.Services.Interface;
 using CAH.Core;
 using CAH.Core.Base;
+using CAH.ModelViews.UniMajorModelViews;
 using CAH.ModelViews.UniversityModelViews;
 using Microsoft.AspNetCore.Http;
 using Microsoft.EntityFrameworkCore;
@@ -26,7 +27,7 @@ namespace CAH.Services.Service
 			_configuration = configuration;
 		}
 
-		public async Task<string> CreateUniversityAsync(UniversityModelView model)
+		public async Task<string> CreateUniversityAsync(CreateUniversityModelView model)
 		{
 			try
 			{
@@ -82,7 +83,7 @@ namespace CAH.Services.Service
 		}
 
 
-		public async Task<string> UpdateUniversityAsync(string id, UniversityModelView model)
+		public async Task<string> UpdateUniversityAsync(string id, CreateUniversityModelView model)
 		{
 			try
 			{
@@ -151,22 +152,41 @@ namespace CAH.Services.Service
 		}
 
 
-		public async Task<Object> GetUniversityByIdAsync(string id)
-		{
-			try
-			{
-				var university = await _unitOfWork.GetRepository<University>().GetByIdAsync(id);
-				if (university == null || university.DeletedTime.HasValue)
-				{
-					return "can not find or university is deleted";
-				}
+        public async Task<UniversityModelView> GetUniversityByIdAsync(string id)
+        {
+            try
+            {
+                var university = await _unitOfWork.GetRepository<University>()
+                    .Entities
+                    .Include(u => u.UniMajors.Where(um => !um.DeletedTime.HasValue)) // Lọc UniMajor chưa bị xóa
+                        .ThenInclude(um => um.Major) // Chưa thể lọc ở đây do EF Core hạn chế
+                    .FirstOrDefaultAsync(u => u.Id == id);
 
-				return _mapper.Map<UniversityMV>(university);
-			}
-			catch (Exception ex)
-			{
-				throw new Exception($"Error: {ex.Message}");
-			}
-		}
-	}
+                if (university == null || university.DeletedTime.HasValue)
+                {
+                    throw new Exception("can not find or university is deleted");
+                }
+
+                var universityModelView = _mapper.Map<UniversityModelView>(university);
+
+                universityModelView.Majors = university.UniMajors?
+                    .Where(um => um.Major != null && !um.Major.DeletedTime.HasValue) // Lọc Major chưa bị xóa
+                    .Select(um => new ListUniMajorModelView
+                    {
+                        Id = um.Id.ToString(),
+                        TuitionFee = um.TuitionFee,
+                        MajorCode = um.MajorCode,
+                        UniversityName = university.Name,
+                        MajorName = um.Major.Name
+                    }).ToList();
+
+                return universityModelView;
+            }
+            catch (Exception ex)
+            {
+                throw new Exception($"Error: {ex.Message}");
+            }
+        }
+
+    }
 }

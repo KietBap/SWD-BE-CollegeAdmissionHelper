@@ -5,10 +5,11 @@ namespace CAH.Contract.Services.Interface
 {
 	public interface IUniversityService
 	{
-		Task<string> CreateUniversityAsync(UniversityModelView model);
+		Task<string> CreateUniversityAsync(CreateUniversityModelView model);
 		Task<string> DeleteUniversityAsync(string id);
-		Task<string> UpdateUniversityAsync(string id, UniversityModelView model);
+		Task<string> UpdateUniversityAsync(string id, CreateUniversityModelView model);
 		Task<BasePaginatedList<UniversityMV>> GetAllUniversityAsync(int pageNumber, int pageSize, string? uniCode, string? type, string? location);
-        Task<Object> GetUniversityByIdAsync(string id);
-	}
+		Task<UniversityModelView> GetUniversityByIdAsync(string id);
+
+    }
 }

@@ -23,7 +23,7 @@ namespace CAH.API.Controllers
 
 
 		[HttpPost]
-		public async Task<ActionResult<string>> CreateUniversity(UniversityModelView model)
+		public async Task<ActionResult<string>> CreateUniversity(CreateUniversityModelView model)
 		{
             string result = await _universityService.CreateUniversityAsync(model);
             await _cacheService.RemoveByPrefixAsync("universities"); 
@@ -43,7 +43,7 @@ namespace CAH.API.Controllers
 
 
 		[HttpPatch("{id}")]
-		public async Task<ActionResult<string>> UpdateUniversity(string id, UniversityModelView model)
+		public async Task<ActionResult<string>> UpdateUniversity(string id, CreateUniversityModelView model)
 		{
             string result = await _universityService.UpdateUniversityAsync(id, model);
             await _cacheService.RemoveByPrefixAsync("universities");
@@ -74,7 +74,7 @@ namespace CAH.API.Controllers
         }
 
 		[HttpGet("{id}")]
-		public async Task<ActionResult<Object>> GetUniversityById(string id)
+		public async Task<ActionResult<UniversityModelView>> GetUniversityById(string id)
 		{
             string cacheKey = $"university:{id}";
             var cachedResult = await _cacheService.GetListAsync<object>(cacheKey);

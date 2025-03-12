@@ -24,10 +24,11 @@ namespace CAH.Repositories.Mapper
 			CreateMap<MajorModelView, Major>();
 			CreateMap<Major, MajorModelView>();
 
-			CreateMap<University, UniversityModelView>();
-			CreateMap<UniversityModelView, University>();
+			CreateMap<University, CreateUniversityModelView>();
+			CreateMap<CreateUniversityModelView, University>();
 			CreateMap<UniversityMV, University>();
 			CreateMap<University, UniversityMV>();
+			CreateMap<University, UniversityModelView>();
 
 			CreateMap<AdmissionMethod, AdmissionMethodMV>();
 			CreateMap<AdmissionMethodMV, AdmissionMethod>();
