@@ -7,7 +7,7 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace CAH.API.Controllers
 {
-    [Authorize(Roles = "Admin")]
+    [Authorize(Roles = "Admin,User")]
     [Route("api/[controller]")]
     [ApiController]
     public class SubjectScoreController : ControllerBase
@@ -53,7 +53,7 @@ namespace CAH.API.Controllers
         }
 
         [HttpGet]
-        public async Task<ActionResult<BasePaginatedList<ListSubScoreModelView>>> GetAllSubjectScore(int pageNumber = 1, int pageSize = 5)
+        public async Task<ActionResult<BasePaginatedList<ListSubScoreModelView>>> GetAllSubjectScore(string? userId, int pageNumber = 1, int pageSize = 5)
         {
             string cacheKey = $"subject_scores:page_{pageNumber}_size_{pageSize}";
             var cachedResult = await _cacheService.GetListAsync<BasePaginatedList<ListSubScoreModelView>>(cacheKey);
@@ -63,7 +63,7 @@ namespace CAH.API.Controllers
                 return Ok(new { Message = cachedResult });
             }
 
-            var result = await _service.GetAllSubjectScoreAsync(pageNumber, pageSize);
+            var result = await _service.GetAllSubjectScoreAsync(pageNumber, pageSize, userId);
 
             await _cacheService.SetAsync(cacheKey, result, TimeSpan.FromMinutes(30), "subject_scores");
             return Ok(new { Message = result });

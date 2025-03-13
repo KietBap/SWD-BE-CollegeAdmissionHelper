@@ -2,13 +2,12 @@
 using CAH.Core;
 using CAH.ModelViews.MajorModelViews;
 using CAH.ModelViews.UniMajorModelViews;
-using CAH.Services.Service;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace CAH.API.Controllers
 {
-    [Authorize(Roles = "Admin")]
+    //[Authorize(Roles = "Admin")]
     [Route("api/[controller]")]
     [ApiController]
     public class UniMajorController : ControllerBase
@@ -22,6 +21,7 @@ namespace CAH.API.Controllers
             _majorService = majorService;
         }
 
+        [Authorize(Roles = "Admin")]
         [HttpPost]
         public async Task<ActionResult<string>> CreateUniMajor(CreateUniMajorModelView model)
         {
@@ -30,7 +30,7 @@ namespace CAH.API.Controllers
             return Ok(new { Message = result });
         }
 
-
+        [Authorize(Roles = "Admin")]
         [HttpDelete("{id}")]
         public async Task<ActionResult<string>> DeleteUniMajor(string id)
         {
@@ -39,7 +39,7 @@ namespace CAH.API.Controllers
             return Ok(new { Message = result });
         }
 
-
+        [Authorize(Roles = "Admin")]
         [HttpPatch("{id}")]
         public async Task<ActionResult<string>> UpdateUniMajor(string id, UpdateUniMajorModelView model)
         {
@@ -48,6 +48,7 @@ namespace CAH.API.Controllers
             return Ok(new { Message = result });
         }
 
+        [Authorize(Roles = "Admin,User")]
         [HttpGet]
         public async Task<ActionResult<BasePaginatedList<ListUniMajorModelView>>> GetAllUniMajor(string? universityName,int pageNumber = 1, int pageSize = 5)
         {
@@ -56,6 +57,7 @@ namespace CAH.API.Controllers
             return Ok(new { Message = result });
         }
 
+        [Authorize(Roles = "Admin,User")]
         [HttpGet("{id}")]
         public async Task<ActionResult<Object>> GetUniMajorById(string id)
         {
@@ -64,7 +66,7 @@ namespace CAH.API.Controllers
             return Ok(new { Message = result });
         }
 
-
+        [Authorize(Roles = "Admin,User")]
         [HttpGet("by-university/{universityId}")]
         public async Task<ActionResult<BasePaginatedList<MajorModelView>>> GetAllMajorByUniId(string? universityId, int pageNumber = 1, int pageSize = 5)
         {

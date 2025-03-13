@@ -101,13 +101,16 @@ namespace CAH.Services.Service
         }
 
 
-        public async Task<BasePaginatedList<ListSubScoreModelView>> GetAllSubjectScoreAsync(int pageNumber, int pageSize)
+        public async Task<BasePaginatedList<ListSubScoreModelView>> GetAllSubjectScoreAsync(int pageNumber, int pageSize, string? userId)
         {
-            var userId = _httpContextAccessor.HttpContext?.User.FindFirst("userId")?.Value;
-
             IQueryable<SubjectScore> subScoreQuery = _unitOfWork.GetRepository<SubjectScore>().Entities
-                .Where(p => !p.DeletedTime.HasValue && p.UserId.ToString() == userId)
+                .Where(p => !p.DeletedTime.HasValue)
                 .OrderByDescending(s => s.CreatedTime);
+
+            if (!string.IsNullOrEmpty(userId))
+            {
+                subScoreQuery.Where(s => s.UserId.ToString() == userId);
+            }
 
             int totalCount = await subScoreQuery.CountAsync();
 

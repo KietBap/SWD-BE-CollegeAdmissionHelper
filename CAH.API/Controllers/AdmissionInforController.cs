@@ -3,6 +3,7 @@ using CAH.Core;
 using CAH.ModelViews.AdmissionInforModelViews;
 using CAH.ModelViews.UniversityModelViews;
 using CAH.Services.Service;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace CAH.API.Controllers
@@ -19,7 +20,7 @@ namespace CAH.API.Controllers
             _admissionInforService = admissionInforService;
         }
 
-
+        [Authorize(Roles = "Admin")]
         [HttpPost]
         public async Task<ActionResult<string>> CreateAdmissionInfor(CreateAdInforModelView model)
         {
@@ -28,7 +29,7 @@ namespace CAH.API.Controllers
             return Ok(new { Message = result });
         }
 
-
+        [Authorize(Roles = "Admin,User")]
         [HttpGet]
         public async Task<ActionResult<BasePaginatedList<UniversityMV>>> GetAllUniversity(string? uniName,
                                                                                           string? majorName,
@@ -40,6 +41,7 @@ namespace CAH.API.Controllers
             return Ok(new { Message = result });
         }
 
+        [Authorize(Roles = "Admin,User")]
         [HttpGet("{id}")]
         public async Task<ActionResult<Object>> GetAdmissionInforById(string id)
         {
@@ -48,6 +50,7 @@ namespace CAH.API.Controllers
             return Ok(new { Message = result });
         }
 
+        [Authorize(Roles = "Admin")]
         [HttpDelete("{id}")]
         public async Task<ActionResult<string>> DeleteAdmissionInfor(string id)
         {

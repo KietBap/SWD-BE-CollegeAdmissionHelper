@@ -7,7 +7,7 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace CAH.API.Controllers
 {
-    [Authorize(Roles = "Admin")]
+    [Authorize(Roles = "Admin,User")]
     [Route("api/[controller]")]
     [ApiController]
     public class ReviewController : ControllerBase

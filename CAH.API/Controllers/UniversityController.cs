@@ -7,7 +7,7 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace CAH.API.Controllers
 {
-	[Authorize(Roles = "Admin")]
+	//[Authorize(Roles = "Admin")]
 	[Route("api/[controller]")]
 	[ApiController]
 	public class UniversityController : ControllerBase
@@ -21,8 +21,8 @@ namespace CAH.API.Controllers
 			_cacheService = cacheService;
 		}
 
-
-		[HttpPost]
+        [Authorize(Roles = "Admin")]
+        [HttpPost]
 		public async Task<ActionResult<string>> CreateUniversity(CreateUniversityModelView model)
 		{
             string result = await _universityService.CreateUniversityAsync(model);
@@ -31,7 +31,8 @@ namespace CAH.API.Controllers
             return Ok(new { Message = result });
         }
 
-		[HttpDelete("{id}")]
+        [Authorize(Roles = "Admin")]
+        [HttpDelete("{id}")]
 		public async Task<ActionResult<string>> DeleteUniversity(string id)
 		{
             string result = await _universityService.DeleteUniversityAsync(id);
@@ -41,8 +42,8 @@ namespace CAH.API.Controllers
             return Ok(new { Message = result });
         }
 
-
-		[HttpPatch("{id}")]
+        [Authorize(Roles = "Admin")]
+        [HttpPatch("{id}")]
 		public async Task<ActionResult<string>> UpdateUniversity(string id, CreateUniversityModelView model)
 		{
             string result = await _universityService.UpdateUniversityAsync(id, model);
@@ -52,9 +53,9 @@ namespace CAH.API.Controllers
             return Ok(new { Message = result });
         }
 
-
-		[HttpGet]
-		public async Task<ActionResult<BasePaginatedList<UniversityMV>>> GetAllUniversity(string? uniCode,
+        [Authorize(Roles = "Admin,User")]
+        [HttpGet]
+        public async Task<ActionResult<BasePaginatedList<UniversityMV>>> GetAllUniversity(string? uniCode,
 																						  string? type,
 																						  string? location,
 																						  int pageNumber = 1, int pageSize = 5)
@@ -73,8 +74,9 @@ namespace CAH.API.Controllers
             return Ok(new { Message = result });
         }
 
-		[HttpGet("{id}")]
-		public async Task<ActionResult<UniversityModelView>> GetUniversityById(string id)
+        [Authorize(Roles = "Admin,User")]
+        [HttpGet("{id}")]
+        public async Task<ActionResult<UniversityModelView>> GetUniversityById(string id)
 		{
             string cacheKey = $"university:{id}";
             var cachedResult = await _cacheService.GetListAsync<object>(cacheKey);
