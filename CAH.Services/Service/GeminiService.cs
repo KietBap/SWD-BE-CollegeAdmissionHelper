@@ -33,6 +33,8 @@ namespace CAH.Services.Service
             _firebaseClient = new FirebaseClient("https://collegeadmissionhelper.asia-southeast1.firebasedatabase.app/");
             _httpContextAccessor = httpContextAccessor;
         }
+
+
         public async Task<GeminiResponseModelView> GenerateTextAsync(string prompt)
         {
             try
@@ -45,18 +47,14 @@ namespace CAH.Services.Service
                     throw new Exception("API Key is missing. Make sure it is set in environment variables.");
                 }
 
+                var history = await GetChatHistoryAsync(userId);
+
                 var requestBody = new
                 {
-                    contents = new[]
+                    contents = history.Append(new
                     {
-                        new
-                        {
-                            parts = new[]
-                            {
-                                new { text = $"{prompt}" }
-                            }
-                        }
-                    }
+                        parts = new[] { new { text = prompt } }
+                    }).ToArray()
                 };
 
                 var jsonContent = new StringContent(JsonSerializer.Serialize(requestBody), Encoding.UTF8, "application/json");
@@ -90,7 +88,6 @@ namespace CAH.Services.Service
                     Time = DateTime.Now
                 };
 
-                // Lưu lịch sử chat vào Firebase
                 await SaveChatHistoryAsync(userId, prompt, generatedText);
 
                 return responseModel;
@@ -103,6 +100,23 @@ namespace CAH.Services.Service
                     Time = DateTime.Now
                 };
             }
+        }
+
+        private async Task<List<object>> GetChatHistoryAsync(string userId)
+        {
+            if (string.IsNullOrEmpty(userId)) return new List<object>();
+
+            var chatHistory = await _firebaseClient
+                .Child("ChatHistory")
+                .Child(userId)
+                .OrderByKey()
+                .LimitToLast(10)
+                .OnceAsync<object>();
+
+            return chatHistory.Select(entry => (object)new
+            {
+                parts = new[] { new { text = entry.Object.GetType().GetProperty("Text")?.GetValue(entry.Object, null) as string } }
+            }).ToList();
         }
 
         private async Task SaveChatHistoryAsync(string userId,  string userMessage, string botResponse)
