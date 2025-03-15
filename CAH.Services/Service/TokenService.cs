@@ -48,25 +48,25 @@ namespace CAH.Services.Service
 			// Tạo token
 			var token = CreateToken(claims);
 
-			var refreshToken = GenerateRefreshToken();
-			user.RefreshToken = refreshToken;
-			_ = int.TryParse(_configuration["JWT:RefreshTokenValidityInDays"], out int refreshTokenValidityInDays);
-			user.RefreshTokenExpiryTime = DateTime.Now.AddDays(refreshTokenValidityInDays);
+			//var refreshToken = GenerateRefreshToken();
+			//user.RefreshToken = refreshToken;
+			//_ = int.TryParse(_configuration["JWT:RefreshTokenValidityInDays"], out int refreshTokenValidityInDays);
+			//user.RefreshTokenExpiryTime = DateTime.Now.AddDays(refreshTokenValidityInDays);
 
 			var tokenString = new JwtSecurityTokenHandler().WriteToken(token);
 
 
 			// Add refresh token to database
-			await AddTokenToDatabaseAsync(userId, refreshToken);
+			await AddTokenToDatabaseAsync(userId);
 
 			return new TokenModelView
 			{
 				AccessToken = tokenString,
-				RefreshToken = refreshToken
+				//RefreshToken = refreshToken
 			};
 		}
 
-        private async Task AddTokenToDatabaseAsync(string userId, string refreshToken)
+        private async Task AddTokenToDatabaseAsync(string userId)
         {
 			if (!Guid.TryParse(userId, out Guid userIdGuid))
 			{
@@ -91,7 +91,7 @@ namespace CAH.Services.Service
                     if (existingToken != null)
                     {
                         // If an existing token is found, update it with the new refresh token
-                        existingToken.Value = refreshToken;
+                        //existingToken.Value = refreshToken;
                         existingToken.LastUpdatedBy = user.UserName;
                         existingToken.LastUpdatedTime = CoreHelper.SystemTimeNow;
 
@@ -106,7 +106,7 @@ namespace CAH.Services.Service
                             UserId = Guid.Parse(userId),
                             LoginProvider = "CustomLoginProvider", 
                             Name = "JWT", 
-                            Value = refreshToken, 
+                            //Value = refreshToken, 
                             CreatedBy = user.UserName, 
                             CreatedTime = CoreHelper.SystemTimeNow, 
                             LastUpdatedBy = user.UserName, 
@@ -165,59 +165,59 @@ namespace CAH.Services.Service
             return Convert.ToBase64String(randomNumber);
         }
 
-        public async Task<TokenModelView> RefreshToken(TokenModelView tokenModel)
-        {
-            // Check if the provided token model is null
-            if (tokenModel is null)
-            {
-                throw new Exception("Token is null");
-            }
+        //public async Task<TokenModelView> RefreshToken(TokenModelView tokenModel)
+        //{
+        //    // Check if the provided token model is null
+        //    if (tokenModel is null)
+        //    {
+        //        throw new Exception("Token is null");
+        //    }
 
-            // Retrieve the access token and refresh token from the token model
-            string? accessToken = tokenModel.AccessToken;
-            string? refreshToken = tokenModel.RefreshToken;
+        //    // Retrieve the access token and refresh token from the token model
+        //    string? accessToken = tokenModel.AccessToken;
+        //    //string? refreshToken = tokenModel.RefreshToken;
 
-            // Extract the principal (user identity and claims) from the expired access token
-            var principal = GetPrincipalFromExpiredToken(accessToken);
-            if (principal == null)
-            {
-                throw new Exception("Principal"); 
-            }
+        //    // Extract the principal (user identity and claims) from the expired access token
+        //    var principal = GetPrincipalFromExpiredToken(accessToken);
+        //    if (principal == null)
+        //    {
+        //        throw new Exception("Principal"); 
+        //    }
 
-            // Get the username from the principal
-            #pragma warning disable CS8600 
-            #pragma warning disable CS8602 
-            string username = principal.Identity.Name;
-            #pragma warning restore CS8602 
-            #pragma warning restore CS8600 
+        //    // Get the username from the principal
+        //    #pragma warning disable CS8600 
+        //    #pragma warning disable CS8602 
+        //    string username = principal.Identity.Name;
+        //    #pragma warning restore CS8602 
+        //    #pragma warning restore CS8600 
 
-            // Find the user by username (from the database)
-            var user = await _unitOfWork.GetRepository<User>().Entities.
-                FirstOrDefaultAsync(x => x.UserName == username);
-            if (user == null || user.RefreshToken != refreshToken || user.RefreshTokenExpiryTime <= DateTime.Now)
-            {
-                throw new Exception("Something went wrong with refresh"); 
-            }
+        //    // Find the user by username (from the database)
+        //    var user = await _unitOfWork.GetRepository<User>().Entities.
+        //        FirstOrDefaultAsync(x => x.UserName == username);
+        //    if (user == null || user.RefreshToken != refreshToken || user.RefreshTokenExpiryTime <= DateTime.Now)
+        //    {
+        //        throw new Exception("Something went wrong with refresh"); 
+        //    }
 
-            // Create a new access token based on the claims of the expired token
-            var newAccessToken = CreateToken(principal.Claims.ToList());
+        //    // Create a new access token based on the claims of the expired token
+        //    var newAccessToken = CreateToken(principal.Claims.ToList());
 
-            // Generate a new refresh token
-            var newRefreshToken = GenerateRefreshToken();
+        //    // Generate a new refresh token
+        //    var newRefreshToken = GenerateRefreshToken();
 
-            // Update the user's refresh token in the database with the new token
-            user.RefreshToken = newRefreshToken;
+        //    // Update the user's refresh token in the database with the new token
+        //    user.RefreshToken = newRefreshToken;
 
-            // Save the updated user information to the database
-            await _unitOfWork.GetRepository<User>().UpdateAsync(user);
+        //    // Save the updated user information to the database
+        //    await _unitOfWork.GetRepository<User>().UpdateAsync(user);
 
-            // Return the new access token and refresh token as a model
-            return new TokenModelView()
-            {
-                AccessToken = new JwtSecurityTokenHandler().WriteToken(newAccessToken), // Serialize the new access token to a string
-                RefreshToken = newRefreshToken // Return the new refresh token
-            };
-        }
+        //    // Return the new access token and refresh token as a model
+        //    return new TokenModelView()
+        //    {
+        //        AccessToken = new JwtSecurityTokenHandler().WriteToken(newAccessToken), // Serialize the new access token to a string
+        //        RefreshToken = newRefreshToken // Return the new refresh token
+        //    };
+        //}
         public async Task<string> Revoke(string username)
         {
             // Look up the user by their username

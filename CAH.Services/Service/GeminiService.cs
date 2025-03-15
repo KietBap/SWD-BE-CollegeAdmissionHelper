@@ -47,21 +47,21 @@ namespace CAH.Services.Service
                     throw new Exception("API Key is missing. Make sure it is set in environment variables.");
                 }
 
-                var history = await GetChatHistoryAsync(userId);
-
-                // Append the current user prompt
-                history.Add(new
-                {
-                    role = "user",
-                    parts = new[] { new { text = prompt } }
-                });
-
                 var requestBody = new
                 {
-                    contents = history.ToArray()
+                    contents = new[]
+                    {
+                         new
+                         {
+                             parts = new[]
+                             {
+                                 new { text = $"{prompt}" }
+                             }
+                         }
+                    }
                 };
 
-                var jsonContent = new StringContent(JsonSerializer.Serialize(requestBody), Encoding.UTF8, "application/json");
+            var jsonContent = new StringContent(JsonSerializer.Serialize(requestBody), Encoding.UTF8, "application/json");
                 var requestUrl = $"https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key={apiKey}";
 
                 var response = await _httpClient.PostAsync(requestUrl, jsonContent);
@@ -104,25 +104,6 @@ namespace CAH.Services.Service
                     Time = DateTime.Now
                 };
             }
-        }
-
-        private async Task<List<object>> GetChatHistoryAsync(string userId)
-        {
-            if (string.IsNullOrEmpty(userId)) return new List<object>();
-
-            var chatHistory = await _firebaseClient
-                .Child("ChatHistory")
-                .Child(userId)
-                .Child("messages")
-                .OrderBy("Timestamp")
-                .LimitToLast(10)
-                .OnceAsync<dynamic>(); // Use dynamic for flexibility with Firebase data
-
-            return chatHistory.Select(entry => (object)new
-            {
-                role = entry.Object.Sender == "user" ? "user" : "model", // Gemini API uses "role"
-                parts = new[] { new { text = entry.Object.Text as string } }
-            }).ToList();
         }
 
         private async Task SaveChatHistoryAsync(string userId, string userMessage, string botResponse)
