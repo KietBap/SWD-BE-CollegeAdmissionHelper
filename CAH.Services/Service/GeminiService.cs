@@ -44,7 +44,7 @@ namespace CAH.Services.Service
                 var apiKey = Environment.GetEnvironmentVariable("GEMINI_API_KEY") ?? _apiKey;
                 if (string.IsNullOrEmpty(apiKey))
                 {
-                    throw new Exception("API Key is missing. Make sure it is set in environment variables.");
+                    throw new Exception("API  Key is missing. Make sure it is set in environment variables.");
                 }
 
                 // Chuẩn bị lịch sử trò chuyện để gửi lên API
