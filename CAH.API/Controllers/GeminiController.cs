@@ -1,4 +1,5 @@
-﻿using CAH.Services.Service;
+﻿using CAH.ModelViews.AIChatBotModelView;
+using CAH.Services.Service;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
@@ -17,9 +18,9 @@ namespace CAH.API.Controllers
         }
 
         [HttpGet]
-        public async Task<ActionResult<Object>> GenerateText(string prompt)
+        public async Task<ActionResult<GeminiResponseModelView>> GenerateText(string prompt, List<ChatMessage>? chatHistory)
         {
-            var result = await _service.GenerateTextAsync(prompt);
+            var result = await _service.GenerateTextAsync(prompt, chatHistory);
 
             return Ok(new { Message = result });
         }

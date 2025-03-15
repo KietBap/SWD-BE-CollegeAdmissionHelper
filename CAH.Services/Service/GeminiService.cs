@@ -35,7 +35,7 @@ namespace CAH.Services.Service
         }
 
 
-        public async Task<GeminiResponseModelView> GenerateTextAsync(string prompt)
+        public async Task<GeminiResponseModelView> GenerateTextAsync(string prompt, List<ChatMessage>? chatHistory)
         {
             try
             {
@@ -47,21 +47,23 @@ namespace CAH.Services.Service
                     throw new Exception("API Key is missing. Make sure it is set in environment variables.");
                 }
 
-                var requestBody = new
-                {
-                    contents = new[]
+                // Chuẩn bị lịch sử trò chuyện để gửi lên API
+                var conversationParts = chatHistory
+                    .Select(msg => new
                     {
-                         new
-                         {
-                             parts = new[]
-                             {
-                                 new { text = $"{prompt}" }
-                             }
-                         }
-                    }
-                };
+                        parts = new[] { new { text = $"{msg.Sender}: {msg.Message}" } }
+                    })
+                    .ToList();
 
-            var jsonContent = new StringContent(JsonSerializer.Serialize(requestBody), Encoding.UTF8, "application/json");
+                // Thêm prompt mới vào cuối danh sách
+                conversationParts.Add(new
+                {
+                    parts = new[] { new { text = $"User: {prompt}" } }
+                });
+
+                var requestBody = new { contents = conversationParts };
+
+                var jsonContent = new StringContent(JsonSerializer.Serialize(requestBody), Encoding.UTF8, "application/json");
                 var requestUrl = $"https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key={apiKey}";
 
                 var response = await _httpClient.PostAsync(requestUrl, jsonContent);
