@@ -51,14 +51,16 @@ namespace CAH.Services.Service
                 var conversationParts = chatHistory
                     .Select(msg => new
                     {
-                        parts = new[] { new { text = $"{msg.Sender}: {msg.Message}" } }
+                        parts = new[] { new { text = msg.Message } },
+                        role = msg.Sender == "user" ? "user" : "model"
                     })
                     .ToList();
 
                 // Thêm prompt mới vào cuối danh sách
                 conversationParts.Add(new
                 {
-                    parts = new[] { new { text = $"User: {prompt}" } }
+                    parts = new[] { new { text = prompt } },
+                    role = "user"
                 });
 
                 var requestBody = new { contents = conversationParts };
