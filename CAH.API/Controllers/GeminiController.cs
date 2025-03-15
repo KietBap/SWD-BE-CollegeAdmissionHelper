@@ -17,7 +17,7 @@ namespace CAH.API.Controllers
             _service = geminiService;
         }
 
-        [HttpGet]
+        [HttpPost]
         public async Task<ActionResult<GeminiResponseModelView>> GenerateText(string prompt, List<ChatMessage>? chatHistory)
         {
             var result = await _service.GenerateTextAsync(prompt, chatHistory);
