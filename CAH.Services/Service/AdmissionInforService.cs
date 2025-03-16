@@ -192,6 +192,90 @@ namespace CAH.Services.Service
         }
 
 
+        public async Task<string> MarkWishlistAsync(string adInforId)
+        {
+            try
+            {
+                var userId = _httpContext.HttpContext?.User.FindFirst("userId")?.Value;
+
+                Wishlist wishlist = new Wishlist
+                {
+                    UserId = Guid.Parse(userId),
+                    AdmissionInforId = adInforId,
+                    CreatedBy = userId,
+                    CreatedTime = DateTime.UtcNow,
+                };
+
+                await _unitOfWork.GetRepository<Wishlist>().InsertAsync(wishlist);
+                await _unitOfWork.SaveAsync();
+
+                return "Marked!";
+            }
+            catch (Exception ex)
+            {
+                throw new Exception($"Error: {ex.Message}");
+            }
+        }
+
+        public async Task<BasePaginatedList<ListAdInforModelView>> GetWishlistAsync(int pageNumber, int pageSize)
+        {
+            var userId = _httpContext.HttpContext?.User.FindFirst("userId")?.Value;
+            if (string.IsNullOrEmpty(userId))
+            {
+                return new BasePaginatedList<ListAdInforModelView>(new List<ListAdInforModelView>(), 0, pageNumber, pageSize);
+            }
+
+            IQueryable<Wishlist> query = _unitOfWork.GetRepository<Wishlist>().Entities
+                .Where(w => w.UserId.ToString() == userId && !w.DeletedTime.HasValue)
+                .Include(w => w.AdmissionInfor) // Bao gồm AdmissionInfor
+                    .ThenInclude(p => p.UniMajor) // Lấy UniMajor từ AdmissionInfor
+                        .ThenInclude(um => um.University) // Lấy University từ UniMajor
+                .Include(w => w.AdmissionInfor.UniMajor.Major) // Lấy Major từ UniMajor
+                .Include(w => w.AdmissionInfor.InforMethods) // Lấy danh sách phương thức tuyển sinh
+                    .ThenInclude(im => im.AdmissionMethod)
+                .OrderByDescending(w => w.AdmissionInfor.CreatedTime);
+
+            int totalCount = await query.CountAsync();
+
+            List<ListAdInforModelView> adInforModelView = await query
+                .Skip((pageNumber - 1) * pageSize)
+                .Take(pageSize)
+                .Select(w => new ListAdInforModelView
+                {
+                    Id = w.AdmissionInfor.Id,
+                    UniversityName = w.AdmissionInfor.UniMajor.University.Name,
+                    MajorName = w.AdmissionInfor.UniMajor.Major.Name,
+                    MethodName = string.Join(", ", w.AdmissionInfor.InforMethods.Select(im => im.AdmissionMethod.MethodName)),
+                    AdmisstionDate = w.AdmissionInfor.AdmisstionDate
+                })
+                .ToListAsync();
+
+            return new BasePaginatedList<ListAdInforModelView>(adInforModelView, totalCount, pageNumber, pageSize);
+        }
+
+        public async Task<string> UnMarkWishlistAsync(string admissionInforId)
+        {
+            try
+            {
+                var userId = _httpContext.HttpContext?.User.FindFirst("userId")?.Value;
+
+                var wishlist = await _unitOfWork.GetRepository<Wishlist>()
+                                                    .Entities.Where(w => w.AdmissionInforId ==  admissionInforId && w.UserId.ToString() == userId)
+                                                    .FirstOrDefaultAsync();
+                wishlist.DeletedTime = DateTime.Now;
+                wishlist.DeletedBy = userId;
+
+                await _unitOfWork.GetRepository<Wishlist>().UpdateAsync(wishlist);
+                await _unitOfWork.SaveAsync();
+
+                return "UnMarked!";
+            }
+            catch (Exception ex)
+            {
+                throw new Exception($"Error: {ex.Message}");
+            }
+        }
+
         //public async Task<string> UpdateAdmissionInforAsync(string id, UniversityModelView model)
         //{
         //    try
@@ -226,6 +310,9 @@ namespace CAH.Services.Service
         //        throw new Exception($"Error: {ex.Message}");
         //    }
         //}
+
+
+
 
     }
 }

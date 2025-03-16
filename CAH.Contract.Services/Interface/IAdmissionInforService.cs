@@ -9,5 +9,8 @@ namespace CAH.Contract.Services.Interface
         Task<BasePaginatedList<ListAdInforModelView>> GetAllAdmissionInforAsync(int pageNumber, int pageSize, string? uniName, string? majorName, int? year);
         Task<object> GetAdInforByIdAsync(string id);
         Task<string> DeleteAdmissionInforAsync(string id);
+        Task<string> MarkWishlistAsync(string adInforId);
+        Task<BasePaginatedList<ListAdInforModelView>> GetWishlistAsync(int pageNumber, int pageSize);
+        Task<string> UnMarkWishlistAsync(string admissionInforId);
     }
 }

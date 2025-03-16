@@ -31,7 +31,7 @@ namespace CAH.API.Controllers
 
         [Authorize(Roles = "Admin,User")]
         [HttpGet]
-        public async Task<ActionResult<BasePaginatedList<UniversityMV>>> GetAllUniversity(string? uniName,
+        public async Task<ActionResult<BasePaginatedList<UniversityMV>>> GetAllAdmissionInfor(string? uniName,
                                                                                           string? majorName,
                                                                                           int? year,
                                                                                           int pageNumber = 1, int pageSize = 5)
@@ -55,6 +55,33 @@ namespace CAH.API.Controllers
         public async Task<ActionResult<string>> DeleteAdmissionInfor(string id)
         {
             string result = await _admissionInforService.DeleteAdmissionInforAsync(id);
+
+            return Ok(new { Message = result });
+        }
+
+        [Authorize(Roles = "Admin,User")]
+        [HttpPost("mark-wishlist")]
+        public async Task<ActionResult<string>> MarkWishlist(string admissionInforId)
+        {
+            string result = await _admissionInforService.MarkWishlistAsync(admissionInforId);
+
+            return Ok(new { Message = result });
+        }
+
+        [Authorize(Roles = "Admin,User")]
+        [HttpDelete("unmark-wishlist")]
+        public async Task<ActionResult<string>> UnMarkWishlist(string admissionInforId)
+        {
+            string result = await _admissionInforService.UnMarkWishlistAsync(admissionInforId);
+
+            return Ok(new { Message = result });
+        }
+
+        [Authorize(Roles = "Admin,User")]
+        [HttpGet("wishlist")]
+        public async Task<ActionResult<BasePaginatedList<UniversityMV>>> GetWishlist(int pageNumber = 1, int pageSize = 5)
+        {
+            var result = await _admissionInforService.GetWishlistAsync(pageNumber, pageSize);
 
             return Ok(new { Message = result });
         }
