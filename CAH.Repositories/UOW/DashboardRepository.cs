@@ -8,6 +8,8 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using CAH.Core.Utils;
+using CAH.ModelViews.UniMajorModelViews;
 
 namespace CAH.Repositories.UOW
 {
@@ -25,6 +27,44 @@ namespace CAH.Repositories.UOW
             _userRepo = userRepo ?? throw new ArgumentNullException(nameof(userRepo));
             _majorRepo = majorRepo ?? throw new ArgumentNullException(nameof(majorRepo));
         }
+
+        public async Task<List<ListUniMajorModelView>> GetTopReviewedUniMajors(int year, string period)
+        {
+            var uniMajorsQuery = _context.UniMajors
+                .Include(um => um.Reviews)
+                .Where(um => um.Reviews.Any())
+                .AsQueryable();
+
+            if (period.ToLower() == "month")
+            {
+                uniMajorsQuery = uniMajorsQuery.Where(um => um.Reviews
+                    .Any(r => r.CreatedTime.Year == year &&
+                              r.CreatedTime.Month >= 1 && r.CreatedTime.Month <= 12));
+            }
+            else if (period.ToLower() == "quarter")
+            {
+                uniMajorsQuery = uniMajorsQuery.Where(um => um.Reviews
+                    .Any(r => r.CreatedTime.Year == year &&
+                              r.CreatedTime.Month >= 1 && r.CreatedTime.Month <= 3));
+            }
+
+            var topUniMajors = await uniMajorsQuery
+                .OrderByDescending(um => um.Reviews.Count)
+                .Take(5)
+                .Select(um => new ListUniMajorModelView
+                {
+                    Id = um.Id,
+                    MajorName = um.Major.Name,
+                    UniversityName = um.University.Name,
+                    MajorCode = um.MajorCode,
+                    TuitionFee = um.TuitionFee,
+                    
+                })
+                .ToListAsync();
+
+            return topUniMajors;
+        }
+
 
         public async Task<int> GetUniversityCountAsync()
         {
@@ -52,6 +92,7 @@ namespace CAH.Repositories.UOW
                 })
                 .ToListAsync();
         }
+        
 
     }
 }
