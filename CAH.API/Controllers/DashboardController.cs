@@ -1,5 +1,7 @@
 ﻿using CAH.Contract.Services.Interface;
 using CAH.ModelViews.DashBoardModelViews;
+using CAH.ModelViews.UniMajorModelViews;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using System;
 using System.Collections.Generic;
@@ -7,7 +9,7 @@ using System.Threading.Tasks;
 
 namespace CAH.API.Controllers
 {
-    //[Authorize(Roles = "Admin")]
+    [Authorize(Roles = "Admin")]
     [Route("api/[controller]")]
     [ApiController]
     public class DashboardController : Controller
@@ -45,6 +47,21 @@ namespace CAH.API.Controllers
             var loginStats = await _dashboardService.GetUserLoginCountsAsync(actualStartDate, actualEndDate);
             return Ok(new { Message = "Success", Data = loginStats });
         }
+        [HttpGet("top-reviewed-unimajors")]
+        public async Task<ActionResult<List<ListUniMajorModelView>>> GetTopReviewedUniMajors([FromQuery] int year, [FromQuery] string period)
+        {
+            if (year < 2000 || year > DateTime.UtcNow.Year)
+            {
+                return BadRequest(new { Message = "Invalid year. Please enter a valid year." });
+            }
 
+            if (string.IsNullOrEmpty(period) || (period.ToLower() != "month" && period.ToLower() != "quarter"))
+            {
+                return BadRequest(new { Message = "Invalid period. Please use 'month' or 'quarter'." });
+            }
+
+            var topReviewedUniMajors = await _dashboardService.GetTopReviewedUniMajors(year, period);
+            return Ok(new { Message = "Success", Data = topReviewedUniMajors });
+        }
     }
 }

@@ -7,6 +7,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using CAH.ModelViews.DashBoardModelViews;
+using CAH.ModelViews.UniMajorModelViews;
 
 namespace CAH.Contract.Repositories.IUOW
 {
@@ -15,5 +16,6 @@ namespace CAH.Contract.Repositories.IUOW
         Task<int> GetUserCountAsync();
         Task<int> GetUniversityCountAsync();
         Task<List<UserLoginCountModelView>> GetUserLoginCountsAsync(DateTime startDate, DateTime endDate);
+        Task<List<ListUniMajorModelView>> GetTopReviewedUniMajors(int year, string period);
     }
 }
