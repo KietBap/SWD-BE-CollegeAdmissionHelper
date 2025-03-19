@@ -104,8 +104,9 @@ namespace CAH.Services.Service
                     Id = p.Id,
                     UniversityName = p.UniMajor.University.Name,
                     MajorName = p.UniMajor.Major.Name,
-                    MethodName = string.Join(", ", p.InforMethods.Select(im => im.AdmissionMethod.MethodName)),
-                    AdmisstionDate = p.AdmisstionDate
+                    AdmisstionDate = p.AdmisstionDate,
+                    Deadline = p.Deadline,
+                    Quota = p.Quota
                 })
                 .ToListAsync();
 
@@ -245,8 +246,9 @@ namespace CAH.Services.Service
                     Id = w.AdmissionInfor.Id,
                     UniversityName = w.AdmissionInfor.UniMajor.University.Name,
                     MajorName = w.AdmissionInfor.UniMajor.Major.Name,
-                    MethodName = string.Join(", ", w.AdmissionInfor.InforMethods.Select(im => im.AdmissionMethod.MethodName)),
-                    AdmisstionDate = w.AdmissionInfor.AdmisstionDate
+                    AdmisstionDate = w.AdmissionInfor.AdmisstionDate,
+                    Deadline = w.AdmissionInfor.Deadline,
+                    Quota = w.AdmissionInfor.Quota
                 })
                 .ToListAsync();
 

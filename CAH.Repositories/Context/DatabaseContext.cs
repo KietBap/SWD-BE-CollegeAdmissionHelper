@@ -208,8 +208,31 @@ namespace CAH.Repositories.Context
 					LastUpdatedTime = DateTimeOffset.UtcNow
 				});
 
-			//University
-			var uniId1 = Guid.NewGuid().ToString();
+            //Subject
+            var sub1 = Guid.NewGuid().ToString();
+            var sub2 = Guid.NewGuid().ToString();
+            modelBuilder.Entity<Subject>().HasData(
+                new Subject
+                {
+                    Id = sub1,
+                    Name = "Toan",
+                    CreatedBy = "SeedData",
+                    LastUpdatedBy = "SeedData",
+                    CreatedTime = DateTimeOffset.UtcNow,
+                    LastUpdatedTime = DateTimeOffset.UtcNow
+                },
+                new Subject
+                {
+                    Id = sub2,
+                    Name = "Tieng Anh",
+                    CreatedBy = "SeedData",
+                    LastUpdatedBy = "SeedData",
+                    CreatedTime = DateTimeOffset.UtcNow,
+                    LastUpdatedTime = DateTimeOffset.UtcNow
+                });
+
+            //University
+            var uniId1 = Guid.NewGuid().ToString();
             var uniId2 = Guid.NewGuid().ToString();
             modelBuilder.Entity<University>().HasData(
 				new University
@@ -252,8 +275,18 @@ namespace CAH.Repositories.Context
             //Major
             var majorId1 = Guid.NewGuid().ToString();
             var majorId2 = Guid.NewGuid().ToString();
+            var majorId3 = Guid.NewGuid().ToString();
             modelBuilder.Entity<Major>().HasData(
-				new Major
+                new Major
+                {
+                    Id = majorId3,
+                    Name = "Ki Thuat O To",
+                    CreatedBy = "SeedData",
+                    LastUpdatedBy = "SeedData",
+                    CreatedTime = DateTimeOffset.UtcNow,
+                    LastUpdatedTime = DateTimeOffset.UtcNow
+                },
+                new Major
 				{
 					Id = majorId1,
 					Name = "Cong Nghe Thong Tin",
@@ -275,7 +308,33 @@ namespace CAH.Repositories.Context
 			//UniMajor
 			var uniMajor1 = Guid.NewGuid().ToString();
 			var uniMajor2 = Guid.NewGuid().ToString();
+			var uniMajor3 = Guid.NewGuid().ToString();
+			var uniMajor4 = Guid.NewGuid().ToString();
             modelBuilder.Entity<UniMajor>().HasData(
+                new UniMajor
+                {
+                    Id = uniMajor4,
+                    UniversityId = uniId2,
+                    MajorId = majorId1,
+                    TuitionFee = "18.000.000",
+                    MajorCode = "CNTT",
+                    CreatedBy = "SeedData",
+                    LastUpdatedBy = "SeedData",
+                    CreatedTime = DateTimeOffset.UtcNow,
+                    LastUpdatedTime = DateTimeOffset.UtcNow
+                },
+                new UniMajor
+                {
+                    Id = uniMajor3,
+                    UniversityId = uniId2,
+                    MajorId = majorId3,
+                    TuitionFee = "15.000.000",
+                    MajorCode = "CAR",
+                    CreatedBy = "SeedData",
+                    LastUpdatedBy = "SeedData",
+                    CreatedTime = DateTimeOffset.UtcNow,
+                    LastUpdatedTime = DateTimeOffset.UtcNow
+                },
                 new UniMajor
                 {
                     Id = uniMajor1,
@@ -301,28 +360,7 @@ namespace CAH.Repositories.Context
                     LastUpdatedTime = DateTimeOffset.UtcNow
                 });
 
-            //Subject
-            var sub1 = Guid.NewGuid().ToString();
-            var sub2 = Guid.NewGuid().ToString();
-            modelBuilder.Entity<Subject>().HasData(
-                new Subject
-                {
-                    Id = sub1,
-                    Name = "Toan",
-                    CreatedBy = "SeedData",
-                    LastUpdatedBy = "SeedData",
-                    CreatedTime = DateTimeOffset.UtcNow,
-                    LastUpdatedTime = DateTimeOffset.UtcNow
-                },
-                new Subject
-                {
-                    Id = sub2,
-                    Name = "Tieng Anh",
-                    CreatedBy = "SeedData",
-                    LastUpdatedBy = "SeedData",
-                    CreatedTime = DateTimeOffset.UtcNow,
-                    LastUpdatedTime = DateTimeOffset.UtcNow
-                });
+            
 
             //AdmissionMethod
             var am1 = Guid.NewGuid().ToString();
@@ -351,15 +389,46 @@ namespace CAH.Repositories.Context
             // AdmissionInfor
             var ai1 = Guid.NewGuid().ToString();
             var ai2 = Guid.NewGuid().ToString();
+            var ai3 = Guid.NewGuid().ToString();
+            var ai4 = Guid.NewGuid().ToString();
             var ay1 = Guid.NewGuid().ToString();
             var ay2 = Guid.NewGuid().ToString();
 
             modelBuilder.Entity<AdmissionInfor>().HasData(
                 new AdmissionInfor
                 {
+                    Id = ai4,
+                    UniMajorId = uniMajor4,
+                    AcademicYearId = ay1,
+                    AdmisstionDate = new DateTime(2025, 1, 1),
+                    Deadline = new DateTime(2025, 8, 1),
+                    Quota = 2000,
+                    CreatedBy = "SeedData",
+                    LastUpdatedBy = "SeedData",
+                    CreatedTime = DateTimeOffset.UtcNow,
+                    LastUpdatedTime = DateTimeOffset.UtcNow
+                },
+                new AdmissionInfor
+                {
+                    Id = ai3,
+                    UniMajorId = uniMajor3,
+                    AcademicYearId = ay1,
+                    AdmisstionDate = new DateTime(2025, 1, 1),
+                    Deadline = new DateTime(2025, 8, 1),
+                    Quota = 3000,
+                    CreatedBy = "SeedData",
+                    LastUpdatedBy = "SeedData",
+                    CreatedTime = DateTimeOffset.UtcNow,
+                    LastUpdatedTime = DateTimeOffset.UtcNow
+                },
+                new AdmissionInfor
+                {
                     Id = ai1,
                     UniMajorId = uniMajor1,
-                    AcademicYearId = ay1, // ✅ OK, dùng ID của AcademicYear
+                    AcademicYearId = ay1,
+                    AdmisstionDate = new DateTime(2025, 2, 1),
+                    Deadline = new DateTime(2025, 8, 15),
+                    Quota = 1500,
                     CreatedBy = "SeedData",
                     LastUpdatedBy = "SeedData",
                     CreatedTime = DateTimeOffset.UtcNow,
@@ -369,56 +438,92 @@ namespace CAH.Repositories.Context
                 {
                     Id = ai2,
                     UniMajorId = uniMajor2,
-                    AcademicYearId = ay2, // ✅ OK
+                    AcademicYearId = ay2,
+                    AdmisstionDate = new DateTime(2025, 1, 1),
+                    Deadline = new DateTime(2025, 9, 1),
+                    Quota = 2500,
                     CreatedBy = "SeedData",
                     LastUpdatedBy = "SeedData",
                     CreatedTime = DateTimeOffset.UtcNow,
                     LastUpdatedTime = DateTimeOffset.UtcNow
                 });
 
-            // Wishlist
-            modelBuilder.Entity<Wishlist>().HasData(
-                new Wishlist
-                {
-                    Id = Guid.NewGuid().ToString(),
-                    UserId = userId,
-                    AdmissionInforId = ai1, // ✅ Dùng đúng ID của AdmissionInfor
-                    CreatedBy = "SeedData",
-                    LastUpdatedBy = "SeedData",
-                    CreatedTime = DateTimeOffset.UtcNow,
-                    LastUpdatedTime = DateTimeOffset.UtcNow
-                });
-
-
-            //AcademicYear
-
-            modelBuilder.Entity<AcademicYear>().HasData(
-                new AcademicYear
-                {
-                    Id = ay1,
-                    Year = 2025,
-                    CreatedBy = "SeedData",
-                    LastUpdatedBy = "SeedData",
-                    CreatedTime = DateTimeOffset.UtcNow,
-                    LastUpdatedTime = DateTimeOffset.UtcNow
-                },
-                new AcademicYear
-                {
-                    Id = ay2,
-                    Year = 2024,
-                    CreatedBy = "SeedData",
-                    LastUpdatedBy = "SeedData",
-                    CreatedTime = DateTimeOffset.UtcNow,
-                    LastUpdatedTime = DateTimeOffset.UtcNow
-                });
+            
             // InforMethod
             modelBuilder.Entity<InforMethod>().HasData(
                 new InforMethod
                 {
                     Id = Guid.NewGuid().ToString(),
+                    AdmissionInforId = ai4,
+                    AdmissionMethodId = am1,
+                    ScoreType = "Khoi A1",
+                    ScoreRequirement = 27,
+                    PercentageOfQuota = 20,
+                    CreatedBy = "SeedData",
+                    LastUpdatedBy = "SeedData",
+                    CreatedTime = DateTimeOffset.UtcNow,
+                    LastUpdatedTime = DateTimeOffset.UtcNow
+                },
+                new InforMethod
+                {
+                    Id = Guid.NewGuid().ToString(),
+                    AdmissionInforId = ai3,
+                    AdmissionMethodId = am1,
+                    ScoreType = "Khoi A",
+                    ScoreRequirement = 26,
+                    PercentageOfQuota = 20,
+                    CreatedBy = "SeedData",
+                    LastUpdatedBy = "SeedData",
+                    CreatedTime = DateTimeOffset.UtcNow,
+                    LastUpdatedTime = DateTimeOffset.UtcNow
+                },
+                new InforMethod
+                {
+                    Id = Guid.NewGuid().ToString(),
+                    AdmissionInforId = ai3,
+                    AdmissionMethodId = am2,
+                    ScoreType = "Diem Danh Gia Nang Luc",
+                    ScoreRequirement = 600,
+                    PercentageOfQuota = 20,
+                    CreatedBy = "SeedData",
+                    LastUpdatedBy = "SeedData",
+                    CreatedTime = DateTimeOffset.UtcNow,
+                    LastUpdatedTime = DateTimeOffset.UtcNow
+                },
+                new InforMethod
+                {
+                    Id = Guid.NewGuid().ToString(),
                     AdmissionInforId = ai1,
                     AdmissionMethodId = am1,
-                    ScoreType = "GPA", // Bổ sung giá trị cho ScoreType
+                    ScoreType = "Khoi A", 
+					ScoreRequirement = 30,
+					PercentageOfQuota = 20,
+                    CreatedBy = "SeedData",
+                    LastUpdatedBy = "SeedData",
+                    CreatedTime = DateTimeOffset.UtcNow,
+                    LastUpdatedTime = DateTimeOffset.UtcNow
+                },
+                new InforMethod
+                {
+                    Id = Guid.NewGuid().ToString(),
+                    AdmissionInforId = ai1,
+                    AdmissionMethodId = am1,
+                    ScoreType = "Khoi B",
+                    ScoreRequirement = 28,
+					PercentageOfQuota = 30,
+                    CreatedBy = "SeedData",
+                    LastUpdatedBy = "SeedData",
+                    CreatedTime = DateTimeOffset.UtcNow,
+                    LastUpdatedTime = DateTimeOffset.UtcNow
+                },
+                new InforMethod
+                {
+                    Id = Guid.NewGuid().ToString(),
+                    AdmissionInforId = ai2,
+                    AdmissionMethodId = am1,
+                    ScoreType = "Khoi D",
+                    ScoreRequirement = 27,
+                    PercentageOfQuota = 15,
                     CreatedBy = "SeedData",
                     LastUpdatedBy = "SeedData",
                     CreatedTime = DateTimeOffset.UtcNow,
@@ -429,7 +534,9 @@ namespace CAH.Repositories.Context
                     Id = Guid.NewGuid().ToString(),
                     AdmissionInforId = ai2,
                     AdmissionMethodId = am2,
-                    ScoreType = "Percentage", // Bổ sung giá trị cho ScoreType
+                    ScoreType = "Danh Gia Nang Luc", 
+					ScoreRequirement = 500,
+					PercentageOfQuota= 20,
                     CreatedBy = "SeedData",
                     LastUpdatedBy = "SeedData",
                     CreatedTime = DateTimeOffset.UtcNow,
@@ -457,6 +564,42 @@ namespace CAH.Repositories.Context
                     UniMajorId = uniMajor2,
                     Comment = "Moi truong hoc tap nang dong!",
                     Rating = 4,
+                    CreatedBy = "SeedData",
+                    LastUpdatedBy = "SeedData",
+                    CreatedTime = DateTimeOffset.UtcNow,
+                    LastUpdatedTime = DateTimeOffset.UtcNow
+                });
+
+
+            // Wishlist
+            modelBuilder.Entity<Wishlist>().HasData(
+                new Wishlist
+                {
+                    Id = Guid.NewGuid().ToString(),
+                    UserId = userId,
+                    AdmissionInforId = ai1, // ✅ Dùng đúng ID của AdmissionInfor
+                    CreatedBy = "SeedData",
+                    LastUpdatedBy = "SeedData",
+                    CreatedTime = DateTimeOffset.UtcNow,
+                    LastUpdatedTime = DateTimeOffset.UtcNow
+                });
+
+
+            //AcademicYear
+            modelBuilder.Entity<AcademicYear>().HasData(
+                new AcademicYear
+                {
+                    Id = ay1,
+                    Year = 2025,
+                    CreatedBy = "SeedData",
+                    LastUpdatedBy = "SeedData",
+                    CreatedTime = DateTimeOffset.UtcNow,
+                    LastUpdatedTime = DateTimeOffset.UtcNow
+                },
+                new AcademicYear
+                {
+                    Id = ay2,
+                    Year = 2024,
                     CreatedBy = "SeedData",
                     LastUpdatedBy = "SeedData",
                     CreatedTime = DateTimeOffset.UtcNow,

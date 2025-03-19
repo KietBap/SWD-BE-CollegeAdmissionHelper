@@ -19,7 +19,7 @@ namespace CAH.Contract.Repositories.Entity
 		public virtual AdmissionMethod AdmissionMethod { get; set; }
 
         public string ScoreType { get; set; }
-        public int ScoreRequirement { get; set; }
+        public float ScoreRequirement { get; set; }
         public float PercentageOfQuota { get; set; }
     }
 }
