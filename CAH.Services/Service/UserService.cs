@@ -92,8 +92,12 @@ namespace CAH.Services.Service
             try
             {
                 var userId = _httpContextAccessor.HttpContext?.User.FindFirst("userId")?.Value;
+                if (!Guid.TryParse(id, out Guid userGuid))
+                {
+                    return "Invalid User ID format";
+                }
 
-                var user = await _unitOfWork.GetRepository<User>().GetByIdAsync(id);
+                var user = await _unitOfWork.GetRepository<User>().GetByIdAsync(userGuid);
                 if (user == null)
                 {
                     return "can not find UserAccount";
