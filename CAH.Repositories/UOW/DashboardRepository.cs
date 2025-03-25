@@ -28,7 +28,7 @@ namespace CAH.Repositories.UOW
             _majorRepo = majorRepo ?? throw new ArgumentNullException(nameof(majorRepo));
         }
 
-        public async Task<List<ListUniMajorModelView>> GetTopReviewedUniMajors(int year, string period)
+        public async Task<List<ListUniMajorModelView>> GetTopReviewedUniMajors(int year, string period, int value)
         {
             var uniMajorsQuery = _context.UniMajors
                 .Include(um => um.Reviews)
@@ -38,14 +38,14 @@ namespace CAH.Repositories.UOW
             if (period.ToLower() == "month")
             {
                 uniMajorsQuery = uniMajorsQuery.Where(um => um.Reviews
-                    .Any(r => r.CreatedTime.Year == year &&
-                              r.CreatedTime.Month >= 1 && r.CreatedTime.Month <= 12));
+                    .Any(r => r.CreatedTime.Year == year && r.CreatedTime.Month == value));
             }
             else if (period.ToLower() == "quarter")
             {
+                int startMonth = (value - 1) * 3 + 1;
+                int endMonth = startMonth + 2;
                 uniMajorsQuery = uniMajorsQuery.Where(um => um.Reviews
-                    .Any(r => r.CreatedTime.Year == year &&
-                              r.CreatedTime.Month >= 1 && r.CreatedTime.Month <= 3));
+                    .Any(r => r.CreatedTime.Year == year && r.CreatedTime.Month >= startMonth && r.CreatedTime.Month <= endMonth));
             }
 
             var topUniMajors = await uniMajorsQuery
@@ -58,7 +58,6 @@ namespace CAH.Repositories.UOW
                     UniversityName = um.University.Name,
                     MajorCode = um.MajorCode,
                     TuitionFee = um.TuitionFee,
-                    
                 })
                 .ToListAsync();
 

@@ -48,7 +48,7 @@ namespace CAH.API.Controllers
             return Ok(new { Message = "Success", Data = loginStats });
         }
         [HttpGet("top-reviewed-unimajors")]
-        public async Task<ActionResult<List<ListUniMajorModelView>>> GetTopReviewedUniMajors([FromQuery] int year, [FromQuery] string period)
+        public async Task<ActionResult<List<ListUniMajorModelView>>> GetTopReviewedUniMajors([FromQuery] int year, [FromQuery] string period, [FromQuery] int value)
         {
             if (year < 2000 || year > DateTime.UtcNow.Year)
             {
@@ -60,7 +60,12 @@ namespace CAH.API.Controllers
                 return BadRequest(new { Message = "Invalid period. Please use 'month' or 'quarter'." });
             }
 
-            var topReviewedUniMajors = await _dashboardService.GetTopReviewedUniMajors(year, period);
+            if ((period.ToLower() == "month" && (value < 1 || value > 12)) || (period.ToLower() == "quarter" && (value < 1 || value > 4)))
+            {
+                return BadRequest(new { Message = "Invalid value. Please enter a valid month (1-12) or quarter (1-4)." });
+            }
+
+            var topReviewedUniMajors = await _dashboardService.GetTopReviewedUniMajors(year, period, value);
             return Ok(new { Message = "Success", Data = topReviewedUniMajors });
         }
     }
