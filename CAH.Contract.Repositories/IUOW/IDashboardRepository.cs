@@ -16,6 +16,6 @@ namespace CAH.Contract.Repositories.IUOW
         Task<int> GetUserCountAsync();
         Task<int> GetUniversityCountAsync();
         Task<List<UserLoginCountModelView>> GetUserLoginCountsAsync(DateTime startDate, DateTime endDate);
-        Task<List<ListUniMajorModelView>> GetTopReviewedUniMajors(int year, string period);
+        Task<List<ListUniMajorModelView>> GetTopReviewedUniMajors(int year, string period, int value);
     }
 }

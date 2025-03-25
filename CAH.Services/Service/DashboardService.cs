@@ -49,9 +49,9 @@ namespace CAH.Services.Service
             }
         }
 
-        public Task<List<ListUniMajorModelView>> GetTopReviewedUniMajors(int year, string period)
+        public Task<List<ListUniMajorModelView>> GetTopReviewedUniMajors(int year, string period, int value)
         {
-            return _dashboardRepository.GetTopReviewedUniMajors(year, period);
+            return _dashboardRepository.GetTopReviewedUniMajors(year, period,value);
         }
     }
 }
