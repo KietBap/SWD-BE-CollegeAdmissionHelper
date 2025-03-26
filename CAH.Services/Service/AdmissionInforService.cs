@@ -199,6 +199,14 @@ namespace CAH.Services.Service
             {
                 var userId = _httpContext.HttpContext?.User.FindFirst("userId")?.Value;
 
+                var existingWishlist = await _unitOfWork.GetRepository<Wishlist>().Entities
+                        .FirstOrDefaultAsync(w => w.UserId == Guid.Parse(userId) && w.AdmissionInforId == adInforId && !w.DeletedTime.HasValue);
+
+                if (existingWishlist != null)
+                {
+                    return "Marked!";
+                }
+
                 Wishlist wishlist = new Wishlist
                 {
                     UserId = Guid.Parse(userId),
@@ -262,7 +270,8 @@ namespace CAH.Services.Service
                 var userId = _httpContext.HttpContext?.User.FindFirst("userId")?.Value;
 
                 var wishlist = await _unitOfWork.GetRepository<Wishlist>()
-                                                    .Entities.Where(w => w.AdmissionInforId ==  admissionInforId && w.UserId.ToString() == userId)
+                                                    .Entities.Where(w => w.AdmissionInforId ==  admissionInforId 
+                                                    && w.UserId.ToString() == userId && !w.DeletedTime.HasValue)
                                                     .FirstOrDefaultAsync();
                 wishlist.DeletedTime = DateTime.Now;
                 wishlist.DeletedBy = userId;
