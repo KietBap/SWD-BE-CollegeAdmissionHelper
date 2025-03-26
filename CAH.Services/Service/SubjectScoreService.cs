@@ -103,26 +103,38 @@ namespace CAH.Services.Service
 
         public async Task<BasePaginatedList<ListSubScoreModelView>> GetAllSubjectScoreAsync(int pageNumber, int pageSize, string? userId)
         {
-            IQueryable<SubjectScore> subScoreQuery = _unitOfWork.GetRepository<SubjectScore>().Entities
-                .Where(p => !p.DeletedTime.HasValue)
-                .OrderByDescending(s => s.CreatedTime);
+            var subScoreQuery = from score in _unitOfWork.GetRepository<SubjectScore>().Entities
+                                join subject in _unitOfWork.GetRepository<Subject>().Entities
+                                on score.SubjectId equals subject.Id
+                                where !score.DeletedTime.HasValue
+                                && (string.IsNullOrEmpty(userId) || score.UserId.ToString() == userId) // Lọc theo userId nếu có
+                                orderby score.CreatedTime descending
+                                select new ListSubScoreModelView
+                                {
+                                    Id = score.Id.ToString(),
+                                    SubjectName = subject.Name,
+                                    Year = new DateTime(score.Date.HasValue ? score.Date.Value.Year : 1, 1, 1),
+                                    Score = score.Score,
+                                    ExamType = score.ExamType,
+                                    Class = score.Class
+                                };
 
-            if (!string.IsNullOrEmpty(userId))
-            {
-                subScoreQuery.Where(s => s.UserId.ToString() == userId);
-            }
+            //if (!string.IsNullOrEmpty(userId))
+            //{
+            //    subScoreQuery = subScoreQuery.Where(s => s.Id == userId);
+            //}
 
             int totalCount = await subScoreQuery.CountAsync();
 
-            List<SubjectScore> paginatedServices = await subScoreQuery
+            List<ListSubScoreModelView> paginatedScores = await subScoreQuery
                 .Skip((pageNumber - 1) * pageSize)
                 .Take(pageSize)
                 .ToListAsync();
 
-            List<ListSubScoreModelView> reviewModelView = _mapper.Map<List<ListSubScoreModelView>>(paginatedServices);
-
-            return new BasePaginatedList<ListSubScoreModelView>(reviewModelView, totalCount, pageNumber, pageSize);
+            return new BasePaginatedList<ListSubScoreModelView>(paginatedScores, totalCount, pageNumber, pageSize);
         }
+
+
 
 
         public async Task<Object> GetSubScoreByIdAsync(string id)

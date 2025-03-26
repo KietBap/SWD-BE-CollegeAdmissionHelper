@@ -1,9 +1,12 @@
-﻿using CAH.ModelViews.AIChatBotModelView;
+﻿using CAH.Contract.Repositories.Entity;
+using CAH.Contract.Repositories.Interface;
+using CAH.ModelViews.AIChatBotModelView;
 using Firebase.Database;
 using Firebase.Database.Query;
 using FirebaseAdmin;
 using Google.Apis.Auth.OAuth2;
 using Microsoft.AspNetCore.Http;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using System.Text;
 using System.Text.Json;
@@ -16,10 +19,12 @@ namespace CAH.Services.Service
         private readonly HttpClient _httpClient;
         private readonly FirebaseClient _firebaseClient;
         private readonly IHttpContextAccessor _httpContextAccessor;
+        private readonly IUnitOfWork _unitOfWork;
 
-        public GeminiService(IConfiguration configuration, HttpClient httpClient, IHttpContextAccessor httpContextAccessor)
+        public GeminiService(IConfiguration configuration, HttpClient httpClient, IHttpContextAccessor httpContextAccessor, IUnitOfWork unitOfWork)
         {
             _apiKey = configuration["AI:GeminiApiKey"];
+            _unitOfWork = unitOfWork;
             _httpClient = httpClient;
 
             if (FirebaseApp.DefaultInstance == null)
@@ -56,10 +61,37 @@ namespace CAH.Services.Service
                     })
                     .ToList();
 
+                // Nếu người dùng hỏi về điểm số, truy vấn danh sách điểm
+                if (prompt.Contains("điểm của tôi") || prompt.Contains("diem cua toi") || prompt.Contains("my score"))
+                {
+                    var scores = await (from score in _unitOfWork.GetRepository<SubjectScore>().Entities
+                                        join subject in _unitOfWork.GetRepository<Subject>().Entities on score.SubjectId equals subject.Id
+                                        where score.UserId.ToString() == userId && !score.DeletedTime.HasValue
+                                        orderby score.Date descending
+                                        select new
+                                        {
+                                            subject.Name,
+                                            score.Score,
+                                            score.ExamType,
+                                            score.Date
+                                        }).ToListAsync();
+
+                    string scoreText = scores.Any()
+                        ? string.Join("\n", scores.Select(s => $"{s.Name} ({s.ExamType}): {s.Score} điểm vào ngày {s.Date:dd/MM/yyyy}"))
+                        : "Tôi chưa có điểm nào được lưu trong hệ thống.";
+
+                    // Thêm danh sách điểm như một phần hội thoại
+                    conversationParts.Add(new
+                    {
+                        parts = new[] { new { text = $"Danh sách điểm của tôi:\n{scoreText}" } },
+                        role = "model"
+                    });
+                }
+
                 // Thêm prompt mới vào cuối danh sách
                 conversationParts.Add(new
                 {
-                    parts = new[] { new { text = "Dựa vào cuộc hội thoại của tôi và bạn ở trên để tiếp tục cuộc nói chuyện này và không cần nhắc lại ( nếu có ) : " + prompt } },
+                    parts = new[] { new { text = "Dựa vào cuộc hội thoại và danh sách điểm ( tôi đưa cho bạn ở trên nếu có ) của tôi và bạn ở trên để tiếp tục cuộc nói chuyện này và không cần nhắc lại ( nếu có ) : " + prompt } },
                     role = "user"
                 });
 
