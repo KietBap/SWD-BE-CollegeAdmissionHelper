@@ -17,6 +17,7 @@ namespace CAH.Repositories.UOW
     {
         private readonly IGenericRepository<User> _userRepo;
         private readonly IGenericRepository<Major> _majorRepo;
+        private readonly IGenericRepository<University> _universityRepo;
         private readonly DatabaseContext _context;
 
         public DashboardRepository(DatabaseContext context,
@@ -67,7 +68,7 @@ namespace CAH.Repositories.UOW
 
         public async Task<int> GetUniversityCountAsync()
         {
-            return await _majorRepo.Entities.CountAsync();
+            return await _universityRepo.Entities.CountAsync();
         }
 
         public async Task<int> GetUserCountAsync()
