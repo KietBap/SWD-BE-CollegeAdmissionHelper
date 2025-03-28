@@ -23,12 +23,15 @@ namespace CAH.Repositories.UOW
 
         public DashboardRepository(DatabaseContext context,
                                    IGenericRepository<User> userRepo,
-                                   IGenericRepository<Major> majorRepo)
+                                   IGenericRepository<Major> majorRepo,
+                                   IGenericRepository<University> universityRepo)
         {
             _context = context ?? throw new ArgumentNullException(nameof(context));
             _userRepo = userRepo ?? throw new ArgumentNullException(nameof(userRepo));
-            _majorRepo = majorRepo ?? throw new ArgumentNullException(nameof(majorRepo));
-        }
+            _majorRepo = majorRepo ?? throw new ArgumentNullException(nameof(majorRepo));   
+    _universityRepo = universityRepo ?? throw new ArgumentNullException(nameof(universityRepo));}
+        
+
 
         public async Task<List<ListUniMajorModelView>> GetTopReviewedUniMajors(int year, string period, int value)
         {
