@@ -88,10 +88,51 @@ namespace CAH.Services.Service
                     });
                 }
 
+                if (prompt.Contains("trường") || prompt.Contains("truong") || prompt.Contains("university"))
+                {
+                    var admissionInfo = await (from uni in _unitOfWork.GetRepository<University>().Entities
+                                               join uniMajor in _unitOfWork.GetRepository<UniMajor>().Entities on uni.Id equals uniMajor.UniversityId
+                                               join major in _unitOfWork.GetRepository<Major>().Entities on uniMajor.MajorId equals major.Id
+                                               join admission in _unitOfWork.GetRepository<AdmissionInfor>().Entities on uniMajor.Id equals admission.UniMajorId
+                                               join method in _unitOfWork.GetRepository<InforMethod>().Entities on admission.Id equals method.AdmissionInforId
+                                               join admissionMethod in _unitOfWork.GetRepository<AdmissionMethod>().Entities on method.AdmissionMethodId equals admissionMethod.Id
+                                               where !admission.DeletedTime.HasValue
+                                               select new
+                                               {
+                                                   UniversityName = uni.Name,
+                                                   MajorName = major.Name,
+                                                   MethodName = admissionMethod.MethodName,
+                                                   ScoreType = method.ScoreType, // Lấy loại điểm (VD: Khối A, Khối D)
+                                                   ScoreRequirement = method.ScoreRequirement,
+                                                   AdmissionDate = admission.AdmisstionDate,
+                                               }).ToListAsync();
+
+                    var groupedInfo = admissionInfo
+                        .GroupBy(x => x.UniversityName)
+                        .Select(g => $"- {g.Key}\n" + // Tên trường
+                            string.Join("\n", g.GroupBy(m => m.MajorName)
+                                .Select(mg => $"     + {mg.Key}:\n" + // Ngành học
+                                    string.Join("\n", mg.GroupBy(m => m.MethodName) // Nhóm theo phương thức tuyển sinh
+                                        .Select(mth => $"          . {mth.Key} (Ngày tuyển sinh: {(mth.First().AdmissionDate.Year == 1 ? "❌ Chưa cập nhật" : mth.First().AdmissionDate.ToString("dd/MM/yyyy"))}):\n" +
+                                            string.Join("\n", mth.Select(m => $"                    {m.ScoreType} : {m.ScoreRequirement}"))))))) // Nhóm theo ScoreType
+                        .ToList();
+
+                    string admissionText = groupedInfo.Any() ? string.Join("\n", groupedInfo) : "Không tìm thấy thông tin tuyển sinh.";
+
+                    // Thêm thông tin tuyển sinh vào phản hồi
+                    conversationParts.Add(new
+                    {
+                        parts = new[] { new { text = $"Thông tin tuyển sinh:\n{admissionText}" } },
+                        role = "model"
+                    });
+                }
+
+
+
                 // Thêm prompt mới vào cuối danh sách
                 conversationParts.Add(new
                 {
-                    parts = new[] { new { text = "Dựa vào cuộc hội thoại và danh sách điểm ( tôi đưa cho bạn ở trên nếu có ) của tôi và bạn ở trên để tiếp tục cuộc nói chuyện này và không cần nhắc lại ( nếu không có lịch sử chat thì bỏ qua không cần nhắc ) : " + prompt } },
+                    parts = new[] { new { text = "Dựa vào cuộc hội thoại và thông tin tuyển sinh ( tôi đưa cho bạn ở trên nếu có, nếu ko có thông tin tuyển sinh thì tự kiếm cho tôi ) của tôi và bạn ở trên để tiếp tục cuộc nói chuyện này và không cần nhắc lại ( nếu không có lịch sử chat thì bỏ qua không cần nhắc ) : " + prompt } },
                     role = "user"
                 });
 
