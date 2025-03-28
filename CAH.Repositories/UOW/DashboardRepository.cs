@@ -10,6 +10,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using CAH.Core.Utils;
 using CAH.ModelViews.UniMajorModelViews;
+using CAH.ModelViews.UserModelView;
 
 namespace CAH.Repositories.UOW
 {
@@ -71,10 +72,33 @@ namespace CAH.Repositories.UOW
             return await _universityRepo.Entities.CountAsync();
         }
 
-        public async Task<int> GetUserCountAsync()
+        public async Task<List<ListUserModelView>> GetUserCountAsync()
         {
-            return await _userRepo.Entities.CountAsync();
+            var usersLastLogin = await (from user in _context.Users
+                                        join login in
+                                            (from ul in _context.UserLoginHistories
+                                             group ul by ul.UserId into g
+                                             select new { UserId = g.Key, LastLoginTime = g.Max(l => l.LoginTime) })
+                                        on user.Id equals login.UserId into loginGroup
+                                        from login in loginGroup.DefaultIfEmpty()
+                                        select new ListUserModelView
+                                        {
+                                            Id = user.Id.ToString(),
+                                            UserImage = user.UserImage,
+                                            Name = user.Name,
+                                            Email = user.Email,
+                                            UserName = user.UserName,
+                                            PhoneNumber = user.PhoneNumber,
+                                            LastLoginTime = login != null ? login.LastLoginTime : null // Keep as null
+                                        }).ToListAsync();
+
+            return usersLastLogin;
         }
+
+
+
+
+
 
         /// <summary>
         /// Đếm số lượt đăng nhập của người dùng trong khoảng thời gian

@@ -8,12 +8,13 @@ using System.Text;
 using System.Threading.Tasks;
 using CAH.ModelViews.DashBoardModelViews;
 using CAH.ModelViews.UniMajorModelViews;
+using CAH.ModelViews.UserModelView;
 
 namespace CAH.Contract.Repositories.IUOW
 {
     public interface IDashboardRepository
     {
-        Task<int> GetUserCountAsync();
+        Task<List<ListUserModelView>> GetUserCountAsync();
         Task<int> GetUniversityCountAsync();
         Task<List<UserLoginCountModelView>> GetUserLoginCountsAsync(DateTime startDate, DateTime endDate);
         Task<List<ListUniMajorModelView>> GetTopReviewedUniMajors(int year, string period, int value);
