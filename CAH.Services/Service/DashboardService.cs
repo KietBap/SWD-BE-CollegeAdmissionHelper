@@ -5,6 +5,7 @@ using CAH.Contract.Repositories.IUOW;
 using CAH.Contract.Services.Interface;
 using CAH.ModelViews.DashBoardModelViews;
 using CAH.ModelViews.UniMajorModelViews;
+using CAH.ModelViews.UserModelView;
 using Microsoft.AspNetCore.Http;
 using Microsoft.EntityFrameworkCore;
 using System;
@@ -32,7 +33,8 @@ namespace CAH.Services.Service
             return await _dashboardRepository.GetUniversityCountAsync();
         }
 
-        public async Task<int> GetUserCountAsync()
+        public async Task<List<ListUserModelView>> GetUserCountAsync()
+
         {
             return await _dashboardRepository.GetUserCountAsync();
         }

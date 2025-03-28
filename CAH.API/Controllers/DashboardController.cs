@@ -22,11 +22,19 @@ namespace CAH.API.Controllers
         }
 
         [HttpGet("total-users")]
-        public async Task<ActionResult<int>> GetTotalUsers()
+        public async Task<ActionResult> GetTotalUsers()
         {
-            int totalUsers = await _dashboardService.GetUserCountAsync();
-            return Ok(new { Message = "Success", TotalUsers = totalUsers });
+            var users = await _dashboardService.GetUserCountAsync(); // Lấy danh sách user kèm LastLoginTime
+            int totalUsers = users.Count; // Đếm số lượng user
+
+            return Ok(new
+            {
+                Message = "Success",
+                TotalUsers = totalUsers,
+                Users = users
+            });
         }
+
 
         [HttpGet("total-universitys")]
         public async Task<ActionResult<int>> GetTotalUniversities()
