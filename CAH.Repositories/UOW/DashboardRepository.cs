@@ -72,12 +72,12 @@ namespace CAH.Repositories.UOW
 
         public async Task<int> GetUniversityCountAsync()
         {
-            return await _universityRepo.Entities.CountAsync();
+            return await _universityRepo.Entities.Where(u => u.DeletedTime == null).CountAsync();
         }
 
         public async Task<List<ListUserModelView>> GetUserCountAsync()
         {
-            var usersLastLogin = await (from user in _context.Users
+            var usersLastLogin = await (from user in _context.Users.Where(u => u.DeletedTime == null)
                                         join login in
                                             (from ul in _context.UserLoginHistories
                                              group ul by ul.UserId into g
