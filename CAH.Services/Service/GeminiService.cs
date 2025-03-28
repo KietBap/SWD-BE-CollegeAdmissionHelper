@@ -132,7 +132,7 @@ namespace CAH.Services.Service
                 // Thêm prompt mới vào cuối danh sách
                 conversationParts.Add(new
                 {
-                    parts = new[] { new { text = "Dựa trên lịch sử trò chuyện và thông tin đã cung cấp (điểm số của tôi và thông tin tuyển sinh nếu có), hãy tư vấn cho tôi cách chọn ngành học và trường đại học phù hợp với năng lực hiện tại của tôi. Cụ thể, hãy:\\n\" +\r\n                     \"1. Phân tích điểm số của tôi (nếu có) để xác định thế mạnh và điểm yếu.\\n\" +\r\n                     \"2. Đề xuất ít nhất 2 trường đại học và ngành học phù hợp với điểm số của tôi, kèm theo phương thức tuyển sinh và điểm yêu cầu.\\n\" +\r\n                     \"3. Đưa ra lời khuyên về cách cải thiện để đạt mục tiêu nếu tôi chưa đủ điểm.\\n\" +\r\n                     \"Trả lời dưới dạng các gạch đầu dòng rõ ràng." + prompt } },
+                    parts = new[] { new { text = "Bạn là một AI tư vấn tuyển sinh. Dựa vào cuộc hội thoại và thông tin tuyển sinh ( tôi đưa cho bạn ở trên nếu có ) của tôi và bạn ở trên để tiếp tục cuộc nói chuyện này và không cần nhắc lại ( nếu không có lịch sử chat thì bỏ qua không cần nhắc ) : " + prompt } },
                     role = "user"
                 });
 
