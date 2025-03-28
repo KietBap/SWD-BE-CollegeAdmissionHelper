@@ -7,7 +7,7 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace CAH.API.Controllers
 {
-	[Authorize(Roles = "Admin")]
+	//[Authorize(Roles = "Admin")]
 	[Route("api/[controller]")]
 	[ApiController]
 	public class MajorController : ControllerBase
@@ -21,8 +21,8 @@ namespace CAH.API.Controllers
             _cacheService = cacheService;
 		}
 
-
-		[HttpPost]
+        [Authorize(Roles = "Admin")]
+        [HttpPost]
 		public async Task<ActionResult<string>> CreateMajor(CreateMajorModelView model)
 		{
 			string result = await _majorService.CreateMajorAsync(model);
@@ -32,7 +32,8 @@ namespace CAH.API.Controllers
             return Ok(new { Message = result });
 		}
 
-		[HttpDelete("{id}")]
+        [Authorize(Roles = "Admin")]
+        [HttpDelete("{id}")]
 		public async Task<ActionResult<string>> DeleteMajor(string id)
 		{
             string result = await _majorService.DeleteMajorAsync(id);
@@ -43,7 +44,8 @@ namespace CAH.API.Controllers
             return Ok(new { Message = result });
         }
 
-		[HttpPatch("{id}")]
+        [Authorize(Roles = "Admin")]
+        [HttpPatch("{id}")]
 		public async Task<ActionResult<string>> UpdateMajor(string id, CreateMajorModelView model)
 		{
             string result = await _majorService.UpdateMajorAsync(id, model);
@@ -54,6 +56,7 @@ namespace CAH.API.Controllers
             return Ok(new { Message = result });
         }
 
+        [Authorize(Roles = "Admin,User")]
         [HttpGet]
         public async Task<ActionResult<BasePaginatedList<MajorModelView>>> GetAllMajor(
 			int pageNumber = 1,
@@ -79,6 +82,7 @@ namespace CAH.API.Controllers
             return Ok(new { Message = result });
         }
 
+        [Authorize(Roles = "Admin,User")]
         [HttpGet("by-university/{universityId}")]
         public async Task<ActionResult<BasePaginatedList<MajorModelView>>> GetAllMajorByUniId(string? universityId, int pageNumber = 1, int pageSize = 5)
         {
@@ -97,6 +101,7 @@ namespace CAH.API.Controllers
             return Ok(new { Message = result, Cache = false });
         }
 
+        [Authorize(Roles = "Admin,User")]
         [HttpGet("{id}")]
 		public async Task<ActionResult<Object>> GetMajorById(string id)
 		{
