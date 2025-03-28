@@ -26,7 +26,7 @@ namespace CAH.API.Controllers
         public async Task<ActionResult<string>> CreateSubjectScore(CreateSubScoreModelView model)
         {
             string result = await _service.CreateSubScoreAsync(model);
-            await _cacheService.RemoveByPrefixAsync("subject_scores"); 
+            //await _cacheService.RemoveByPrefixAsync("subject_scores"); 
             return Ok(new { Message = result });
         }
 
@@ -35,8 +35,8 @@ namespace CAH.API.Controllers
         public async Task<ActionResult<string>> DeleteSubjectScore(string id)
         {
             string result = await _service.DeleteSubjectScoreAsync(id);
-            await _cacheService.RemoveByPrefixAsync("subject_scores");
-            await _cacheService.RemoveByPrefixAsync($"subject_score:{id}");
+            //await _cacheService.RemoveByPrefixAsync("subject_scores");
+            //await _cacheService.RemoveByPrefixAsync($"subject_score:{id}");
 
             return Ok(new { Message = result });
         }
@@ -46,8 +46,8 @@ namespace CAH.API.Controllers
         public async Task<ActionResult<string>> UpdateSubjectScore(string id, UpdateSubScoreModelView model)
         {
             string result = await _service.UpdateSubjectScoreAsync(id, model);
-            await _cacheService.RemoveByPrefixAsync("subject_scores");
-            await _cacheService.RemoveByPrefixAsync($"subject_score:{id}");
+            //await _cacheService.RemoveByPrefixAsync("subject_scores");
+            //await _cacheService.RemoveByPrefixAsync($"subject_score:{id}");
 
             return Ok(new { Message = result });
         }
@@ -55,34 +55,34 @@ namespace CAH.API.Controllers
         [HttpGet]
         public async Task<ActionResult<BasePaginatedList<ListSubScoreModelView>>> GetAllSubjectScore(string? userId, int pageNumber = 1, int pageSize = 5)
         {
-            string cacheKey = $"subject_scores:page_{pageNumber}_size_{pageSize}";
-            var cachedResult = await _cacheService.GetListAsync<BasePaginatedList<ListSubScoreModelView>>(cacheKey);
+            //string cacheKey = $"subject_scores:page_{pageNumber}_size_{pageSize}";
+            //var cachedResult = await _cacheService.GetListAsync<BasePaginatedList<ListSubScoreModelView>>(cacheKey);
 
-            if (cachedResult is not null)
-            {
-                return Ok(new { Message = cachedResult });
-            }
+            //if (cachedResult is not null)
+            //{
+            //    return Ok(new { Message = cachedResult });
+            //}
 
             var result = await _service.GetAllSubjectScoreAsync(pageNumber, pageSize, userId);
 
-            await _cacheService.SetAsync(cacheKey, result, TimeSpan.FromMinutes(30), "subject_scores");
+            //await _cacheService.SetAsync(cacheKey, result, TimeSpan.FromMinutes(30), "subject_scores");
             return Ok(new { Message = result });
         }
 
         [HttpGet("{id}")]
         public async Task<ActionResult<Object>> GetSubjectScoreById(string id)
         {
-            string cacheKey = $"subject_score:{id}";
-            var cachedResult = await _cacheService.GetListAsync<object>(cacheKey);
+            //string cacheKey = $"subject_score:{id}";
+            //var cachedResult = await _cacheService.GetListAsync<object>(cacheKey);
 
-            if (cachedResult is not null)
-            {
-                return Ok(new { Message = cachedResult });
-            }
+            //if (cachedResult is not null)
+            //{
+            //    return Ok(new { Message = cachedResult });
+            //}
 
             var result = await _service.GetSubScoreByIdAsync(id);
 
-            await _cacheService.SetAsync(cacheKey, result, TimeSpan.FromMinutes(30), $"subject_score:{id}");
+            //await _cacheService.SetAsync(cacheKey, result, TimeSpan.FromMinutes(30), $"subject_score:{id}");
             return Ok(new { Message = result });
         }
     }

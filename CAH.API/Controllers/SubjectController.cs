@@ -26,7 +26,7 @@ namespace CAH.API.Controllers
 		public async Task<ActionResult<string>> CreateSubject(SubjectModelView model)
 		{
             string result = await _service.CreateSubjectAsync(model);
-            await _cacheService.RemoveByPrefixAsync("subjects"); 
+            //await _cacheService.RemoveByPrefixAsync("subjects"); 
             return Ok(new { Message = result });
         }
 
@@ -34,8 +34,8 @@ namespace CAH.API.Controllers
 		public async Task<ActionResult<string>> DeleteSubject(string id)
 		{
             string result = await _service.DeleteSubjectAsync(id);
-            await _cacheService.RemoveByPrefixAsync("subjects");
-            await _cacheService.RemoveByPrefixAsync($"subject:{id}");
+            //await _cacheService.RemoveByPrefixAsync("subjects");
+            //await _cacheService.RemoveByPrefixAsync($"subject:{id}");
             return Ok(new { Message = result });
         }
 
@@ -44,8 +44,8 @@ namespace CAH.API.Controllers
 		public async Task<ActionResult<string>> UpdateSubject(string id, SubjectModelView model)
 		{
             string result = await _service.UpdateSubjectAsync(id, model);
-            await _cacheService.RemoveByPrefixAsync("subjects");
-            await _cacheService.RemoveByPrefixAsync($"subject:{id}");
+            //await _cacheService.RemoveByPrefixAsync("subjects");
+            //await _cacheService.RemoveByPrefixAsync($"subject:{id}");
             return Ok(new { Message = result });
         }
 
@@ -53,17 +53,17 @@ namespace CAH.API.Controllers
 		[HttpGet]
 		public async Task<ActionResult<BasePaginatedList<ListSubjectModelView>>> GetAllSubject(int pageNumber = 1, int pageSize = 5)
 		{
-            string cacheKey = $"subjects:page{pageNumber}:size{pageSize}";
-            var cachedData = await _cacheService.GetListAsync<BasePaginatedList<ListSubjectModelView>>(cacheKey);
+            //string cacheKey = $"subjects:page{pageNumber}:size{pageSize}";
+            //var cachedData = await _cacheService.GetListAsync<BasePaginatedList<ListSubjectModelView>>(cacheKey);
 
-            if (cachedData != null)
-            {
-                return Ok(new { Message = cachedData, Cache = true });
-            }
+            //if (cachedData != null)
+            //{
+            //    return Ok(new { Message = cachedData, Cache = true });
+            //}
 
             var result = await _service.GetAllSubjectAsync(pageNumber, pageSize);
 
-            await _cacheService.SetAsync(cacheKey, result, TimeSpan.FromMinutes(15), "subjects");
+            //await _cacheService.SetAsync(cacheKey, result, TimeSpan.FromMinutes(15), "subjects");
 
             return Ok(new { Message = result, Cache = false });
         }
@@ -71,17 +71,17 @@ namespace CAH.API.Controllers
 		[HttpGet("{id}")]
 		public async Task<ActionResult<Object>> GetSubjectById(string id)
 		{
-            string cacheKey = $"subject:{id}";
-            var cachedData = await _cacheService.GetListAsync<ListSubjectModelView>(cacheKey);
+            //string cacheKey = $"subject:{id}";
+            //var cachedData = await _cacheService.GetListAsync<ListSubjectModelView>(cacheKey);
 
-            if (cachedData != null)
-            {
-                return Ok(new { Message = cachedData, Cache = true });
-            }
+            //if (cachedData != null)
+            //{
+            //    return Ok(new { Message = cachedData, Cache = true });
+            //}
 
             var result = await _service.GetSubjectByIdAsync(id);
 
-            await _cacheService.SetAsync(cacheKey, result, TimeSpan.FromMinutes(30), "subjects");
+            //await _cacheService.SetAsync(cacheKey, result, TimeSpan.FromMinutes(30), "subjects");
 
             return Ok(new { Message = result, Cache = false });
         }

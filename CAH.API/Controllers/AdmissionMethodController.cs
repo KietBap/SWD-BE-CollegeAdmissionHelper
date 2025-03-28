@@ -25,7 +25,7 @@ namespace CAH.API.Controllers
 		public async Task<ActionResult<string>> CreateAdmissionMethod(AdmissionMethodMV model)
 		{
             string result = await _service.CreateAdmissionMethodAsync(model);
-            await _cacheService.RemoveByPrefixAsync("admission_methods"); 
+            //await _cacheService.RemoveByPrefixAsync("admission_methods"); 
 
             return Ok(new { Message = result });
         }
@@ -34,8 +34,8 @@ namespace CAH.API.Controllers
 		public async Task<ActionResult<string>> DeleteAdmissionMethod(string id)
 		{
             string result = await _service.DeleteAdmissionMethodAsync(id);
-            await _cacheService.RemoveByPrefixAsync("admission_methods");
-            await _cacheService.RemoveByPrefixAsync($"admission_method:{id}");
+            //await _cacheService.RemoveByPrefixAsync("admission_methods");
+            //await _cacheService.RemoveByPrefixAsync($"admission_method:{id}");
 
             return Ok(new { Message = result });
         }
@@ -45,8 +45,8 @@ namespace CAH.API.Controllers
 		public async Task<ActionResult<string>> UpdateAdmissionMethod(string id, AdmissionMethodMV model)
 		{
             string result = await _service.UpdateAdmissionMethodAsync(id, model);
-            await _cacheService.RemoveByPrefixAsync("admission_methods");
-            await _cacheService.RemoveByPrefixAsync($"admission_method:{id}"); 
+            //await _cacheService.RemoveByPrefixAsync("admission_methods");
+            //await _cacheService.RemoveByPrefixAsync($"admission_method:{id}"); 
 
             return Ok(new { Message = result });
         }
@@ -54,34 +54,34 @@ namespace CAH.API.Controllers
 		[HttpGet]
 		public async Task<ActionResult<BasePaginatedList<ListAdMethodMV>>> GetAllAdMethod(int pageNumber = 1, int pageSize = 5)
 		{
-            string cacheKey = $"admission_methods:page_{pageNumber}_size_{pageSize}";
-            var cachedResult = await _cacheService.GetListAsync<BasePaginatedList<ListAdMethodMV>>(cacheKey);
+            //string cacheKey = $"admission_methods:page_{pageNumber}_size_{pageSize}";
+            //var cachedResult = await _cacheService.GetListAsync<BasePaginatedList<ListAdMethodMV>>(cacheKey);
 
-            if (cachedResult is not null)
-            {
-                return Ok(new { Message = cachedResult });
-            }
+            //if (cachedResult is not null)
+            //{
+            //    return Ok(new { Message = cachedResult });
+            //}
 
             var result = await _service.GetAllAdMethodAsync(pageNumber, pageSize);
 
-            await _cacheService.SetAsync(cacheKey, result, TimeSpan.FromMinutes(30), "admission_methods");
+            //await _cacheService.SetAsync(cacheKey, result, TimeSpan.FromMinutes(30), "admission_methods");
             return Ok(new { Message = result });
         }
 
 		[HttpGet("{id}")]
 		public async Task<ActionResult<Object>> GetAdMethodById(string id)
 		{
-            string cacheKey = $"admission_method:{id}";
-            var cachedResult = await _cacheService.GetListAsync<object>(cacheKey);
+            //string cacheKey = $"admission_method:{id}";
+            //var cachedResult = await _cacheService.GetListAsync<object>(cacheKey);
 
-            if (cachedResult is not null)
-            {
-                return Ok(new { Message = cachedResult });
-            }
+            //if (cachedResult is not null)
+            //{
+            //    return Ok(new { Message = cachedResult });
+            //}
 
             var result = await _service.GetAdMethodByIdAsync(id);
 
-            await _cacheService.SetAsync(cacheKey, result, TimeSpan.FromMinutes(30), $"admission_method:{id}");
+            //await _cacheService.SetAsync(cacheKey, result, TimeSpan.FromMinutes(30), $"admission_method:{id}");
             return Ok(new { Message = result });
         }
 	}
