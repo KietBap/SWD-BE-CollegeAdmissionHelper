@@ -21,8 +21,8 @@ namespace CAH.API.Controllers
 			_cacheService = cacheService;
 		}
 
-
-		[HttpPost]
+        [Authorize(Roles = "Admin")]
+        [HttpPost]
 		public async Task<ActionResult<string>> CreateSubject(SubjectModelView model)
 		{
             string result = await _service.CreateSubjectAsync(model);
@@ -30,7 +30,8 @@ namespace CAH.API.Controllers
             return Ok(new { Message = result });
         }
 
-		[HttpDelete("{id}")]
+        [Authorize(Roles = "Admin")]
+        [HttpDelete("{id}")]
 		public async Task<ActionResult<string>> DeleteSubject(string id)
 		{
             string result = await _service.DeleteSubjectAsync(id);
@@ -39,8 +40,8 @@ namespace CAH.API.Controllers
             return Ok(new { Message = result });
         }
 
-
-		[HttpPatch("{id}")]
+        [Authorize(Roles = "Admin")]
+        [HttpPatch("{id}")]
 		public async Task<ActionResult<string>> UpdateSubject(string id, SubjectModelView model)
 		{
             string result = await _service.UpdateSubjectAsync(id, model);
@@ -49,8 +50,8 @@ namespace CAH.API.Controllers
             return Ok(new { Message = result });
         }
 
-
-		[HttpGet]
+        [Authorize(Roles = "Admin,User")]
+        [HttpGet]
 		public async Task<ActionResult<BasePaginatedList<ListSubjectModelView>>> GetAllSubject(int pageNumber = 1, int pageSize = 5)
 		{
             //string cacheKey = $"subjects:page{pageNumber}:size{pageSize}";
@@ -68,7 +69,8 @@ namespace CAH.API.Controllers
             return Ok(new { Message = result, Cache = false });
         }
 
-		[HttpGet("{id}")]
+        [Authorize(Roles = "Admin,User")]
+        [HttpGet("{id}")]
 		public async Task<ActionResult<Object>> GetSubjectById(string id)
 		{
             //string cacheKey = $"subject:{id}";
