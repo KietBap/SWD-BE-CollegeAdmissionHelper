@@ -59,7 +59,7 @@ namespace CAH.Services.Service
             {
                 UserId = user.Id,
                 LoginProvider = "CustomLoginProvider",
-                ProviderKey = user.Id.ToString(), // 🔹 Đảm bảo có ProviderKey
+                ProviderKey = user.Id.ToString(), 
                 LoginTime = CoreHelper.SystemTimeNow,
                 CreatedBy = user.UserName,
                 CreatedTime = CoreHelper.SystemTimeNow
@@ -191,7 +191,7 @@ namespace CAH.Services.Service
                 SecurityStamp = Guid.NewGuid().ToString(),
             };
 
-            var userRole = await _unitOfWork.GetRepository<Role>().Entities.FirstOrDefaultAsync(r => r.Name == "Admin");
+            var userRole = await _unitOfWork.GetRepository<Role>().Entities.FirstOrDefaultAsync(r => r.Name == "User");
 
             var applicationUserRole = new UserRole
             {

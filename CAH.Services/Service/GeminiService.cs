@@ -91,7 +91,7 @@ namespace CAH.Services.Service
                 // Thêm prompt mới vào cuối danh sách
                 conversationParts.Add(new
                 {
-                    parts = new[] { new { text = "Dựa vào cuộc hội thoại và danh sách điểm ( tôi đưa cho bạn ở trên nếu có ) của tôi và bạn ở trên để tiếp tục cuộc nói chuyện này và không cần nhắc lại ( nếu có ) : " + prompt } },
+                    parts = new[] { new { text = "Dựa vào cuộc hội thoại và danh sách điểm ( tôi đưa cho bạn ở trên nếu có ) của tôi và bạn ở trên để tiếp tục cuộc nói chuyện này và không cần nhắc lại ( nếu không có lịch sử chat thì bỏ qua không cần nhắc ) : " + prompt } },
                     role = "user"
                 });
 
