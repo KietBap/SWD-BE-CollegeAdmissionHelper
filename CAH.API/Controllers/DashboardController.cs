@@ -9,7 +9,6 @@ using System.Threading.Tasks;
 
 namespace CAH.API.Controllers
 {
-    [Authorize(Roles = "Admin")]
     [Route("api/[controller]")]
     [ApiController]
     public class DashboardController : Controller
