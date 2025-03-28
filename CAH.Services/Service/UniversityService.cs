@@ -71,7 +71,18 @@ namespace CAH.Services.Service
 				university.DeletedTime = DateTimeOffset.UtcNow;
 				university.DeletedBy = userId;
 
-				await _unitOfWork.GetRepository<University>().UpdateAsync(university);
+                var uniMajors = _unitOfWork.GetRepository<UniMajor>().Entities.Where(u => u.MajorId == id);
+                if (uniMajors.Any())
+                {
+                    foreach (var uniMajor in uniMajors)
+                    {
+                        uniMajor.DeletedTime = DateTimeOffset.UtcNow;
+                        uniMajor.DeletedBy = userId;
+                        await _unitOfWork.GetRepository<UniMajor>().DeleteAsync(uniMajor);
+                    }
+                }
+
+                await _unitOfWork.GetRepository<University>().UpdateAsync(university);
 				await _unitOfWork.SaveAsync();
 
 				return "University delete successfully";

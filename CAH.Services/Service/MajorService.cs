@@ -58,7 +58,18 @@ namespace CAH.Services.Service
 					return "can not find major";
 				}
 
-				major.DeletedTime = DateTimeOffset.UtcNow;
+                var uniMajors = _unitOfWork.GetRepository<UniMajor>().Entities.Where(u => u.MajorId == id);
+                if (uniMajors.Any())
+                {
+                    foreach (var uniMajor in uniMajors)
+                    {
+						uniMajor.DeletedTime = DateTimeOffset.UtcNow;
+						uniMajor.DeletedBy = userId;
+                        await _unitOfWork.GetRepository<UniMajor>().UpdateAsync(uniMajor);
+                    }
+                }
+
+                major.DeletedTime = DateTimeOffset.UtcNow;
 				major.DeletedBy = userId;
 
 				await _unitOfWork.GetRepository<Major>().UpdateAsync(major);
